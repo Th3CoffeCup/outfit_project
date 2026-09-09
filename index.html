@@ -10,23 +10,22 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
-    /* ==========================================================================
-       FRUTIGER AERO DYNAMIC THEMES MATRIX
-       ========================================================================== */
     :root {
       --spring-snap: cubic-bezier(0.25, 1, 0.3, 1);
       --radius-xl: 32px;
       --radius-lg: 22px;
       --radius-md: 16px;
       --radius-sm: 10px;
+
+      /* Дефолтні плавні переходи для елементів інтерфейсу */
+      --smooth-theme-transition: background 1.6s ease, background-color 1.6s ease, border-color 1.6s ease, color 1.2s ease, box-shadow 1.6s ease;
     }
 
     /* 1. РАНОК - ЯСНО (Світлий корал) */
     body.theme-morning.weather-clear {
-      --bg-gradient: linear-gradient(165deg, #FFEFEA 0%, #FCD8CE 40%, #FDEEE7 100%);
+      --current-gradient: linear-gradient(165deg, #FFEFEA 0%, #FCD8CE 40%, #FDEEE7 100%);
       --bubble-1: #FFA48D;
       --bubble-2: #FFD4C4;
-      --bubble-3: #FF8F74;
       --glass-surface: rgba(255, 255, 255, 0.52);
       --glass-card: rgba(255, 244, 239, 0.62);
       --glass-border-top: rgba(255, 255, 255, 0.95);
@@ -39,12 +38,11 @@
       --shadow-aero: 0 16px 40px -10px rgba(180, 75, 50, 0.22);
     }
 
-    /* 1.2 РАНОК - ПОХМУРО (Затишний кашеміровий туман) */
+    /* 1.2 РАНОК - ПОХМУРО (Кашеміровий туман) */
     body.theme-morning.weather-cloudy {
-      --bg-gradient: linear-gradient(165deg, #F8EBE7 0%, #EBD5D0 40%, #F5E5E0 100%);
+      --current-gradient: linear-gradient(165deg, #F8EBE7 0%, #EBD5D0 40%, #F5E5E0 100%);
       --bubble-1: #E6B5AC;
       --bubble-2: #F7DCD6;
-      --bubble-3: #DFC1B8;
       --glass-surface: rgba(255, 255, 255, 0.58);
       --glass-card: rgba(255, 246, 244, 0.68);
       --glass-border-top: rgba(255, 255, 255, 0.95);
@@ -59,10 +57,9 @@
 
     /* 1.3 РАНОК - ДОЩИК (Теплий чайний туман) */
     body.theme-morning.weather-rain {
-      --bg-gradient: linear-gradient(165deg, #EBE5E8 0%, #D8CDD6 40%, #E8DFE5 100%);
+      --current-gradient: linear-gradient(165deg, #EBE5E8 0%, #D8CDD6 40%, #E8DFE5 100%);
       --bubble-1: #C9AEC4;
       --bubble-2: #E3D1DF;
-      --bubble-3: #B99DB4;
       --glass-surface: rgba(255, 255, 255, 0.55);
       --glass-card: rgba(252, 247, 250, 0.65);
       --glass-border-top: rgba(255, 255, 255, 0.95);
@@ -75,12 +72,11 @@
       --shadow-aero: 0 16px 40px -10px rgba(120, 70, 110, 0.18);
     }
 
-    /* 2. ДЕНЬ - ЯСНО (Сонячний теплий мед) */
+    /* 2. ДЕНЬ - ЯСНО (Сонячний мед) */
     body.theme-day.weather-clear {
-      --bg-gradient: linear-gradient(165deg, #FFF5EA 0%, #FDE4C9 40%, #FDEFD9 100%);
+      --current-gradient: linear-gradient(165deg, #FFF5EA 0%, #FDE4C9 40%, #FDEFD9 100%);
       --bubble-1: #F7BA7C;
       --bubble-2: #FFE0BA;
-      --bubble-3: #FFAA55;
       --glass-surface: rgba(255, 255, 255, 0.52);
       --glass-card: rgba(255, 248, 238, 0.64);
       --glass-border-top: rgba(255, 255, 255, 0.98);
@@ -93,12 +89,11 @@
       --shadow-aero: 0 16px 40px -10px rgba(190, 110, 30, 0.22);
     }
 
-    /* 2.2 ДЕНЬ - ПОХМУРО (Затишний золотистий льон) */
+    /* 2.2 ДЕНЬ - ПОХМУРО (Затишний льон) */
     body.theme-day.weather-cloudy {
-      --bg-gradient: linear-gradient(165deg, #F9F1E7 0%, #EBDBCB 40%, #F4E8DB 100%);
+      --current-gradient: linear-gradient(165deg, #F9F1E7 0%, #EBDBCB 40%, #F4E8DB 100%);
       --bubble-1: #DFC4AA;
       --bubble-2: #F5E6D8;
-      --bubble-3: #D0B092;
       --glass-surface: rgba(255, 255, 255, 0.56);
       --glass-card: rgba(255, 250, 245, 0.68);
       --glass-border-top: rgba(255, 255, 255, 0.95);
@@ -111,12 +106,11 @@
       --shadow-aero: 0 16px 40px -10px rgba(150, 110, 75, 0.16);
     }
 
-    /* 2.3 ДЕНЬ - ДОЩИК (Свіжий блакитний сланець) */
+    /* 2.3 ДЕНЬ - ДОЩИК (Блакитний сланець) */
     body.theme-day.weather-rain {
-      --bg-gradient: linear-gradient(165deg, #EBF1F5 0%, #D5E1EA 40%, #E4EDF3 100%);
+      --current-gradient: linear-gradient(165deg, #EBF1F5 0%, #D5E1EA 40%, #E4EDF3 100%);
       --bubble-1: #ADC8DC;
       --bubble-2: #D4E6F2;
-      --bubble-3: #95B7CE;
       --glass-surface: rgba(255, 255, 255, 0.55);
       --glass-card: rgba(247, 251, 254, 0.66);
       --glass-border-top: rgba(255, 255, 255, 0.98);
@@ -129,58 +123,55 @@
       --shadow-aero: 0 16px 40px -10px rgba(60, 115, 155, 0.2);
     }
 
-    /* 3. НІЧ - ЯСНО (Сутінковий оксамит #7477B5) */
+    /* 3. НІЧ - ЯСНО (Глибокий оксамитовий індиго #1A1829 / #7477B5) */
     body.theme-night.weather-clear {
-      --bg-gradient: linear-gradient(165deg, #EBEBF7 0%, #D4D6EE 40%, #E2E4F5 100%);
-      --bubble-1: #9DA0DA;
-      --bubble-2: #C8CAF2;
-      --bubble-3: #7477B5;
-      --glass-surface: rgba(255, 255, 255, 0.52);
-      --glass-card: rgba(248, 248, 255, 0.65);
-      --glass-border-top: rgba(255, 255, 255, 0.95);
-      --glass-border-bot: rgba(116, 119, 181, 0.35);
-      --glass-gloss: linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.2) 40%, rgba(116,119,181,0.14) 100%);
-      --text-main: #191A2E;
-      --text-sub: #535678;
-      --accent-theme: #5B5FA8;
-      --accent-theme-deep: #3C3F85;
-      --shadow-aero: 0 16px 40px -10px rgba(85, 90, 160, 0.22);
+      --current-gradient: linear-gradient(165deg, #1A1829 0%, #12101F 45%, #0B0A14 100%);
+      --bubble-1: #3B386A;
+      --bubble-2: #24224A;
+      --glass-surface: rgba(45, 42, 74, 0.48);
+      --glass-card: rgba(36, 32, 60, 0.65);
+      --glass-border-top: rgba(180, 184, 255, 0.55);
+      --glass-border-bot: rgba(116, 119, 181, 0.3);
+      --glass-gloss: linear-gradient(135deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.05) 40%, rgba(116,119,181,0.2) 100%);
+      --text-main: #F4F3FF;
+      --text-sub: #ABA9CD;
+      --accent-theme: #898CD6;
+      --accent-theme-deep: #ADB0F2;
+      --shadow-aero: 0 16px 40px -10px rgba(0, 0, 0, 0.55);
     }
 
     /* 3.2 НІЧ - ПОХМУРО (Сутінковий аметист) */
     body.theme-night.weather-cloudy {
-      --bg-gradient: linear-gradient(165deg, #ECE6EF 0%, #D7CADC 40%, #E3D6E7 100%);
-      --bubble-1: #B49EBD;
-      --bubble-2: #DECDE4;
-      --bubble-3: #9C80A7;
-      --glass-surface: rgba(255, 255, 255, 0.56);
-      --glass-card: rgba(251, 248, 253, 0.68);
-      --glass-border-top: rgba(255, 255, 255, 0.95);
-      --glass-border-bot: rgba(140, 110, 155, 0.3);
-      --glass-gloss: linear-gradient(135deg, rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.2) 45%, rgba(160,125,175,0.1) 100%);
-      --text-main: #241629;
-      --text-sub: #66506E;
-      --accent-theme: #895899;
-      --accent-theme-deep: #663575;
-      --shadow-aero: 0 16px 40px -10px rgba(115, 70, 130, 0.18);
+      --current-gradient: linear-gradient(165deg, #221827 0%, #160F1A 45%, #0E0911 100%);
+      --bubble-1: #4B2E58;
+      --bubble-2: #311A3B;
+      --glass-surface: rgba(56, 38, 65, 0.48);
+      --glass-card: rgba(44, 28, 52, 0.65);
+      --glass-border-top: rgba(220, 175, 240, 0.5);
+      --glass-border-bot: rgba(150, 95, 170, 0.3);
+      --glass-gloss: linear-gradient(135deg, rgba(255,255,255,0.32) 0%, rgba(255,255,255,0.05) 45%, rgba(180,120,205,0.2) 100%);
+      --text-main: #FBF4FD;
+      --text-sub: #BCA3C5;
+      --accent-theme: #B976CE;
+      --accent-theme-deep: #DCA3EC;
+      --shadow-aero: 0 16px 40px -10px rgba(0, 0, 0, 0.55);
     }
 
     /* 3.3 НІЧ - ДОЩИК (Нічний сапфір) */
     body.theme-night.weather-rain {
-      --bg-gradient: linear-gradient(165deg, #E2E6F0 0%, #C7D0E2 40%, #D6DFEF 100%);
-      --bubble-1: #95A6C7;
-      --bubble-2: #C4D3EE;
-      --bubble-3: #758DB7;
-      --glass-surface: rgba(255, 255, 255, 0.55);
-      --glass-card: rgba(245, 248, 254, 0.66);
-      --glass-border-top: rgba(255, 255, 255, 0.95);
-      --glass-border-bot: rgba(90, 120, 165, 0.35);
-      --glass-gloss: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.2) 45%, rgba(110,145,200,0.12) 100%);
-      --text-main: #131A26;
-      --text-sub: #495B7A;
-      --accent-theme: #41639B;
-      --accent-theme-deep: #25467A;
-      --shadow-aero: 0 16px 40px -10px rgba(50, 80, 135, 0.2);
+      --current-gradient: linear-gradient(165deg, #131A26 0%, #0C121C 45%, #070B12 100%);
+      --bubble-1: #243B5E;
+      --bubble-2: #14243D;
+      --glass-surface: rgba(30, 48, 75, 0.48);
+      --glass-card: rgba(22, 38, 62, 0.65);
+      --glass-border-top: rgba(160, 205, 255, 0.55);
+      --glass-border-bot: rgba(70, 120, 180, 0.35);
+      --glass-gloss: linear-gradient(135deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.05) 45%, rgba(85,145,220,0.2) 100%);
+      --text-main: #F0F6FF;
+      --text-sub: #9BB6DA;
+      --accent-theme: #649FE5;
+      --accent-theme-deep: #90BFF7;
+      --shadow-aero: 0 16px 40px -10px rgba(0, 0, 0, 0.6);
     }
 
     * {
@@ -191,20 +182,35 @@
       font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
       user-select: none;
       -webkit-user-select: none;
+      transition: var(--smooth-theme-transition);
     }
 
     body {
-      background: var(--bg-gradient);
       color: var(--text-main);
       display: flex;
       justify-content: center;
       min-height: 100vh;
       overflow-x: hidden;
       position: relative;
-      transition: background 0.8s ease;
     }
 
-    /* Frutiger Aero бульбашки підкладки */
+    /* ДВА ШАРИ ФОНУ ДЛЯ БЕЗШОВНОГО ПЕРЕПЛИВАННЯ (CROSSFADE) */
+    .bg-crossfade-layer {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      transition: opacity 1.8s ease-in-out;
+    }
+    #bg-layer-1 {
+      background: var(--current-gradient);
+      opacity: 1;
+    }
+    #bg-layer-2 {
+      background: var(--current-gradient);
+      opacity: 0;
+    }
+
     .aero-depth-bg {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -218,7 +224,7 @@
       filter: blur(45px);
       opacity: 0.78;
       animation: floatBubble 14s infinite alternate ease-in-out;
-      transition: background 0.8s ease;
+      transition: background 1.8s ease-in-out;
     }
     .bubble-1 {
       width: 320px; height: 320px;
@@ -250,7 +256,6 @@
       z-index: 1;
     }
 
-    /* Вертикальний м'який підйом (iOS Modal Lift) */
     .screen {
       display: none;
       flex-direction: column;
@@ -298,7 +303,6 @@
       line-height: 1.45;
     }
 
-    /* Тактильні кнопки */
     .interactive-press {
       transition: transform 0.16s cubic-bezier(0.2, 0.9, 0.3, 1.2), box-shadow 0.16s ease;
       will-change: transform;
@@ -323,7 +327,7 @@
       position: relative;
     }
     .btn-primary {
-      background: linear-gradient(135deg, var(--text-main) 0%, #150906 100%);
+      background: linear-gradient(135deg, var(--accent-theme-deep) 0%, var(--accent-theme) 100%);
       color: #FFF6F3;
       box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
       border: 1px solid rgba(255, 255, 255, 0.25);
@@ -338,18 +342,17 @@
       border-left: 1px solid var(--glass-border-top);
       border-right: 1px solid var(--glass-border-bot);
       border-bottom: 1.5px solid var(--glass-border-bot);
-      box-shadow: var(--shadow-aero), inset 0 2px 2px #fff;
+      box-shadow: var(--shadow-aero), inset 0 2px 2px rgba(255,255,255,0.7);
     }
 
     .btn-outline {
       border: 1px solid var(--glass-border-top);
-      background: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.18);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
       color: var(--text-main);
     }
 
-    /* Навігаційний бар */
     .top-bar {
       display: flex;
       align-items: center;
@@ -373,6 +376,11 @@
       border-radius: 50%;
       box-shadow: 0 0 12px var(--accent-theme);
     }
+    .top-bar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
     .icon-btn {
       background: var(--glass-gloss), var(--glass-surface);
       backdrop-filter: blur(24px);
@@ -381,7 +389,7 @@
       border-left: 1px solid var(--glass-border-top);
       border-bottom: 1.5px solid var(--glass-border-bot);
       border-right: 1px solid var(--glass-border-bot);
-      box-shadow: var(--shadow-aero), inset 0 1.5px 1.5px #fff;
+      box-shadow: var(--shadow-aero), inset 0 1.5px 1.5px rgba(255,255,255,0.7);
       border-radius: 50%;
       width: 46px;
       height: 46px;
@@ -402,7 +410,7 @@
       gap: 6px;
       padding: 6px 14px;
       border-radius: 30px;
-      background: rgba(255, 255, 255, 0.65);
+      background: rgba(255, 255, 255, 0.4);
       backdrop-filter: blur(14px);
       border: 1px solid var(--glass-border-top);
       font-size: 11px;
@@ -414,7 +422,6 @@
       box-shadow: 0 4px 14px rgba(0,0,0,0.06);
     }
 
-    /* Картки Frutiger Aero Glass */
     .choice-card {
       background: var(--glass-gloss), var(--glass-card);
       backdrop-filter: blur(32px);
@@ -427,7 +434,7 @@
       padding: 24px;
       margin-bottom: 16px;
       cursor: pointer;
-      box-shadow: var(--shadow-aero), inset 0 2px 2px #fff;
+      box-shadow: var(--shadow-aero), inset 0 2px 2px rgba(255,255,255,0.7);
       position: relative;
       overflow: hidden;
     }
@@ -435,8 +442,8 @@
       width: 54px;
       height: 54px;
       border-radius: 20px;
-      background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 230, 220, 0.75) 100%);
-      border: 1.5px solid #fff;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 230, 220, 0.5) 100%);
+      border: 1.5px solid rgba(255,255,255,0.9);
       box-shadow: 0 8px 20px rgba(0,0,0,0.08), inset 0 2px 2px #fff;
       display: flex;
       align-items: center;
@@ -445,17 +452,16 @@
       margin-bottom: 16px;
     }
 
-    /* Слоти Мудборду */
     .outfit-slots-panel {
       position: sticky;
       top: 0;
-      background: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.25);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
       z-index: 10;
       padding: 4px 0 16px;
       margin-bottom: 16px;
-      border-bottom: 1.5px solid rgba(255, 255, 255, 0.6);
+      border-bottom: 1.5px solid rgba(255, 255, 255, 0.4);
     }
     .slots-grid {
       display: grid;
@@ -486,7 +492,7 @@
       cursor: pointer;
       text-align: center;
       padding: 4px;
-      box-shadow: var(--shadow-aero), inset 0 1.5px 1.5px #fff;
+      box-shadow: var(--shadow-aero), inset 0 1.5px 1.5px rgba(255,255,255,0.7);
       flex: 1;
     }
     .slot-item.filled {
@@ -531,7 +537,6 @@
       backdrop-filter: blur(6px);
     }
 
-    /* Фільтри */
     .filters-scroll {
       display: flex;
       gap: 8px;
@@ -556,16 +561,15 @@
       cursor: pointer;
       color: var(--text-main);
       font-weight: 700;
-      box-shadow: var(--shadow-aero), inset 0 1.5px 1.5px #fff;
+      box-shadow: var(--shadow-aero), inset 0 1.5px 1.5px rgba(255,255,255,0.7);
     }
     .filter-chip.active {
-      background: linear-gradient(135deg, var(--text-main) 0%, #150906 100%);
+      background: linear-gradient(135deg, var(--accent-theme-deep) 0%, var(--accent-theme) 100%);
       color: #FFF6F3;
-      border-color: var(--text-main);
+      border-color: var(--accent-theme-deep);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     }
 
-    /* Каталог */
     .items-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -586,19 +590,19 @@
       flex-direction: column;
       cursor: pointer;
       position: relative;
-      box-shadow: var(--shadow-aero), inset 0 1.5px 1.5px #fff;
+      box-shadow: var(--shadow-aero), inset 0 1.5px 1.5px rgba(255,255,255,0.7);
     }
     .item-img-wrap {
       width: 100%;
       height: 155px;
       border-radius: var(--radius-md);
-      background: rgba(255, 255, 255, 0.65);
+      background: rgba(255, 255, 255, 0.5);
       overflow: hidden;
       margin-bottom: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.6);
     }
     .item-img-wrap img {
       width: 100%;
@@ -641,12 +645,11 @@
       font-weight: 700;
       border-radius: var(--radius-sm);
       border: 1px solid var(--glass-border-top);
-      background: rgba(255, 255, 255, 0.75);
+      background: rgba(255, 255, 255, 0.6);
       color: var(--text-main);
       cursor: pointer;
     }
 
-    /* Блок пропозицій */
     .recommendations-banner {
       background: var(--glass-sheen), var(--glass-card);
       backdrop-filter: blur(28px);
@@ -656,7 +659,7 @@
       padding: 16px;
       margin-bottom: 18px;
       display: none;
-      box-shadow: var(--shadow-aero), inset 0 2px 2px #fff;
+      box-shadow: var(--shadow-aero), inset 0 2px 2px rgba(255,255,255,0.7);
     }
     .recommendations-banner.active {
       display: block;
@@ -675,7 +678,6 @@
       letter-spacing: 0.4px;
     }
 
-    /* Картка погоди */
     .smart-weather-box {
       background: var(--glass-sheen), var(--glass-card);
       backdrop-filter: blur(32px);
@@ -687,7 +689,7 @@
       border-radius: var(--radius-xl);
       padding: 22px;
       margin-bottom: 22px;
-      box-shadow: var(--shadow-aero), inset 0 2px 2px #fff;
+      box-shadow: var(--shadow-aero), inset 0 2px 2px rgba(255,255,255,0.7);
       position: relative;
       overflow: hidden;
     }
@@ -722,7 +724,6 @@
       gap: 10px;
     }
 
-    /* Фінальна картка */
     .final-look-card {
       background: var(--glass-sheen), var(--glass-card);
       backdrop-filter: blur(32px);
@@ -732,7 +733,7 @@
       border-left: 1.5px solid var(--glass-border-top);
       border-bottom: 2px solid var(--glass-border-bot);
       padding: 24px;
-      box-shadow: var(--shadow-aero), inset 0 2px 2px #fff;
+      box-shadow: var(--shadow-aero), inset 0 2px 2px rgba(255,255,255,0.7);
       margin-bottom: 24px;
     }
     .final-items-list {
@@ -756,7 +757,6 @@
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
     }
 
-    /* Модальне вікно */
     .modal {
       display: none;
       position: fixed;
@@ -898,13 +898,85 @@
       0% { opacity: 1; transform: translate(0, 0) scale(0.4); }
       100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1.3); }
     }
+
+    /* СЕКРЕТНА ТЕСТ-ПАНЕЛЬ (DEBUG LAB) */
+    #debug-lab-panel {
+      display: none;
+      position: fixed;
+      top: 80px;
+      right: 15px;
+      width: 260px;
+      background: var(--glass-card);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1.5px solid var(--glass-border-top);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 14px 40px rgba(0,0,0,0.3);
+      z-index: 10000;
+      animation: popSlot 0.25s var(--spring-snap);
+    }
+    .debug-title {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-sub);
+      margin-bottom: 8px;
+    }
+    .debug-btn-group {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .debug-mini-btn {
+      padding: 7px 0;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 8px;
+      border: 1px solid var(--glass-border-top);
+      background: var(--glass-surface);
+      color: var(--text-main);
+      cursor: pointer;
+    }
+    .debug-mini-btn:active {
+      transform: scale(0.92);
+    }
   </style>
 </head>
 <body class="theme-day weather-clear">
 
+  <!-- ДВА ПЛАВНИХ ШАРИ ДЛЯ БЕЗШОВНОГО ПЕРЕПЛИВАННЯ КОЛЬОРІВ -->
+  <div id="bg-layer-1" class="bg-crossfade-layer"></div>
+  <div id="bg-layer-2" class="bg-crossfade-layer"></div>
+
   <div class="aero-depth-bg">
     <div class="aero-bubble bubble-1"></div>
     <div class="aero-bubble bubble-2"></div>
+  </div>
+
+  <!-- СЕКРЕТНА DEBUG ПАНЕЛЬ (Тільки для тестування) -->
+  <div id="debug-lab-panel">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+      <span class="debug-title" style="margin:0;">🧪 Testing Lab</span>
+      <button style="border:none; background:none; font-size:16px; cursor:pointer; color:var(--text-sub);" onclick="toggleDebugLab()">✕</button>
+    </div>
+    
+    <div class="debug-title">Час доби</div>
+    <div class="debug-btn-group">
+      <button class="debug-mini-btn" onclick="debugSetTime('theme-morning', 'Ранок')">Ранок</button>
+      <button class="debug-mini-btn" onclick="debugSetTime('theme-day', 'День')">День</button>
+      <button class="debug-mini-btn" onclick="debugSetTime('theme-night', 'Ніч')">Ніч</button>
+    </div>
+
+    <div class="debug-title">Погода</div>
+    <div class="debug-btn-group">
+      <button class="debug-mini-btn" onclick="debugSetWeather('weather-clear', 'Ясно')">☀️ Ясно</button>
+      <button class="debug-mini-btn" onclick="debugSetWeather('weather-cloudy', 'Хмари')">⛅ Хмари</button>
+      <button class="debug-mini-btn" onclick="debugSetWeather('weather-rain', 'Дощ')">🌧️ Дощ</button>
+    </div>
+    <p style="font-size:10.5px; color:var(--text-sub); line-height:1.2;">Зміни перетікають плавно та безшовно.</p>
   </div>
 
   <div id="app">
@@ -915,7 +987,11 @@
           <span class="brand-mark-dot"></span>
           <span id="theme-status-label">Atelier Studio</span>
         </div>
-        <button class="icon-btn interactive-press" onclick="openAddEditModal()" title="Додати річ">+</button>
+        <div class="top-bar-actions">
+          <!-- Кнопка відкриття Debug Lab -->
+          <button class="icon-btn interactive-press" style="width:38px; height:38px; font-size:14px;" onclick="toggleDebugLab()" title="Секретний дебаг">🧪</button>
+          <button class="icon-btn interactive-press" onclick="openAddEditModal()" title="Додати річ">+</button>
+        </div>
       </div>
 
       <div class="hero-header">
@@ -1224,8 +1300,10 @@
     let currentQuizStep = 1;
     let currentOutdoorTemp = 20;
 
+    let activeBgLayer = 1;
+
     /* ==========================================================================
-       ДИНАМІЧНИЙ ДВИГУН АТМОСФЕРИ (Час доби + Погода)
+       ДИНАМІЧНИЙ ДВИГУН З ПЛАВНИМ CROSSFADE
        ========================================================================== */
     function applyDynamicAtmosphere(weatherCode = 0) {
       const now = new Date();
@@ -1256,16 +1334,59 @@
         weatherLabel = 'Похмуро';
       }
 
+      setAtmosphereWithCrossfade(timeClass, weatherClass, timeLabel, weatherLabel);
+    }
+
+    function setAtmosphereWithCrossfade(timeClass, weatherClass, timeLabel, weatherLabel) {
+      // Зміна класів на body
       document.body.className = `${timeClass} ${weatherClass}`;
 
+      // Отримуємо обчислене значення нового градієнта зі стилів body
+      setTimeout(() => {
+        const computedGradient = getComputedStyle(document.body).getPropertyValue('--current-gradient').trim();
+        const layer1 = document.getElementById('bg-layer-1');
+        const layer2 = document.getElementById('bg-layer-2');
+
+        if (activeBgLayer === 1) {
+          layer2.style.background = computedGradient;
+          layer2.style.opacity = '1';
+          layer1.style.opacity = '0';
+          activeBgLayer = 2;
+        } else {
+          layer1.style.background = computedGradient;
+          layer1.style.opacity = '1';
+          layer2.style.opacity = '0';
+          activeBgLayer = 1;
+        }
+      }, 50);
+
       const badge = document.getElementById('weather-badge-text');
-      if (badge) {
-        badge.innerText = `✨ ${timeLabel} • ${weatherLabel}`;
-      }
+      if (badge) badge.innerText = `✨ ${timeLabel} • ${weatherLabel}`;
       const label = document.getElementById('theme-status-label');
-      if (label) {
-        label.innerText = `Atelier • ${timeLabel}`;
-      }
+      if (label) label.innerText = `Atelier • ${timeLabel}`;
+    }
+
+    /* DEBUG LAB ФУНКЦІЇ */
+    let debugCurrentTime = 'theme-day';
+    let debugCurrentWeather = 'weather-clear';
+    let debugCurrentTimeLabel = 'День';
+    let debugCurrentWeatherLabel = 'Ясно';
+
+    function toggleDebugLab() {
+      const panel = document.getElementById('debug-lab-panel');
+      panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function debugSetTime(timeClass, label) {
+      debugCurrentTime = timeClass;
+      debugCurrentTimeLabel = label;
+      setAtmosphereWithCrossfade(debugCurrentTime, debugCurrentWeather, debugCurrentTimeLabel, debugCurrentWeatherLabel);
+    }
+
+    function debugSetWeather(weatherClass, label) {
+      debugCurrentWeather = weatherClass;
+      debugCurrentWeatherLabel = label;
+      setAtmosphereWithCrossfade(debugCurrentTime, debugCurrentWeather, debugCurrentTimeLabel, debugCurrentWeatherLabel);
     }
 
     function delayedNavigate(element, callback) {
@@ -1343,21 +1464,21 @@
       updateCounts();
     }
 
-    /* SMART WEATHER */
-    async function fetchSmartWeather() {
-      const tempEl = document.getElementById('w-temp');
-      const iconEl = document.getElementById('w-icon');
-      const insightsEl = document.getElementById('w-insights');
-      const locEl = document.getElementById('w-location');
-
+    /* ФОНОВИЙ ЗАПУСК ПОГОДИ ПРИ ВХОДІ НА САЙТ */
+    async function initWeatherOnLoad() {
       const queryWeather = async (lat, lon, cityName = 'Київ') => {
-        locEl.innerText = cityName;
-        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code,wind_speed_10m&hourly=temperature_2m,precipitation_probability,precipitation,wind_speed_10m,weather_code&timezone=auto`;
-        
-        const res = await fetch(url);
-        if (!res.ok) throw new Error('Помилка API');
-        const data = await res.json();
-        renderSmartWeather(data);
+        const locEl = document.getElementById('w-location');
+        if (locEl) locEl.innerText = cityName;
+        try {
+          const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code,wind_speed_10m&hourly=temperature_2m,precipitation_probability,precipitation,wind_speed_10m,weather_code&timezone=auto`;
+          const res = await fetch(url);
+          if (res.ok) {
+            const data = await res.json();
+            renderSmartWeather(data);
+          }
+        } catch (e) {
+          applyDynamicAtmosphere(0);
+        }
       };
 
       if (navigator.geolocation) {
@@ -1381,9 +1502,10 @@
       currentOutdoorTemp = currentTemp;
       const windSpeed = Math.round(data.current.wind_speed_10m / 3.6);
 
-      tempEl.innerText = `Зараз ${currentTemp}°C`;
+      if (tempEl) tempEl.innerText = `Зараз ${currentTemp}°C`;
 
       const code = data.current.weather_code;
+      // М'який плавний перехід атмосфери
       applyDynamicAtmosphere(code);
 
       let cloudDesc = 'Ясно';
@@ -1401,7 +1523,7 @@
       }
 
       if ((currentHour >= 21 || currentHour <= 5) && icon === '☀️') icon = '🌙';
-      iconEl.innerText = icon;
+      if (iconEl) iconEl.innerText = icon;
 
       const hourlyTemps = data.hourly.temperature_2m;
       const hourlyPrecip = data.hourly.precipitation;
@@ -1442,7 +1564,7 @@
           insightsHtml += `
             <div class="insight-item">
               <span>✨</span>
-              <span>Приємний вечір, помітного похолодання не очікується.</span>
+              <span>Приємний вечір, сильного похолодання не очікується.</span>
             </div>`;
         }
       }
@@ -1481,7 +1603,7 @@
           </div>`;
       }
 
-      insightsEl.innerHTML = insightsHtml;
+      if (insightsEl) insightsEl.innerHTML = insightsHtml;
     }
 
     /* КВІЗ */
@@ -1501,8 +1623,6 @@
       document.getElementById('q-step-1').style.display = step === 1 ? 'block' : 'none';
       document.getElementById('q-step-2').style.display = step === 2 ? 'block' : 'none';
       document.getElementById('q-step-3').style.display = step === 3 ? 'block' : 'none';
-
-      if (step === 3) fetchSmartWeather();
     }
 
     function handleQuizBack() {
@@ -1524,7 +1644,7 @@
       }
     }
 
-    /* РОЗУМНИЙ АЛГОРИТМ ПІДБОРУ */
+    /* АЛГОРИТМ ПІДБОРУ */
     function generateQuizOutfit() {
       const yesterdayIds = yesterdayOutfit ? Object.values(yesterdayOutfit).filter(Boolean).map(x => x.id) : [];
 
@@ -2088,8 +2208,9 @@
       document.getElementById('rec-banner').classList.remove('active');
     }
 
-    // Запуск та початкова атмосфера
+    // Запуск та початкова фонова ініціалізація погоди
     applyDynamicAtmosphere(0);
+    initWeatherOnLoad();
     setRandomGreeting();
     buildSwatches();
     loadWardrobeFromGitHub();
