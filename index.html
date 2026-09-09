@@ -325,6 +325,21 @@
       color: var(--accent-highlight);
     }
 
+    /* Віджет погоди */
+    .weather-card {
+      background: #f0f7ff;
+      border: 1px solid #d0e4ff;
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .weather-icon {
+      font-size: 28px;
+    }
+
     .final-look-card {
       background: var(--card-bg);
       border-radius: var(--radius-lg);
@@ -447,30 +462,6 @@
       cursor: pointer;
     }
 
-    .detected-color-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
-      border-radius: 20px;
-      background: #eef7ee;
-      color: #2e7d32;
-      font-size: 11px;
-      font-weight: 600;
-      margin-top: 6px;
-    }
-
-    .yesterday-badge {
-      position: absolute;
-      top: 6px;
-      left: 6px;
-      background: rgba(0,0,0,0.75);
-      color: #fff;
-      font-size: 9px;
-      padding: 3px 6px;
-      border-radius: 4px;
-      font-weight: 600;
-    }
     .empty-state {
       text-align: center;
       padding: 50px 20px;
@@ -602,39 +593,54 @@
       <button class="btn btn-primary" style="width: 100%; margin-top: auto;" onclick="finishOutfit()">Готово ✨</button>
     </section>
 
-    <!-- 4. КВІЗ -->
+    <!-- 4. КВІЗ ІЗ ПОВЕРНЕННЯМ НА КРОК НАЗАД ТА ПОГОДОЮ -->
     <section id="screen-quiz" class="screen">
       <div class="top-bar">
-        <button class="icon-btn" onclick="goToScreen('screen-home')">←</button>
+        <button class="icon-btn" onclick="handleQuizBack()">←</button>
         <span style="font-weight: 600; font-size: 14px;">Швидкий підбір</span>
-        <div style="width:40px;"></div>
+        <button class="icon-btn" onclick="goToScreen('screen-home')" title="На головну">✕</button>
+      </div>
+
+      <!-- Віджет прогнозу погоди -->
+      <div id="weather-banner" class="weather-card" style="display:none;">
+        <div class="weather-icon" id="weather-icon">🌤️</div>
+        <div>
+          <div style="font-weight:600; font-size:13px;" id="weather-temp">Завантаження погоди...</div>
+          <div style="font-size:11px; color:var(--muted);" id="weather-desc">Перевіряємо за вікном</div>
+        </div>
       </div>
 
       <div id="quiz-step-container">
+        <!-- КРОК 1 -->
         <div id="q-step-1" class="quiz-step">
           <p style="text-transform:uppercase; font-size:11px; font-weight:700; color:var(--accent-highlight); margin-bottom:8px;">Крок 1 з 3</p>
           <h2>Який формат сьогоднішнього дня?</h2>
           <div style="display:flex; flex-direction:column; gap:12px; margin-top:20px;">
-            <button class="btn btn-secondary" onclick="answerQuiz('occasion', 'chill')">☕ Неспішний день / Прогулянка</button>
-            <button class="btn btn-secondary" onclick="answerQuiz('occasion', 'smart')">💼 Робота / Справи / Зустрічі</button>
-            <button class="btn btn-secondary" onclick="answerQuiz('occasion', 'active')">🏃 Активний день / Багато ходити</button>
+            <button class="btn btn-secondary" onclick="answerQuiz('occasion', 'walk')">🚶‍♀️ Прогулянка</button>
+            <button class="btn btn-secondary" onclick="answerQuiz('occasion', 'study')">📚 Університет / Справи</button>
+            <button class="btn btn-secondary" onclick="answerQuiz('occasion', 'active')">👟 Активний день / багато ходити</button>
+            <button class="btn btn-secondary" onclick="answerQuiz('occasion', 'date')">✨ Побачення</button>
           </div>
         </div>
 
+        <!-- КРОК 2 -->
         <div id="q-step-2" class="quiz-step" style="display:none;">
           <p style="text-transform:uppercase; font-size:11px; font-weight:700; color:var(--accent-highlight); margin-bottom:8px;">Крок 2 з 3</p>
           <h2>Який кольоровий настрій?</h2>
           <div style="display:flex; flex-direction:column; gap:12px; margin-top:20px;">
-            <button class="btn btn-secondary" onclick="answerQuiz('palette', 'dark')">🖤 Total Dark / Монохром</button>
-            <button class="btn btn-secondary" onclick="answerQuiz('palette', 'bright')">❤️ Яскравий акцент (Червоний / Колір)</button>
-            <button class="btn btn-secondary" onclick="answerQuiz('palette', 'neutral')">🩶 Базовий спокій (Сірий / Денім / Беж)</button>
+            <button class="btn btn-secondary" onclick="answerQuiz('palette', 'dark')">🖤 Темний / монохром</button>
+            <button class="btn btn-secondary" onclick="answerQuiz('palette', 'bright')">❤️ Яскравий акцент</button>
+            <button class="btn btn-secondary" onclick="answerQuiz('palette', 'pastel')">🌸 Пастельний (Беж / Ніжний / Світлий)</button>
+            <button class="btn btn-secondary" onclick="answerQuiz('palette', 'surprise')">🎲 Здивуй мене</button>
           </div>
         </div>
 
+        <!-- КРОК 3 -->
         <div id="q-step-3" class="quiz-step" style="display:none;">
           <p style="text-transform:uppercase; font-size:11px; font-weight:700; color:var(--accent-highlight); margin-bottom:8px;">Крок 3 з 3</p>
           <h2>Що з комфортом і погодою?</h2>
-          <div style="display:flex; flex-direction:column; gap:12px; margin-top:20px;">
+          <div id="weather-recommendation-note" style="font-size:12px; font-weight:600; color:var(--accent-highlight); margin-bottom:10px;"></div>
+          <div style="display:flex; flex-direction:column; gap:12px;">
             <button class="btn btn-secondary" onclick="answerQuiz('layer', 'single')">☀️ Тепло (тільки один шар)</button>
             <button class="btn btn-secondary" onclick="answerQuiz('layer', 'zipper')">🧥 Хочеться затишку (потрібна зіпка)</button>
           </div>
@@ -673,7 +679,7 @@
     </section>
   </div>
 
-  <!-- МОДАЛКА З ПОВНОЮ ПАЛІТРОЮ -->
+  <!-- МОДАЛКА З ПАЛІТРОЮ -->
   <div class="modal" id="add-modal">
     <div class="modal-sheet">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
@@ -695,12 +701,6 @@
 
       <div id="img-preview-box" style="display:none; margin-bottom:14px; text-align:center;">
         <img id="img-preview" src="" style="width:90px; height:90px; border-radius:12px; object-fit:cover; border:1.5px solid var(--border);" />
-        <div id="auto-detected-label" style="display:none;">
-          <div class="detected-color-badge">
-            <span id="detected-color-dot" style="width:8px; height:8px; border-radius:50%; display:inline-block;"></span>
-            <span>Автовизначено: <b id="detected-color-name"></b></span>
-          </div>
-        </div>
       </div>
 
       <div class="form-group">
@@ -764,16 +764,15 @@
     let managerFilter = 'all';
     let currentUploadBase64 = null;
     let quizAnswers = {};
+    let currentQuizStep = 1;
 
-    /* ПІДВАНТАЖЕННЯ З GITHUB WARDROBE.JSON */
+    /* ЗАВАНТАЖЕННЯ ДАНИХ */
     async function loadWardrobeFromGitHub() {
       try {
-        // Додаємо timestamp проти браузерного кешування файлу
         const res = await fetch('wardrobe.json?t=' + Date.now());
         if (res.ok) {
           const githubItems = await res.json();
           if (Array.isArray(githubItems)) {
-            // Об'єднуємо речі з GitHub та речі, додані локально на телефоні
             const combined = [...githubItems];
             customLocalItems.forEach(localItem => {
               if (!combined.some(i => i.id === localItem.id)) {
@@ -784,7 +783,6 @@
           }
         }
       } catch (err) {
-        console.warn('Не вдалося завантажити wardrobe.json, використовуємо локальні дані:', err);
         wardrobe = [...customLocalItems];
       }
 
@@ -812,95 +810,314 @@
       updateCounts();
     }
 
-    function exportWardrobeBackup() {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(wardrobe, null, 2));
-      const downloadAnchor = document.createElement('a');
-      downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", `wardrobe_${new Date().toISOString().slice(0,10)}.json`);
-      document.body.appendChild(downloadAnchor);
-      downloadAnchor.click();
-      downloadAnchor.remove();
+    /* АВТОМАТИЧНА ПОГОДА ЧЕРЕЗ OPEN-METEO */
+    async function fetchWeather() {
+      const banner = document.getElementById('weather-banner');
+      const tempEl = document.getElementById('weather-temp');
+      const descEl = document.getElementById('weather-desc');
+      const iconEl = document.getElementById('weather-icon');
+      const noteEl = document.getElementById('weather-recommendation-note');
+
+      // Київ за замовчуванням (або запит точних координат пристрою)
+      let lat = 50.45, lon = 30.52;
+
+      try {
+        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,precipitation,weather_code&timezone=auto`);
+        if (res.ok) {
+          const data = await res.json();
+          const temp = Math.round(data.current.temperature_2m);
+          const precip = data.current.precipitation;
+          const code = data.current.weather_code;
+
+          banner.style.display = 'flex';
+          tempEl.innerText = `Сьогодні за вікном ${temp}°C`;
+
+          if (precip > 0.1 || [51,53,55,61,63,65,80,81,82].includes(code)) {
+            descEl.innerText = 'Обережно, можливий дощ 🌧️';
+            iconEl.innerText = '🌧️';
+            noteEl.innerText = `💡 На вулиці ${temp}°C та дощ. Радимо взяти зіпку або комфортне взуття!`;
+          } else if (temp >= 22) {
+            descEl.innerText = 'Тепло і сонячно ☀️';
+            iconEl.innerText = '☀️';
+            noteEl.innerText = `💡 Сьогодні тепло (${temp}°C) — одного шару буде достатньо.`;
+          } else if (temp <= 16) {
+            descEl.innerText = 'Прохолодно, вітряно 💨';
+            iconEl.innerText = '🧥';
+            noteEl.innerText = `💡 На вулиці лише ${temp}°C — зіпка точно не завадить!`;
+          } else {
+            descEl.innerText = 'Комфортна погода ⛅';
+            iconEl.innerText = '⛅';
+            noteEl.innerText = `💡 На вулиці ${temp}°C. Обирай за власним комфортом.`;
+          }
+        }
+      } catch (e) {
+        banner.style.display = 'none';
+      }
     }
 
-    function importWardrobeBackup(input) {
+    /* НАВІГАЦІЯ КВІЗУ З ПОВЕРНЕННЯМ НА КРОК НАЗАД */
+    function goToQuizFlow() {
+      if (wardrobe.length < 2) {
+        alert('Додайте хоча б кілька речей у гардероб!');
+        return;
+      }
+      quizAnswers = {};
+      currentQuizStep = 1;
+      showQuizStep(1);
+      fetchWeather();
+      goToScreen('screen-quiz');
+    }
+
+    function showQuizStep(step) {
+      currentQuizStep = step;
+      document.getElementById('q-step-1').style.display = step === 1 ? 'block' : 'none';
+      document.getElementById('q-step-2').style.display = step === 2 ? 'block' : 'none';
+      document.getElementById('q-step-3').style.display = step === 3 ? 'block' : 'none';
+    }
+
+    function handleQuizBack() {
+      if (currentQuizStep === 1) {
+        goToScreen('screen-home');
+      } else {
+        showQuizStep(currentQuizStep - 1);
+      }
+    }
+
+    function answerQuiz(stepKey, val) {
+      quizAnswers[stepKey] = val;
+      if (stepKey === 'occasion') {
+        showQuizStep(2);
+      } else if (stepKey === 'palette') {
+        showQuizStep(3);
+      } else if (stepKey === 'layer') {
+        generateQuizOutfit();
+      }
+    }
+
+    /* РОЗУМНИЙ АЛГОРИТМ ПІДБОРУ */
+    function generateQuizOutfit() {
+      const yesterdayIds = yesterdayOutfit ? Object.values(yesterdayOutfit).filter(Boolean).map(x => x.id) : [];
+
+      // Взуття МОЖНА одягати щодня: блокуємо вчорашнє тільки для верху/низу/зіпок
+      let nonShoesPool = wardrobe.filter(item => item.category !== 'shoes' && !yesterdayIds.includes(item.id));
+      if (nonShoesPool.length < 2) nonShoesPool = wardrobe.filter(item => item.category !== 'shoes');
+
+      let shoesPool = wardrobe.filter(item => item.category === 'shoes');
+      if (shoesPool.length === 0) shoesPool = wardrobe; // резервний варіант
+
+      let tops = nonShoesPool.filter(i => i.category === 'top');
+      let bottoms = nonShoesPool.filter(i => i.category === 'bottom');
+      let layers = nonShoesPool.filter(i => i.category === 'layer');
+
+      if (tops.length === 0) tops = wardrobe.filter(i => i.category === 'top');
+      if (bottoms.length === 0) bottoms = wardrobe.filter(i => i.category === 'bottom');
+
+      let pickTop = null;
+      let pickBottom = null;
+      let pickShoes = null;
+      let pickLayer = null;
+
+      // 1. КОЛЬОРОВА ПАЛІТРА
+      const p = quizAnswers.palette;
+      if (p === 'dark') {
+        pickTop = tops.find(i => ['чорн', 'графіт', 'темн'].some(c => i.color.toLowerCase().includes(c))) || tops[0];
+      } else if (p === 'bright') {
+        pickTop = tops.find(i => ['червон', 'рожев', 'зелен', 'жовт', 'помаранч', 'синій'].some(c => i.color.toLowerCase().includes(c))) || tops[0];
+      } else if (p === 'pastel') {
+        pickTop = tops.find(i => ['беж', 'світло-сір', 'біл', 'блакит'].some(c => i.color.toLowerCase().includes(c))) || tops[0];
+      } else {
+        // Здивуй мене: випадковий вибір
+        pickTop = tops[Math.floor(Math.random() * tops.length)];
+      }
+
+      // 2. ФОРМАТ ДНЯ (НИЗ)
+      const occ = quizAnswers.occasion;
+      if (occ === 'study') {
+        // Університет: охайні класичні штани або стримані джинси
+        pickBottom = bottoms.find(i => i.name.toLowerCase().includes('штани')) || bottoms[0];
+      } else if (occ === 'active' || occ === 'walk') {
+        // Прогулянка або багато ходити: зручні напів оверсайз джинси
+        pickBottom = bottoms.find(i => i.name.toLowerCase().includes('джинси')) || bottoms[0];
+      } else if (occ === 'date') {
+        // Побачення: ефектний силует
+        pickBottom = bottoms.find(i => i.fit === 'wide' || i.name.toLowerCase().includes('штани')) || bottoms[0];
+      } else {
+        pickBottom = bottoms[0];
+      }
+
+      // 3. ВЗУТТЯ (ЗАВЖДИ ЗНАХОДИТЬСЯ І НЕ ПРОПАДАЄ)
+      if (occ === 'active') {
+        // Для «багато ходити» пріоритет кросівкам (New Balance, снікери)
+        pickShoes = shoesPool.find(i => ['balance', 'кросівк', 'sneaker', 'ню'].some(n => i.name.toLowerCase().includes(n))) || shoesPool[0];
+      } else if (occ === 'study' || occ === 'date') {
+        // Converse або стильне міське взуття
+        pickShoes = shoesPool.find(i => ['converse', 'lo pro', 'туфл', 'лофер'].some(n => i.name.toLowerCase().includes(n))) || shoesPool[0];
+      } else {
+        pickShoes = shoesPool[0];
+      }
+
+      // 4. ДРУГИЙ ШАР (ЗІПКА)
+      if (quizAnswers.layer === 'zipper' && layers.length > 0) {
+        // Підбираємо гармонійний колір зіпки до верху
+        if (pickTop && pickTop.color.toLowerCase().includes('червон')) {
+          pickLayer = layers.find(l => l.color.toLowerCase().includes('син') || l.color.toLowerCase().includes('чорн')) || layers[0];
+        } else {
+          pickLayer = layers[0];
+        }
+      }
+
+      selectedOutfit = {
+        top: pickTop || null,
+        bottom: pickBottom || null,
+        layer: pickLayer || null,
+        shoes: pickShoes || null
+      };
+
+      finishOutfit();
+    }
+
+    /* ФІНАЛЬНИЙ ЕКРАН */
+    function finishOutfit() {
+      const container = document.getElementById('final-items-container');
+      container.innerHTML = '';
+
+      const items = Object.values(selectedOutfit).filter(Boolean);
+      if (items.length === 0) {
+        alert('Оберіть хоча б одну річ!');
+        return;
+      }
+
+      items.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'final-item-row';
+        row.innerHTML = `
+          <img src="${item.image}" alt="${item.name}" />
+          <div>
+            <div style="font-weight:600; font-size:14px;">${item.name}</div>
+            <div style="font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px;">
+              <span class="color-dot" style="background:${item.colorHex || '#999'}"></span>
+              ${item.color}
+            </div>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+
+      goToScreen('screen-final');
+    }
+
+    function confirmTodayOutfit() {
+      localStorage.setItem('yesterday_outfit', JSON.stringify(selectedOutfit));
+      yesterdayOutfit = selectedOutfit;
+      alert('Чудового дня! Твій аутфіт зафіксовано ✨');
+      goToScreen('screen-home');
+    }
+
+    function toggleFavoriteCurrent() {
+      const items = Object.values(selectedOutfit).filter(Boolean);
+      if (items.length === 0) return;
+
+      favorites.push({
+        id: 'fav-' + Date.now(),
+        date: new Date().toLocaleDateString('uk-UA'),
+        outfit: { ...selectedOutfit }
+      });
+
+      localStorage.setItem('outfit_favorites', JSON.stringify(favorites));
+      updateCounts();
+      alert('Образ додано в улюблені! ❤️');
+    }
+
+    function showFavorites() {
+      const list = document.getElementById('favorites-list');
+      list.innerHTML = '';
+
+      if (favorites.length === 0) {
+        list.innerHTML = '<p style="text-align:center; padding: 40px 0;">У тебе ще немає збережених аутфітів.</p>';
+      } else {
+        favorites.forEach(fav => {
+          const card = document.createElement('div');
+          card.className = 'choice-card';
+          card.style.cursor = 'default';
+
+          let imagesHtml = '';
+          Object.values(fav.outfit).filter(Boolean).forEach(i => {
+            imagesHtml += `<img src="${i.image}" style="width:48px; height:48px; border-radius:8px; object-fit:cover; margin-right:6px;"/>`;
+          });
+
+          card.innerHTML = `
+            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+              <span style="font-size:12px; font-weight:600; color:var(--muted);">${fav.date}</span>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:6px;">${imagesHtml}</div>
+          `;
+          list.appendChild(card);
+        });
+      }
+
+      goToScreen('screen-favorites');
+    }
+
+    /* МОДАЛКА, РЕДАГУВАННЯ ТА КАТАЛОГ */
+    function openAddEditModal(itemId = null) {
+      const modal = document.getElementById('add-modal');
+      const title = document.getElementById('modal-title');
+      const idField = document.getElementById('edit-item-id');
+      const nameField = document.getElementById('item-title-input');
+      const catField = document.getElementById('item-cat-input');
+      const urlField = document.getElementById('item-url-input');
+      const fileField = document.getElementById('item-file-input');
+      const previewBox = document.getElementById('img-preview-box');
+      const previewImg = document.getElementById('img-preview');
+
+      fileField.value = '';
+      currentUploadBase64 = null;
+
+      if (itemId) {
+        const item = wardrobe.find(i => i.id === itemId);
+        title.innerText = 'Редагувати річ';
+        idField.value = item.id;
+        nameField.value = item.name;
+        catField.value = item.category;
+        urlField.value = item.image.startsWith('data:') ? '' : item.image;
+        selectPaletteColor(item.color, item.colorHex || '#1c1b1a');
+        previewImg.src = item.image;
+        previewBox.style.display = 'block';
+      } else {
+        title.innerText = 'Додати річ';
+        idField.value = '';
+        nameField.value = '';
+        catField.value = 'top';
+        urlField.value = '';
+        selectPaletteColor('Чорний', '#1c1b1a');
+        previewBox.style.display = 'none';
+      }
+
+      modal.classList.add('active');
+    }
+
+    function closeAddEditModal() {
+      document.getElementById('add-modal').classList.remove('active');
+    }
+
+    function handleImageUpload(input) {
       if (input.files && input.files[0]) {
         const reader = new FileReader();
         reader.onload = function(e) {
-          try {
-            const imported = JSON.parse(e.target.result);
-            if (Array.isArray(imported)) {
-              wardrobe = imported;
-              customLocalItems = imported;
-              localStorage.setItem('my_local_added_items', JSON.stringify(customLocalItems));
-              renderManagerGrid();
-              buildColorFilters();
-              renderWardrobe();
-              updateCounts();
-              alert('Гардероб успішно оновлено! ✨');
-            }
-          } catch (err) {
-            alert('Не вдалося прочитати файл резервної копії.');
-          }
+          currentUploadBase64 = e.target.result;
+          const previewImg = document.getElementById('img-preview');
+          previewImg.src = currentUploadBase64;
+          document.getElementById('img-preview-box').style.display = 'block';
         };
-        reader.readAsText(input.files[0]);
+        reader.readAsDataURL(input.files[0]);
       }
     }
 
-    /* АВТОВИЗНАЧЕННЯ КОЛЬОРУ */
-    function detectDominantColor(imgElement) {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      canvas.width = 50;
-      canvas.height = 50;
-
-      try {
-        ctx.drawImage(imgElement, 0, 0, 50, 50);
-        const data = ctx.getImageData(0, 0, 50, 50).data;
-        let r = 0, g = 0, b = 0, count = 0;
-
-        for (let i = 0; i < data.length; i += 4) {
-          if (data[i+3] < 128) continue;
-          if (data[i] > 245 && data[i+1] > 245 && data[i+2] > 245) continue;
-          r += data[i];
-          g += data[i+1];
-          b += data[i+2];
-          count++;
-        }
-
-        if (count === 0) return null;
-        r = Math.round(r / count);
-        g = Math.round(g / count);
-        b = Math.round(b / count);
-
-        let closest = PALETTE[0];
-        let minDistance = Infinity;
-
-        PALETTE.forEach(color => {
-          const cRgb = hexToRgb(color.hex);
-          const dist = Math.sqrt(Math.pow(r - cRgb.r, 2) + Math.pow(g - cRgb.g, 2) + Math.pow(b - cRgb.b, 2));
-          if (dist < minDistance) {
-            minDistance = dist;
-            closest = color;
-          }
-        });
-
-        return closest;
-      } catch (err) {
-        return null;
-      }
-    }
-
-    function hexToRgb(hex) {
-      const bigint = parseInt(hex.replace('#', ''), 16);
-      return { r: (bigint >> 16) & 255, g: (bigint >> 8) & 255, b: bigint & 255 };
-    }
-
-    function applyAutoDetectedColor(colorObj) {
-      if (!colorObj) return;
-      selectPaletteColor(colorObj.name, colorObj.hex);
-      document.getElementById('auto-detected-label').style.display = 'block';
-      document.getElementById('detected-color-dot').style.backgroundColor = colorObj.hex;
-      document.getElementById('detected-color-name').innerText = colorObj.name;
+    function handleUrlInput(val) {
+      if (!val) return;
+      const previewImg = document.getElementById('img-preview');
+      previewImg.src = val;
+      document.getElementById('img-preview-box').style.display = 'block';
     }
 
     function buildSwatches(currentHex = '#1c1b1a') {
@@ -934,82 +1151,6 @@
       selectPaletteColor('Власний відтінок', hex);
     }
 
-    /* МОДАЛКА ДОДАВАННЯ / ЗБЕРЕЖЕННЯ */
-    function openAddEditModal(itemId = null) {
-      const modal = document.getElementById('add-modal');
-      const title = document.getElementById('modal-title');
-      const idField = document.getElementById('edit-item-id');
-      const nameField = document.getElementById('item-title-input');
-      const catField = document.getElementById('item-cat-input');
-      const urlField = document.getElementById('item-url-input');
-      const fileField = document.getElementById('item-file-input');
-      const previewBox = document.getElementById('img-preview-box');
-      const previewImg = document.getElementById('img-preview');
-      const autoLabel = document.getElementById('auto-detected-label');
-
-      fileField.value = '';
-      currentUploadBase64 = null;
-      autoLabel.style.display = 'none';
-
-      if (itemId) {
-        const item = wardrobe.find(i => i.id === itemId);
-        title.innerText = 'Редагувати річ';
-        idField.value = item.id;
-        nameField.value = item.name;
-        catField.value = item.category;
-        urlField.value = item.image.startsWith('data:') ? '' : item.image;
-
-        selectPaletteColor(item.color, item.colorHex || '#1c1b1a');
-        previewImg.src = item.image;
-        previewBox.style.display = 'block';
-      } else {
-        title.innerText = 'Додати річ';
-        idField.value = '';
-        nameField.value = '';
-        catField.value = 'top';
-        urlField.value = '';
-        selectPaletteColor('Чорний', '#1c1b1a');
-        previewBox.style.display = 'none';
-      }
-
-      modal.classList.add('active');
-    }
-
-    function closeAddEditModal() {
-      document.getElementById('add-modal').classList.remove('active');
-    }
-
-    function handleImageUpload(input) {
-      if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          currentUploadBase64 = e.target.result;
-          const previewImg = document.getElementById('img-preview');
-          previewImg.src = currentUploadBase64;
-          document.getElementById('img-preview-box').style.display = 'block';
-
-          previewImg.onload = function() {
-            const detected = detectDominantColor(previewImg);
-            if (detected) applyAutoDetectedColor(detected);
-          };
-        };
-        reader.readAsDataURL(input.files[0]);
-      }
-    }
-
-    function handleUrlInput(val) {
-      if (!val) return;
-      const previewImg = document.getElementById('img-preview');
-      previewImg.crossOrigin = "Anonymous";
-      previewImg.src = val;
-      document.getElementById('img-preview-box').style.display = 'block';
-
-      previewImg.onload = function() {
-        const detected = detectDominantColor(previewImg);
-        if (detected) applyAutoDetectedColor(detected);
-      };
-    }
-
     function saveItem() {
       const id = document.getElementById('edit-item-id').value;
       const name = document.getElementById('item-title-input').value.trim();
@@ -1019,7 +1160,7 @@
       const url = document.getElementById('item-url-input').value.trim();
 
       if (!name) {
-        alert('Будь ласка, введіть назву');
+        alert('Введіть назву речі');
         return;
       }
 
@@ -1035,9 +1176,7 @@
           if (image) wardrobe[index].image = image;
         }
         const localIdx = customLocalItems.findIndex(i => i.id === id);
-        if (localIdx !== -1) {
-          customLocalItems[localIdx] = wardrobe[index];
-        }
+        if (localIdx !== -1) customLocalItems[localIdx] = wardrobe[index];
       } else {
         const newItem = {
           id: 'item-' + Date.now(),
@@ -1059,7 +1198,6 @@
       updateCounts();
     }
 
-    /* УПРАВЛІННЯ ГАРДЕРОБОМ */
     function goToWardrobeManager() {
       renderManagerGrid();
       goToScreen('screen-wardrobe-manager');
@@ -1081,7 +1219,7 @@
       const list = wardrobe.filter(item => managerFilter === 'all' || item.category === managerFilter);
 
       if (list.length === 0) {
-        grid.innerHTML = `<div class="empty-state">У гардеробі ще немає речей.<br>Натисніть «+ Додати нову річ» або завантажте їх у wardrobe.json.</div>`;
+        grid.innerHTML = `<div class="empty-state">У гардеробі немає речей.<br>Натисніть «+ Додати нову річ» або завантажте їх у wardrobe.json.</div>`;
         return;
       }
 
@@ -1117,7 +1255,40 @@
       updateCounts();
     }
 
-    /* КОНСТРУКТОР */
+    function exportWardrobeBackup() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(wardrobe, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `wardrobe_${new Date().toISOString().slice(0,10)}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    function importWardrobeBackup(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          try {
+            const imported = JSON.parse(e.target.result);
+            if (Array.isArray(imported)) {
+              wardrobe = imported;
+              customLocalItems = imported;
+              localStorage.setItem('my_local_added_items', JSON.stringify(customLocalItems));
+              renderManagerGrid();
+              buildColorFilters();
+              renderWardrobe();
+              updateCounts();
+              alert('Гардероб оновлено! ✨');
+            }
+          } catch (err) {
+            alert('Не вдалося прочитати файл.');
+          }
+        };
+        reader.readAsText(input.files[0]);
+      }
+    }
+
     function buildColorFilters() {
       const container = document.getElementById('color-filters');
       container.innerHTML = `<button class="filter-chip active" onclick="filterByColor('all', this)">Всі кольори</button>`;
@@ -1186,7 +1357,7 @@
       });
 
       if (list.length === 0) {
-        grid.innerHTML = `<div class="empty-state">Не знайдено речей для цього фільтра.</div>`;
+        grid.innerHTML = `<div class="empty-state">Не знайдено речей.</div>`;
         return;
       }
 
@@ -1265,147 +1436,6 @@
 
     function hideRecommendations() {
       document.getElementById('rec-banner').classList.remove('active');
-    }
-
-    /* КВІЗ */
-    function goToQuizFlow() {
-      if (wardrobe.length < 3) {
-        alert('Будь ласка, спочатку додайте хоча б кілька речей у гардероб!');
-        return;
-      }
-      quizAnswers = {};
-      document.getElementById('q-step-1').style.display = 'block';
-      document.getElementById('q-step-2').style.display = 'none';
-      document.getElementById('q-step-3').style.display = 'none';
-      goToScreen('screen-quiz');
-    }
-
-    function answerQuiz(stepKey, val) {
-      quizAnswers[stepKey] = val;
-      if (stepKey === 'occasion') {
-        document.getElementById('q-step-1').style.display = 'none';
-        document.getElementById('q-step-2').style.display = 'block';
-      } else if (stepKey === 'palette') {
-        document.getElementById('q-step-2').style.display = 'none';
-        document.getElementById('q-step-3').style.display = 'block';
-      } else if (stepKey === 'layer') {
-        generateQuizOutfit();
-      }
-    }
-
-    function generateQuizOutfit() {
-      const yesterdayIds = yesterdayOutfit ? Object.values(yesterdayOutfit).filter(Boolean).map(x => x.id) : [];
-      let pool = wardrobe.filter(item => !yesterdayIds.includes(item.id));
-      if (pool.length < 3) pool = [...wardrobe];
-
-      let pickTop, pickBottom, pickLayer, pickShoes;
-
-      if (quizAnswers.palette === 'bright') {
-        pickTop = pool.find(i => ['червон', 'рожев', 'зелен', 'помаранч'].some(c => i.color.toLowerCase().includes(c))) || pool.find(i => i.category === 'top');
-      } else if (quizAnswers.palette === 'dark') {
-        pickTop = pool.find(i => i.color.toLowerCase().includes('чорн')) || pool.find(i => i.category === 'top');
-      } else {
-        pickTop = pool.find(i => ['сір', 'беж', 'біл'].some(c => i.color.toLowerCase().includes(c))) || pool.find(i => i.category === 'top');
-      }
-
-      pickBottom = pool.find(i => i.category === 'bottom');
-      pickShoes = pool.find(i => i.category === 'shoes');
-
-      if (quizAnswers.layer === 'zipper') {
-        pickLayer = pool.find(i => i.category === 'layer');
-      } else {
-        pickLayer = null;
-      }
-
-      selectedOutfit = {
-        top: pickTop || null,
-        bottom: pickBottom || null,
-        layer: pickLayer || null,
-        shoes: pickShoes || null
-      };
-
-      finishOutfit();
-    }
-
-    function finishOutfit() {
-      const container = document.getElementById('final-items-container');
-      container.innerHTML = '';
-
-      const items = Object.values(selectedOutfit).filter(Boolean);
-      if (items.length === 0) {
-        alert('Оберіть хоча б одну річ для аутфіту!');
-        return;
-      }
-
-      items.forEach(item => {
-        const row = document.createElement('div');
-        row.className = 'final-item-row';
-        row.innerHTML = `
-          <img src="${item.image}" alt="${item.name}" />
-          <div>
-            <div style="font-weight:600; font-size:14px;">${item.name}</div>
-            <div style="font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px;">
-              <span class="color-dot" style="background:${item.colorHex || '#999'}"></span>
-              ${item.color}
-            </div>
-          </div>
-        `;
-        container.appendChild(row);
-      });
-
-      goToScreen('screen-final');
-    }
-
-    function confirmTodayOutfit() {
-      localStorage.setItem('yesterday_outfit', JSON.stringify(selectedOutfit));
-      yesterdayOutfit = selectedOutfit;
-      alert('Чудового дня! Твій аутфіт зафіксовано ✨');
-      goToScreen('screen-home');
-    }
-
-    function toggleFavoriteCurrent() {
-      const items = Object.values(selectedOutfit).filter(Boolean);
-      if (items.length === 0) return;
-
-      favorites.push({
-        id: 'fav-' + Date.now(),
-        date: new Date().toLocaleDateString('uk-UA'),
-        outfit: { ...selectedOutfit }
-      });
-
-      localStorage.setItem('outfit_favorites', JSON.stringify(favorites));
-      updateCounts();
-      alert('Образ додано в улюблені! ❤️');
-    }
-
-    function showFavorites() {
-      const list = document.getElementById('favorites-list');
-      list.innerHTML = '';
-
-      if (favorites.length === 0) {
-        list.innerHTML = '<p style="text-align:center; padding: 40px 0;">У тебе ще немає збережених аутфітів.</p>';
-      } else {
-        favorites.forEach(fav => {
-          const card = document.createElement('div');
-          card.className = 'choice-card';
-          card.style.cursor = 'default';
-
-          let imagesHtml = '';
-          Object.values(fav.outfit).filter(Boolean).forEach(i => {
-            imagesHtml += `<img src="${i.image}" style="width:48px; height:48px; border-radius:8px; object-fit:cover; margin-right:6px;"/>`;
-          });
-
-          card.innerHTML = `
-            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-              <span style="font-size:12px; font-weight:600; color:var(--muted);">${fav.date}</span>
-            </div>
-            <div style="display:flex; flex-wrap:wrap; gap:6px;">${imagesHtml}</div>
-          `;
-          list.appendChild(card);
-        });
-      }
-
-      goToScreen('screen-favorites');
     }
 
     // Запуск
