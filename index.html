@@ -2,7 +2,7 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>Мій Аутфіт Дня ✨</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,23 +11,32 @@
 
   <style>
     :root {
-      --bg-base: #FBF7F2;
-      --card-bg: rgba(255, 255, 255, 0.82);
-      --card-solid: #FFFFFF;
-      --text-espresso: #1C1614;
-      --text-muted: #82776E;
-      --accent-terracotta: #C86650;
-      --accent-amber: #DF9962;
-      --accent-honey: #E6B685;
-      --accent-rose: #E7C3B7;
-      --glass-border: rgba(230, 216, 201, 0.7);
-      --glass-border-hover: rgba(200, 102, 80, 0.35);
-      --shadow-ambient: 0 10px 30px -10px rgba(65, 45, 35, 0.07), 0 4px 12px rgba(65, 45, 35, 0.03);
-      --shadow-glow: 0 14px 36px -8px rgba(223, 153, 98, 0.22);
-      --radius-xl: 28px;
-      --radius-lg: 20px;
-      --radius-md: 14px;
-      --radius-sm: 9px;
+      --bg-base: #FAF5F0;
+      
+      /* Frutiger Aero Coral Glass */
+      --glass-coral: rgba(255, 240, 235, 0.68);
+      --glass-coral-card: rgba(255, 235, 228, 0.62);
+      --glass-coral-accent: rgba(244, 122, 97, 0.18);
+      --glass-border: rgba(255, 255, 255, 0.75);
+      --glass-border-subtle: rgba(244, 140, 118, 0.28);
+      --glass-gloss: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.1) 45%, rgba(244, 122, 97, 0.08) 100%);
+      --glass-specular: inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.85), inset 0 -1.5px 1.5px 0 rgba(220, 100, 80, 0.1);
+      
+      --text-espresso: #201715;
+      --text-muted: #826E67;
+      --accent-coral: #E35E43;
+      --accent-coral-deep: #C7462C;
+      --accent-honey: #F7D0B2;
+      
+      --shadow-glass: 0 12px 36px -8px rgba(180, 70, 50, 0.12), 0 4px 14px rgba(0, 0, 0, 0.03);
+      --shadow-tap: 0 4px 12px rgba(180, 70, 50, 0.08);
+      
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 15px;
+      --radius-sm: 10px;
+
+      --spring-curve: cubic-bezier(0.32, 0.72, 0, 1);
     }
 
     * {
@@ -36,6 +45,8 @@
       margin: 0;
       padding: 0;
       font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     body {
@@ -48,83 +59,63 @@
       position: relative;
     }
 
-    /* Фонова жива аура з плаваючими м'якими плямами світла */
+    /* М'яка коралово-медова підкладка з градієнтом */
     .ambient-bg {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
       pointer-events: none;
       z-index: 0;
       overflow: hidden;
-    }
-    .ambient-orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(75px);
-      opacity: 0.55;
-      animation: floatOrb 18s infinite alternate ease-in-out;
-    }
-    .orb-1 {
-      width: 320px; height: 320px;
-      background: radial-gradient(circle, var(--accent-honey) 0%, rgba(230,182,133,0) 70%);
-      top: -80px; right: -60px;
-      animation-duration: 16s;
-    }
-    .orb-2 {
-      width: 360px; height: 360px;
-      background: radial-gradient(circle, var(--accent-rose) 0%, rgba(231,195,183,0) 70%);
-      bottom: 10%; left: -90px;
-      animation-duration: 22s;
-      animation-delay: -4s;
-    }
-    .orb-3 {
-      width: 250px; height: 250px;
-      background: radial-gradient(circle, #F8DFC8 0%, rgba(248,223,200,0) 70%);
-      top: 45%; right: -50px;
-      animation-duration: 20s;
-      animation-delay: -8s;
-    }
-
-    @keyframes floatOrb {
-      0% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(-30px, 35px) scale(1.1); }
-      100% { transform: translate(25px, -20px) scale(0.92); }
+      background: radial-gradient(circle at 10% 10%, rgba(255, 185, 168, 0.35) 0%, transparent 50%),
+                  radial-gradient(circle at 90% 80%, rgba(247, 208, 178, 0.45) 0%, transparent 55%),
+                  radial-gradient(circle at 50% 50%, rgba(250, 245, 240, 1) 0%, transparent 100%);
     }
 
     #app {
       width: 100%;
-      max-width: 480px;
+      max-width: 460px;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       position: relative;
-      padding-bottom: 40px;
+      padding-bottom: env(safe-area-inset-bottom, 34px);
       z-index: 1;
+      overflow: hidden;
     }
 
+    /* iOS-стиль перехода між екранами */
     .screen {
       display: none;
       flex-direction: column;
       padding: 24px 20px;
-      animation: softSlideIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      min-height: 100vh;
+      transform: translate3d(0, 0, 0);
     }
 
     .screen.active {
       display: flex;
+      animation: iosScreenIn 0.42s var(--spring-curve) forwards;
     }
 
-    @keyframes softSlideIn {
-      from { opacity: 0; transform: translateY(12px) scale(0.99); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
+    @keyframes iosScreenIn {
+      0% {
+        opacity: 0.6;
+        transform: translate3d(24px, 0, 0) scale(0.97);
+      }
+      100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+      }
     }
 
     /* Типографіка */
     h1 {
       font-family: 'Playfair Display', Georgia, serif;
-      font-size: 31px;
+      font-size: 32px;
       font-weight: 600;
       letter-spacing: -0.6px;
       color: var(--text-espresso);
-      line-height: 1.18;
+      line-height: 1.15;
       margin-bottom: 8px;
     }
     h2 {
@@ -133,70 +124,66 @@
       font-weight: 600;
       color: var(--text-espresso);
       letter-spacing: -0.3px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     p {
-      font-size: 13.5px;
+      font-size: 14px;
       color: var(--text-muted);
-      line-height: 1.5;
+      line-height: 1.45;
     }
 
-    /* Стилізація кнопок */
+    /* iOS тактильні кнопки (Spring Active) */
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 16px 22px;
+      padding: 17px 24px;
       border-radius: var(--radius-lg);
-      font-size: 14.5px;
+      font-size: 15px;
       font-weight: 600;
       cursor: pointer;
       border: none;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: transform 0.22s var(--spring-curve), filter 0.2s ease, box-shadow 0.22s ease;
       text-align: center;
       gap: 10px;
       position: relative;
-      overflow: hidden;
     }
     .btn:active {
-      transform: scale(0.97);
+      transform: scale(0.95);
     }
     .btn-primary {
-      background: linear-gradient(135deg, #26201D 0%, #151110 100%);
-      color: #FAF6F0;
-      box-shadow: 0 6px 20px rgba(28, 22, 20, 0.22);
+      background: linear-gradient(135deg, #2D1D19 0%, #170F0D 100%);
+      color: #FAF5F0;
+      box-shadow: 0 8px 24px rgba(45, 29, 25, 0.25);
     }
     .btn-primary:active {
-      box-shadow: 0 2px 10px rgba(28, 22, 20, 0.3);
-    }
-    .btn-primary::after {
-      content: '';
-      position: absolute;
-      top: 0; left: -100%; width: 100%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
-      animation: btnShimmer 4s infinite ease-in-out;
-    }
-    @keyframes btnShimmer {
-      0%, 70% { left: -100%; }
-      100% { left: 100%; }
+      box-shadow: 0 2px 10px rgba(45, 29, 25, 0.3);
+      filter: brightness(1.1);
     }
 
     .btn-secondary {
-      background: var(--card-bg);
-      backdrop-filter: blur(14px);
+      background: var(--glass-coral-card);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       color: var(--text-espresso);
       border: 1px solid var(--glass-border);
-      box-shadow: var(--shadow-ambient);
+      box-shadow: var(--shadow-glass), var(--glass-specular);
     }
-    .btn-secondary:hover {
-      border-color: var(--accent-amber);
-      transform: translateY(-1px);
+    .btn-secondary:active {
+      background: rgba(255, 230, 222, 0.85);
     }
+
     .btn-outline {
-      border: 1px solid var(--glass-border);
-      background: rgba(255, 255, 255, 0.4);
-      backdrop-filter: blur(8px);
+      border: 1px solid var(--glass-border-subtle);
+      background: rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       color: var(--text-espresso);
+      box-shadow: var(--glass-specular);
+    }
+    .btn-outline:active {
+      transform: scale(0.96);
+      background: rgba(255, 255, 255, 0.7);
     }
 
     /* Навігаційний бар */
@@ -204,121 +191,112 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
     }
     .brand-mark {
       font-size: 11px;
       font-weight: 700;
-      letter-spacing: 2.2px;
+      letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--text-muted);
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 8px;
     }
     .brand-mark-dot {
-      width: 6px;
-      height: 6px;
-      background: var(--accent-terracotta);
+      width: 7px;
+      height: 7px;
+      background: var(--accent-coral);
       border-radius: 50%;
-      box-shadow: 0 0 8px var(--accent-terracotta);
+      box-shadow: 0 0 10px var(--accent-coral);
     }
     .icon-btn {
-      background: var(--card-bg);
-      backdrop-filter: blur(12px);
+      background: var(--glass-coral);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border: 1px solid var(--glass-border);
+      box-shadow: var(--shadow-glass), var(--glass-specular);
       border-radius: 50%;
-      width: 42px;
-      height: 42px;
+      width: 44px;
+      height: 44px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       font-size: 18px;
       color: var(--text-espresso);
-      box-shadow: var(--shadow-ambient);
-      transition: all 0.2s ease;
+      transition: transform 0.2s var(--spring-curve);
     }
     .icon-btn:active {
-      transform: scale(0.92);
-      border-color: var(--accent-amber);
+      transform: scale(0.88);
+      background: rgba(255, 255, 255, 0.9);
     }
 
     .hero-header {
-      margin: 18px 0 28px;
+      margin: 10px 0 26px;
     }
     .hero-badge {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 5px 12px;
+      padding: 6px 14px;
       border-radius: 30px;
-      background: rgba(223, 153, 98, 0.14);
-      border: 1px solid rgba(223, 153, 98, 0.28);
-      font-size: 11px;
+      background: rgba(244, 122, 97, 0.14);
+      border: 1px solid rgba(244, 122, 97, 0.32);
+      font-size: 11.5px;
       text-transform: uppercase;
       letter-spacing: 1.2px;
-      color: var(--accent-terracotta);
+      color: var(--accent-coral-deep);
       font-weight: 700;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6);
     }
 
-    /* Картки головного меню */
+    /* Коралове скло карток (Frutiger Aero look) */
     .choice-card {
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
+      background: var(--glass-gloss), var(--glass-coral-card);
+      backdrop-filter: blur(26px);
+      -webkit-backdrop-filter: blur(26px);
       border: 1px solid var(--glass-border);
       border-radius: var(--radius-xl);
       padding: 24px;
       margin-bottom: 16px;
       cursor: pointer;
-      box-shadow: var(--shadow-ambient);
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: var(--shadow-glass), var(--glass-specular);
+      transition: transform 0.24s var(--spring-curve), background 0.2s ease, box-shadow 0.24s ease;
       position: relative;
       overflow: hidden;
     }
-    .choice-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; width: 4px; height: 100%;
-      background: linear-gradient(to bottom, var(--accent-amber), var(--accent-terracotta));
-      opacity: 0;
-      transition: opacity 0.25s ease;
-    }
-    .choice-card:hover {
-      box-shadow: var(--shadow-glow);
-      border-color: var(--glass-border-hover);
-      transform: translateY(-2px);
-    }
-    .choice-card:hover::before {
-      opacity: 1;
-    }
     .choice-card:active {
-      transform: scale(0.99);
+      transform: scale(0.96);
+      box-shadow: var(--shadow-tap);
+      background: rgba(255, 238, 232, 0.88);
     }
     .choice-card .icon-bubble {
-      width: 50px;
-      height: 50px;
-      border-radius: 17px;
-      background: linear-gradient(135deg, #FFF3E6 0%, #F5E2CE 100%);
+      width: 52px;
+      height: 52px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 220, 210, 0.7) 100%);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 6px 16px rgba(244, 122, 97, 0.18), inset 0 1px 2px #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 23px;
+      font-size: 24px;
       margin-bottom: 16px;
-      box-shadow: 0 4px 14px rgba(223, 153, 98, 0.16);
     }
 
     /* Слоти Мудборду */
     .outfit-slots-panel {
       position: sticky;
       top: 0;
-      background: rgba(251, 247, 242, 0.92);
-      backdrop-filter: blur(14px);
+      background: rgba(250, 245, 240, 0.82);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       z-index: 10;
-      padding: 6px 0 16px;
+      padding: 4px 0 16px;
       margin-bottom: 16px;
-      border-bottom: 1px solid rgba(230, 216, 201, 0.6);
+      border-bottom: 1px solid rgba(244, 140, 118, 0.2);
     }
     .slots-grid {
       display: grid;
@@ -326,11 +304,12 @@
       gap: 10px;
     }
     .slot-item {
-      background: var(--card-bg);
-      backdrop-filter: blur(10px);
+      background: var(--glass-gloss), var(--glass-coral-card);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border: 1px solid var(--glass-border);
       border-radius: var(--radius-lg);
-      height: 98px;
+      height: 102px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -340,27 +319,30 @@
       cursor: pointer;
       text-align: center;
       padding: 4px;
-      box-shadow: var(--shadow-ambient);
-      transition: all 0.25s ease;
+      box-shadow: var(--shadow-glass), var(--glass-specular);
+      transition: transform 0.2s var(--spring-curve);
+    }
+    .slot-item:active {
+      transform: scale(0.92);
     }
     .slot-item.filled {
-      border: 1.5px solid var(--accent-terracotta);
-      box-shadow: var(--shadow-glow);
-      animation: pulseFill 0.35s ease;
+      border: 1.5px solid var(--accent-coral);
+      box-shadow: 0 8px 24px rgba(227, 94, 67, 0.24);
+      animation: popSlot 0.35s var(--spring-curve);
     }
-    @keyframes pulseFill {
-      0% { transform: scale(0.94); }
-      50% { transform: scale(1.04); }
+    @keyframes popSlot {
+      0% { transform: scale(0.88); }
+      50% { transform: scale(1.06); }
       100% { transform: scale(1); }
     }
     .slot-item img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 14px;
+      border-radius: 16px;
     }
     .slot-label {
-      font-size: 10px;
+      font-size: 10.5px;
       font-weight: 700;
       color: var(--text-muted);
       letter-spacing: 0.6px;
@@ -370,24 +352,25 @@
       position: absolute;
       top: 5px;
       right: 5px;
-      background: rgba(28, 22, 20, 0.75);
+      background: rgba(32, 23, 21, 0.75);
       color: #fff;
       border: none;
       border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      font-size: 10px;
+      width: 22px;
+      height: 22px;
+      font-size: 11px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       backdrop-filter: blur(4px);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
 
     /* Фільтри */
     .filters-scroll {
       display: flex;
-      gap: 8px;
+      gap: 9px;
       overflow-x: auto;
       padding-bottom: 12px;
       margin-bottom: 12px;
@@ -395,24 +378,28 @@
     }
     .filters-scroll::-webkit-scrollbar { display: none; }
     .filter-chip {
-      background: var(--card-bg);
-      backdrop-filter: blur(10px);
+      background: var(--glass-coral-card);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
       border: 1px solid var(--glass-border);
-      padding: 8px 16px;
+      padding: 9px 18px;
       border-radius: 30px;
-      font-size: 13px;
+      font-size: 13.5px;
       white-space: nowrap;
       cursor: pointer;
       color: var(--text-espresso);
       font-weight: 600;
-      transition: all 0.2s ease;
-      box-shadow: var(--shadow-ambient);
+      box-shadow: var(--shadow-glass), var(--glass-specular);
+      transition: transform 0.2s var(--spring-curve), background 0.2s ease;
+    }
+    .filter-chip:active {
+      transform: scale(0.92);
     }
     .filter-chip.active {
-      background: linear-gradient(135deg, var(--text-espresso), #362E29);
-      color: #FAF7F2;
-      border-color: var(--text-espresso);
-      box-shadow: 0 4px 12px rgba(28, 22, 20, 0.2);
+      background: linear-gradient(135deg, #2D1D19 0%, #170F0D 100%);
+      color: #FAF5F0;
+      border-color: #2D1D19;
+      box-shadow: 0 6px 18px rgba(45, 29, 25, 0.22);
     }
 
     /* Каталог речей */
@@ -423,8 +410,9 @@
       margin-bottom: 24px;
     }
     .item-card {
-      background: var(--card-bg);
-      backdrop-filter: blur(12px);
+      background: var(--glass-gloss), var(--glass-coral-card);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border-radius: var(--radius-lg);
       border: 1px solid var(--glass-border);
       padding: 11px;
@@ -432,53 +420,46 @@
       flex-direction: column;
       cursor: pointer;
       position: relative;
-      box-shadow: var(--shadow-ambient);
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .item-card:hover {
-      box-shadow: var(--shadow-glow);
-      border-color: var(--glass-border-hover);
-      transform: translateY(-3px);
+      box-shadow: var(--shadow-glass), var(--glass-specular);
+      transition: transform 0.22s var(--spring-curve), box-shadow 0.22s ease;
     }
     .item-card:active {
-      transform: scale(0.98);
+      transform: scale(0.94);
+      box-shadow: var(--shadow-tap);
     }
     .item-img-wrap {
       width: 100%;
       height: 155px;
       border-radius: var(--radius-md);
-      background: #F3ECE3;
+      background: rgba(255, 255, 255, 0.5);
       overflow: hidden;
       margin-bottom: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.4);
     }
     .item-img-wrap img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.4s ease;
-    }
-    .item-card:hover .item-img-wrap img {
-      transform: scale(1.04);
     }
     .item-title {
-      font-size: 13px;
+      font-size: 13.5px;
       font-weight: 600;
-      margin-bottom: 3px;
+      margin-bottom: 4px;
       line-height: 1.3;
     }
     .item-sub {
-      font-size: 11.5px;
+      font-size: 12px;
       color: var(--text-muted);
       display: flex;
       align-items: center;
       gap: 6px;
     }
     .color-dot {
-      width: 9px;
-      height: 9px;
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
       border: 1px solid rgba(0,0,0,0.12);
       display: inline-block;
@@ -488,35 +469,41 @@
       display: flex;
       gap: 6px;
       margin-top: 10px;
-      border-top: 1px solid var(--glass-border);
+      border-top: 1px solid rgba(244, 140, 118, 0.2);
       padding-top: 8px;
     }
     .action-sub-btn {
       flex: 1;
-      padding: 7px 0;
+      padding: 8px 0;
       font-size: 12px;
       font-weight: 600;
-      border-radius: 8px;
+      border-radius: var(--radius-sm);
       border: 1px solid var(--glass-border);
-      background: rgba(255,255,255,0.7);
+      background: rgba(255, 255, 255, 0.7);
       color: var(--text-espresso);
       cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+    .action-sub-btn:active {
+      transform: scale(0.92);
+      background: #fff;
     }
 
-    /* Блок рекомендацій */
+    /* Пропозиції сумісності */
     .recommendations-banner {
-      background: linear-gradient(135deg, rgba(255, 244, 233, 0.9) 0%, rgba(246, 230, 214, 0.85) 100%);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(223, 153, 98, 0.4);
+      background: linear-gradient(135deg, rgba(255, 240, 235, 0.95) 0%, rgba(255, 222, 212, 0.85) 100%);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
       border-radius: var(--radius-lg);
       padding: 15px 16px;
       margin-bottom: 18px;
       display: none;
-      box-shadow: var(--shadow-glow);
+      box-shadow: var(--shadow-glass), var(--glass-specular);
     }
     .recommendations-banner.active {
       display: block;
-      animation: softSlideIn 0.3s ease;
+      animation: popSlot 0.35s var(--spring-curve);
     }
     .rec-header {
       display: flex;
@@ -527,29 +514,22 @@
     .rec-header span {
       font-size: 12.5px;
       font-weight: 700;
-      color: var(--accent-terracotta);
+      color: var(--accent-coral-deep);
       letter-spacing: 0.4px;
     }
 
-    /* Картка розумної погоди */
+    /* Картка погоди */
     .smart-weather-box {
-      background: linear-gradient(145deg, rgba(255, 255, 255, 0.9) 0%, rgba(253, 248, 243, 0.85) 100%);
-      backdrop-filter: blur(16px);
+      background: var(--glass-gloss), var(--glass-coral-card);
+      backdrop-filter: blur(26px);
+      -webkit-backdrop-filter: blur(26px);
       border: 1px solid var(--glass-border);
       border-radius: var(--radius-xl);
-      padding: 20px;
+      padding: 22px;
       margin-bottom: 22px;
-      box-shadow: var(--shadow-glow);
+      box-shadow: var(--shadow-glass), var(--glass-specular);
       position: relative;
       overflow: hidden;
-    }
-    .smart-weather-box::after {
-      content: '';
-      position: absolute;
-      top: -30px; right: -30px; width: 100px; height: 100px;
-      background: radial-gradient(circle, var(--accent-honey) 0%, transparent 70%);
-      opacity: 0.4;
-      pointer-events: none;
     }
     .weather-main-row {
       display: flex;
@@ -558,22 +538,22 @@
       margin-bottom: 12px;
     }
     .weather-icon-large {
-      font-size: 36px;
-      filter: drop-shadow(0 4px 8px rgba(223, 153, 98, 0.3));
+      font-size: 38px;
+      filter: drop-shadow(0 4px 10px rgba(244, 122, 97, 0.3));
     }
     .weather-temp-main {
       font-family: 'Playfair Display', Georgia, serif;
-      font-size: 23px;
+      font-size: 24px;
       font-weight: 600;
       color: var(--text-espresso);
     }
     .weather-insights {
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      border-top: 1px dashed var(--glass-border);
-      padding-top: 12px;
-      font-size: 13px;
+      gap: 9px;
+      border-top: 1px dashed rgba(244, 140, 118, 0.3);
+      padding-top: 14px;
+      font-size: 13.5px;
       line-height: 1.45;
     }
     .insight-item {
@@ -584,12 +564,13 @@
 
     /* Фінальна картка образу */
     .final-look-card {
-      background: var(--card-bg);
-      backdrop-filter: blur(18px);
+      background: var(--glass-gloss), var(--glass-coral-card);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
       border-radius: var(--radius-xl);
       border: 1px solid var(--glass-border);
       padding: 24px;
-      box-shadow: var(--shadow-glow);
+      box-shadow: var(--shadow-glass), var(--glass-specular);
       margin-bottom: 24px;
     }
     .final-items-list {
@@ -604,36 +585,43 @@
       gap: 16px;
     }
     .final-item-row img {
-      width: 70px;
-      height: 70px;
+      width: 72px;
+      height: 72px;
       border-radius: var(--radius-md);
       object-fit: cover;
-      background: #F3ECE3;
-      box-shadow: var(--shadow-ambient);
+      background: rgba(255, 255, 255, 0.6);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
     }
 
-    /* Модальне вікно */
+    /* Модальне вікно знизу (iOS Bottom Sheet) */
     .modal {
       display: none;
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(28, 22, 20, 0.48);
-      backdrop-filter: blur(8px);
+      background: rgba(32, 23, 21, 0.45);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       z-index: 100;
       align-items: flex-end;
       justify-content: center;
     }
     .modal.active { display: flex; }
     .modal-sheet {
-      background: #FFFFFF;
+      background: linear-gradient(180deg, #FFFFFF 0%, #FFF8F5 100%);
       width: 100%;
-      max-width: 480px;
-      border-radius: 30px 30px 0 0;
+      max-width: 460px;
+      border-radius: 32px 32px 0 0;
       padding: 28px 22px 42px;
       max-height: 90vh;
       overflow-y: auto;
-      box-shadow: 0 -12px 45px rgba(0,0,0,0.12);
+      box-shadow: 0 -12px 45px rgba(0,0,0,0.14);
+      animation: sheetSlideUp 0.38s var(--spring-curve);
     }
+    @keyframes sheetSlideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
     .form-group {
       margin-bottom: 16px;
     }
@@ -648,18 +636,18 @@
     }
     .form-control {
       width: 100%;
-      padding: 13px 16px;
+      padding: 14px 16px;
       border-radius: var(--radius-md);
-      border: 1px solid var(--glass-border);
-      font-size: 14px;
+      border: 1px solid var(--glass-border-subtle);
+      font-size: 14.5px;
       outline: none;
-      background: #FAF9F7;
+      background: #FAF8F5;
       transition: all 0.2s ease;
     }
     .form-control:focus {
-      border-color: var(--accent-terracotta);
+      border-color: var(--accent-coral);
       background: #fff;
-      box-shadow: 0 0 0 3px rgba(200, 102, 80, 0.12);
+      box-shadow: 0 0 0 3px rgba(227, 94, 67, 0.14);
     }
 
     /* Палітра */
@@ -678,14 +666,14 @@
       align-items: center;
       justify-content: center;
       position: relative;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-      transition: transform 0.2s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: transform 0.2s var(--spring-curve);
     }
-    .color-swatch-item:active { transform: scale(0.9); }
+    .color-swatch-item:active { transform: scale(0.85); }
     .color-swatch-item.selected {
       border-color: var(--text-espresso);
-      transform: scale(1.14);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+      transform: scale(1.15);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
     .color-swatch-item.selected::after {
       content: '✓';
@@ -701,8 +689,8 @@
     .custom-color-btn {
       height: 38px;
       border-radius: 50%;
-      border: 1px dashed var(--glass-border);
-      background: #FAF7F2;
+      border: 1px dashed var(--glass-border-subtle);
+      background: #FAF5F0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -723,13 +711,13 @@
       position: absolute;
       top: 8px;
       left: 8px;
-      background: rgba(28, 22, 20, 0.85);
-      color: #FAF7F2;
+      background: rgba(32, 23, 21, 0.82);
+      color: #FAF5F0;
       font-size: 9px;
-      padding: 3px 8px;
+      padding: 4px 8px;
       border-radius: 6px;
       font-weight: 600;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.4px;
       backdrop-filter: blur(4px);
     }
     .empty-state {
@@ -740,28 +728,24 @@
       font-style: italic;
     }
 
-    /* Ефект спалаху іскорок (Sparkle burst) */
+    /* Тактильні іскорки при дотику */
     .sparkle-particle {
       position: fixed;
       pointer-events: none;
-      font-size: 18px;
-      animation: sparkleFly 0.8s ease-out forwards;
+      font-size: 20px;
+      animation: sparkleFly 0.75s var(--spring-curve) forwards;
       z-index: 9999;
     }
     @keyframes sparkleFly {
-      0% { opacity: 1; transform: translate(0, 0) scale(0.5); }
-      100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1.4); }
+      0% { opacity: 1; transform: translate(0, 0) scale(0.4); }
+      100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1.3); }
     }
   </style>
 </head>
 <body>
 
-  <!-- Фонова аура -->
-  <div class="ambient-bg">
-    <div class="ambient-orb orb-1"></div>
-    <div class="ambient-orb orb-2"></div>
-    <div class="ambient-orb orb-3"></div>
-  </div>
+  <!-- Напівпрозора підкладка -->
+  <div class="ambient-bg"></div>
 
   <div id="app">
     <!-- 1. ГОЛОВНИЙ ЕКРАН -->
@@ -792,16 +776,16 @@
         <p>Три швидких запитання про формат дня та погоду — гармонійний сет без вагань.</p>
       </div>
 
-      <div class="choice-card" style="background: linear-gradient(135deg, rgba(246, 237, 227, 0.85) 0%, rgba(239, 226, 212, 0.7) 100%); border-color: rgba(223, 153, 98, 0.25);" onclick="goToWardrobeManager()">
+      <div class="choice-card" style="background: var(--glass-gloss), rgba(255, 225, 215, 0.75);" onclick="goToWardrobeManager()">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <div style="display:flex; align-items:center; gap:14px;">
             <div style="font-size:24px;">👗</div>
             <div>
-              <h2 style="font-size:16px; margin:0 0 2px;">Мій гардероб</h2>
-              <p style="font-size:12px; margin:0;">Всього речей: <span id="total-items-count">0</span> • переглянути / змінити</p>
+              <h2 style="font-size:16.5px; margin:0 0 2px;">Мій гардероб</h2>
+              <p style="font-size:12.5px; margin:0;">Всього речей: <span id="total-items-count">0</span> • переглянути / змінити</p>
             </div>
           </div>
-          <span style="font-size:18px; color:var(--accent-terracotta);">→</span>
+          <span style="font-size:19px; color:var(--accent-coral);">→</span>
         </div>
       </div>
 
@@ -816,13 +800,13 @@
     <section id="screen-wardrobe-manager" class="screen">
       <div class="top-bar">
         <button class="icon-btn" onclick="goToScreen('screen-home')">←</button>
-        <span style="font-weight: 600; font-size: 14px; letter-spacing: 0.5px;">Мій гардероб</span>
+        <span style="font-weight: 600; font-size: 14.5px; letter-spacing: 0.5px;">Мій гардероб</span>
         <button class="icon-btn" onclick="openAddEditModal()">+</button>
       </div>
 
       <div style="display:flex; gap:8px; margin-bottom:14px;">
-        <button class="btn btn-outline" style="flex:1; padding:9px; font-size:11.5px;" onclick="exportWardrobeBackup()">💾 Зберегти копію</button>
-        <button class="btn btn-outline" style="flex:1; padding:9px; font-size:11.5px;" onclick="document.getElementById('import-file-input').click()">📥 Відновити</button>
+        <button class="btn btn-outline" style="flex:1; padding:10px; font-size:12px;" onclick="exportWardrobeBackup()">💾 Зберегти копію</button>
+        <button class="btn btn-outline" style="flex:1; padding:10px; font-size:12px;" onclick="document.getElementById('import-file-input').click()">📥 Відновити</button>
         <input type="file" id="import-file-input" accept=".json" style="display:none;" onchange="importWardrobeBackup(this)" />
       </div>
 
@@ -843,7 +827,7 @@
     <section id="screen-manual" class="screen">
       <div class="top-bar">
         <button class="icon-btn" onclick="goToScreen('screen-home')">←</button>
-        <span style="font-weight: 600; font-size: 14px; letter-spacing: 0.5px;">Конструктор образу</span>
+        <span style="font-weight: 600; font-size: 14.5px; letter-spacing: 0.5px;">Конструктор образу</span>
         <button class="icon-btn" onclick="openAddEditModal()">+</button>
       </div>
 
@@ -867,7 +851,7 @@
       <div id="rec-banner" class="recommendations-banner">
         <div class="rec-header">
           <span id="rec-title">✨ Пропозиції до обраного:</span>
-          <button style="border:none; background:none; font-size:12px; color:var(--text-muted); cursor:pointer;" onclick="hideRecommendations()">Сховати</button>
+          <button style="border:none; background:none; font-size:12.5px; color:var(--text-muted); cursor:pointer;" onclick="hideRecommendations()">Сховати</button>
         </div>
         <div id="rec-items-scroll" style="display:flex; gap:10px; overflow-x:auto; padding:4px 0;"></div>
       </div>
@@ -891,14 +875,14 @@
     <section id="screen-quiz" class="screen">
       <div class="top-bar">
         <button class="icon-btn" onclick="handleQuizBack()">←</button>
-        <span style="font-weight: 600; font-size: 14px; letter-spacing: 0.5px;">Швидкий підбір</span>
+        <span style="font-weight: 600; font-size: 14.5px; letter-spacing: 0.5px;">Швидкий підбір</span>
         <button class="icon-btn" onclick="goToScreen('screen-home')" title="На головну">✕</button>
       </div>
 
       <div id="quiz-step-container">
         <!-- КРОК 1 -->
         <div id="q-step-1" class="quiz-step">
-          <p style="text-transform:uppercase; font-size:11px; font-weight:700; color:var(--accent-terracotta); margin-bottom:8px; letter-spacing:1px;">Крок 1 з 3</p>
+          <p style="text-transform:uppercase; font-size:11px; font-weight:700; color:var(--accent-coral-deep); margin-bottom:8px; letter-spacing:1px;">Крок 1 з 3</p>
           <h2>Який формат сьогоднішнього дня?</h2>
           <div style="display:flex; flex-direction:column; gap:12px; margin-top:20px;">
             <button class="btn btn-secondary" onclick="answerQuiz('occasion', 'walk')">🚶‍♀️ Прогулянка</button>
@@ -910,7 +894,7 @@
 
         <!-- КРОК 2 -->
         <div id="q-step-2" class="quiz-step" style="display:none;">
-          <p style="text-transform:uppercase; font-size:11px; font-weight:700; color:var(--accent-terracotta); margin-bottom:8px; letter-spacing:1px;">Крок 2 з 3</p>
+          <p style="text-transform:uppercase; font-size:11px; font-weight:700; color:var(--accent-coral-deep); margin-bottom:8px; letter-spacing:1px;">Крок 2 з 3</p>
           <h2>Який кольоровий настрій?</h2>
           <div style="display:flex; flex-direction:column; gap:12px; margin-top:20px;">
             <button class="btn btn-secondary" onclick="answerQuiz('palette', 'dark')">🖤 Темний / монохром</button>
@@ -922,7 +906,7 @@
 
         <!-- КРОК 3 -->
         <div id="q-step-3" class="quiz-step" style="display:none;">
-          <p style="text-transform:uppercase; font-size:11px; font-weight:700; color:var(--accent-terracotta); margin-bottom:8px; letter-spacing:1px;">Крок 3 з 3</p>
+          <p style="text-transform:uppercase; font-size:11px; font-weight:700; color:var(--accent-coral-deep); margin-bottom:8px; letter-spacing:1px;">Крок 3 з 3</p>
           <h2>Що з комфортом і погодою?</h2>
 
           <div id="smart-weather-box" class="smart-weather-box">
@@ -930,7 +914,7 @@
               <div class="weather-icon-large" id="w-icon">⛅</div>
               <div>
                 <div class="weather-temp-main" id="w-temp">Визначаємо погоду...</div>
-                <div style="font-size:12px; color:var(--text-muted);" id="w-location">Твоя локація</div>
+                <div style="font-size:12.5px; color:var(--text-muted);" id="w-location">Твоя локація</div>
               </div>
             </div>
             <div class="weather-insights" id="w-insights">
@@ -950,12 +934,12 @@
     <section id="screen-final" class="screen">
       <div class="top-bar">
         <button class="icon-btn" onclick="goToScreen('screen-home')">✕</button>
-        <span style="font-weight: 600; font-size: 14px; letter-spacing: 0.5px;">Образ на сьогодні</span>
+        <span style="font-weight: 600; font-size: 14.5px; letter-spacing: 0.5px;">Образ на сьогодні</span>
         <button class="icon-btn" onclick="toggleFavoriteCurrent(event)">❤️</button>
       </div>
 
       <div class="final-look-card">
-        <span style="font-size: 11px; text-transform:uppercase; letter-spacing:1.5px; color:var(--accent-terracotta); font-weight:700;">Готовий сет</span>
+        <span style="font-size: 11px; text-transform:uppercase; letter-spacing:1.5px; color:var(--accent-coral-deep); font-weight:700;">Готовий сет</span>
         <h2 style="margin-top: 4px;">Ти виглядаєш неперевершено!</h2>
         <div class="final-items-list" id="final-items-container"></div>
       </div>
@@ -970,8 +954,8 @@
     <section id="screen-favorites" class="screen">
       <div class="top-bar">
         <button class="icon-btn" onclick="goToScreen('screen-home')">←</button>
-        <span style="font-weight: 600; font-size: 14px; letter-spacing: 0.5px;">Улюблені аутфіти</span>
-        <div style="width:42px;"></div>
+        <span style="font-weight: 600; font-size: 14.5px; letter-spacing: 0.5px;">Улюблені аутфіти</span>
+        <div style="width:44px;"></div>
       </div>
       <div id="favorites-list" style="display:flex; flex-direction:column; gap:16px;"></div>
     </section>
@@ -998,7 +982,7 @@
       </div>
 
       <div id="img-preview-box" style="display:none; margin-bottom:14px; text-align:center;">
-        <img id="img-preview" src="" style="width:96px; height:96px; border-radius:14px; object-fit:cover; border:1.5px solid var(--glass-border); box-shadow:var(--shadow-ambient);" />
+        <img id="img-preview" src="" style="width:96px; height:96px; border-radius:16px; object-fit:cover; border:1.5px solid var(--glass-border); box-shadow:var(--shadow-glass);" />
       </div>
 
       <div class="form-group">
@@ -1064,23 +1048,27 @@
     let quizAnswers = {};
     let currentQuizStep = 1;
 
-    /* ЕФЕКТ СЯЮЧИХ ЗІРОЧОК (SPARKLES) */
-    function triggerSparkles(x, y) {
+    /* ТАКТИЛЬНІ ЧАСТИНКИ ДЛЯ ТЕЛЕФОНУ */
+    function triggerSparkles(event) {
+      const touch = event && event.touches ? event.touches[0] : event;
+      const x = touch ? touch.clientX : window.innerWidth / 2;
+      const y = touch ? touch.clientY : window.innerHeight / 2;
+
       const icons = ['✨', '🌸', '💫', '🤍'];
-      for (let i = 0; i < 9; i++) {
+      for (let i = 0; i < 8; i++) {
         const p = document.createElement('div');
         p.className = 'sparkle-particle';
         p.innerText = icons[Math.floor(Math.random() * icons.length)];
-        p.style.left = (x || window.innerWidth / 2) + 'px';
-        p.style.top = (y || window.innerHeight / 2) + 'px';
+        p.style.left = x + 'px';
+        p.style.top = y + 'px';
 
-        const dx = (Math.random() - 0.5) * 160 + 'px';
-        const dy = (Math.random() - 0.5) * 160 - 40 + 'px';
+        const dx = (Math.random() - 0.5) * 140 + 'px';
+        const dy = (Math.random() - 0.5) * 140 - 30 + 'px';
         p.style.setProperty('--dx', dx);
         p.style.setProperty('--dy', dy);
 
         document.body.appendChild(p);
-        setTimeout(() => p.remove(), 800);
+        setTimeout(() => p.remove(), 750);
       }
     }
 
@@ -1122,12 +1110,13 @@
 
     function goToScreen(screenId) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      document.getElementById(screenId).classList.add('active');
+      const nextScreen = document.getElementById(screenId);
+      nextScreen.classList.add('active');
       window.scrollTo(0, 0);
       updateCounts();
     }
 
-    /* SMART WEATHER ENGINE */
+    /* РОЗУМНА ПОГОДА */
     async function fetchSmartWeather() {
       const tempEl = document.getElementById('w-temp');
       const iconEl = document.getElementById('w-icon');
@@ -1244,7 +1233,7 @@
 
       if (rainHour !== -1) {
         insightsHtml += `
-          <div class="insight-item" style="color:var(--accent-terracotta);">
+          <div class="insight-item" style="color:var(--accent-coral-deep);">
             <span>🌧️</span>
             <span>Увага: близько <b>${rainHour}:00</b> можливий <b>${rainIntensity} дощ</b>. Захопи парасольку чи щільне взуття!</span>
           </div>`;
@@ -1380,7 +1369,7 @@
     }
 
     function finishOutfit(event = null) {
-      if (event) triggerSparkles(event.clientX, event.clientY);
+      if (event) triggerSparkles(event);
 
       const container = document.getElementById('final-items-container');
       container.innerHTML = '';
@@ -1397,8 +1386,8 @@
         row.innerHTML = `
           <img src="${item.image}" alt="${item.name}" />
           <div>
-            <div style="font-weight:600; font-size:14.5px;">${item.name}</div>
-            <div style="font-size:12px; color:var(--text-muted); display:flex; align-items:center; gap:6px; margin-top:2px;">
+            <div style="font-weight:600; font-size:15px;">${item.name}</div>
+            <div style="font-size:12.5px; color:var(--text-muted); display:flex; align-items:center; gap:6px; margin-top:3px;">
               <span class="color-dot" style="background:${item.colorHex || '#999'}"></span>
               ${item.color}
             </div>
@@ -1411,17 +1400,17 @@
     }
 
     function confirmTodayOutfit(event = null) {
-      if (event) triggerSparkles(event.clientX, event.clientY);
+      if (event) triggerSparkles(event);
       localStorage.setItem('yesterday_outfit', JSON.stringify(selectedOutfit));
       yesterdayOutfit = selectedOutfit;
       setTimeout(() => {
         alert('Чудового дня! Твій аутфіт зафіксовано ✨');
         goToScreen('screen-home');
-      }, 200);
+      }, 250);
     }
 
     function toggleFavoriteCurrent(event = null) {
-      if (event) triggerSparkles(event.clientX, event.clientY);
+      if (event) triggerSparkles(event);
       const items = Object.values(selectedOutfit).filter(Boolean);
       if (items.length === 0) return;
 
@@ -1449,12 +1438,12 @@
 
           let imagesHtml = '';
           Object.values(fav.outfit).filter(Boolean).forEach(i => {
-            imagesHtml += `<img src="${i.image}" style="width:52px; height:52px; border-radius:10px; object-fit:cover; margin-right:8px; box-shadow:var(--shadow-ambient);"/>`;
+            imagesHtml += `<img src="${i.image}" style="width:54px; height:54px; border-radius:12px; object-fit:cover; margin-right:8px; box-shadow:0 4px 10px rgba(0,0,0,0.06);"/>`;
           });
 
           card.innerHTML = `
             <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
-              <span style="font-size:12px; font-weight:600; color:var(--text-muted);">${fav.date}</span>
+              <span style="font-size:12.5px; font-weight:600; color:var(--text-muted);">${fav.date}</span>
             </div>
             <div style="display:flex; flex-wrap:wrap; gap:6px;">${imagesHtml}</div>
           `;
@@ -1644,7 +1633,7 @@
           </div>
           <div class="item-card-actions">
             <button class="action-sub-btn" onclick="openAddEditModal('${item.id}')">✏️ Змінити</button>
-            <button class="action-sub-btn" style="color:var(--accent-terracotta);" onclick="deleteItem('${item.id}')">🗑️</button>
+            <button class="action-sub-btn" style="color:var(--accent-coral-deep);" onclick="deleteItem('${item.id}')">🗑️</button>
           </div>
         `;
         grid.appendChild(card);
@@ -1745,7 +1734,7 @@
     }
 
     function selectItem(id, event = null) {
-      if (event) triggerSparkles(event.clientX, event.clientY);
+      if (event) triggerSparkles(event);
       const item = wardrobe.find(i => i.id === id);
       if (!item) return;
 
@@ -1832,8 +1821,8 @@
         thumb.style = "min-width: 72px; cursor: pointer; text-align:center;";
         thumb.onclick = (e) => selectItem(s.id, e);
         thumb.innerHTML = `
-          <img src="${s.image}" style="width:72px; height:72px; border-radius:12px; object-fit:cover; border:1px solid var(--glass-border); box-shadow:var(--shadow-ambient);"/>
-          <div style="font-size:10.5px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:72px; margin-top:4px;">${s.name}</div>
+          <img src="${s.image}" style="width:72px; height:72px; border-radius:14px; object-fit:cover; border:1px solid var(--glass-border); box-shadow:var(--shadow-glass);"/>
+          <div style="font-size:11px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:72px; margin-top:4px;">${s.name}</div>
         `;
         container.appendChild(thumb);
       });
@@ -1846,7 +1835,7 @@
       document.getElementById('rec-banner').classList.remove('active');
     }
 
-    // Старт
+    // Запуск застосунку
     setRandomGreeting();
     buildSwatches();
     loadWardrobeFromGitHub();
