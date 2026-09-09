@@ -7,36 +7,38 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg-base: #FAF5F0;
+      /* Контрастні та соковиті кольори підкладки для справжнього скла */
+      --bg-gradient: linear-gradient(160deg, #FFE3D8 0%, #F6CFC0 35%, #FDE8D7 70%, #F5D3C4 100%);
       
-      /* Frutiger Aero Coral Glass */
-      --glass-coral: rgba(255, 240, 235, 0.68);
-      --glass-coral-card: rgba(255, 235, 228, 0.62);
-      --glass-coral-accent: rgba(244, 122, 97, 0.18);
-      --glass-border: rgba(255, 255, 255, 0.75);
-      --glass-border-subtle: rgba(244, 140, 118, 0.28);
-      --glass-gloss: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.1) 45%, rgba(244, 122, 97, 0.08) 100%);
-      --glass-specular: inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.85), inset 0 -1.5px 1.5px 0 rgba(220, 100, 80, 0.1);
+      /* Соковите Frutiger Aero Coral Glass */
+      --glass-surface: rgba(255, 255, 255, 0.42);
+      --glass-card: rgba(255, 245, 240, 0.55);
+      --glass-coral-tint: rgba(255, 120, 95, 0.16);
+      --glass-border-light: rgba(255, 255, 255, 0.88);
+      --glass-border-bottom: rgba(220, 110, 90, 0.35);
       
-      --text-espresso: #201715;
-      --text-muted: #826E67;
-      --accent-coral: #E35E43;
-      --accent-coral-deep: #C7462C;
-      --accent-honey: #F7D0B2;
+      /* Глянцевий відблиск зверху скла */
+      --glass-sheen: linear-gradient(135deg, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.15) 40%, rgba(255,130,105,0.08) 100%);
+      --glass-specular: inset 0 2px 2px 0 rgba(255, 255, 255, 0.95), inset 0 -2px 3px 0 rgba(200, 80, 60, 0.15);
       
-      --shadow-glass: 0 12px 36px -8px rgba(180, 70, 50, 0.12), 0 4px 14px rgba(0, 0, 0, 0.03);
-      --shadow-tap: 0 4px 12px rgba(180, 70, 50, 0.08);
+      --text-main: #241410;
+      --text-sub: #7A5B52;
+      --accent-coral: #E65338;
+      --accent-coral-deep: #B8341D;
       
-      --radius-xl: 30px;
-      --radius-lg: 22px;
-      --radius-md: 15px;
+      --shadow-aero: 0 16px 40px -10px rgba(180, 65, 45, 0.2), 0 4px 16px rgba(0, 0, 0, 0.04);
+      --shadow-pressed: 0 4px 14px rgba(180, 65, 45, 0.12);
+      
+      --radius-xl: 32px;
+      --radius-lg: 24px;
+      --radius-md: 16px;
       --radius-sm: 10px;
 
-      --spring-curve: cubic-bezier(0.32, 0.72, 0, 1);
+      --spring-snap: cubic-bezier(0.25, 1, 0.3, 1);
     }
 
     * {
@@ -50,8 +52,8 @@
     }
 
     body {
-      background-color: var(--bg-base);
-      color: var(--text-espresso);
+      background: var(--bg-gradient);
+      color: var(--text-main);
       display: flex;
       justify-content: center;
       min-height: 100vh;
@@ -59,16 +61,44 @@
       position: relative;
     }
 
-    /* М'яка коралово-медова підкладка з градієнтом */
-    .ambient-bg {
+    /* Фоновий глибокий контраст: сфери світла та жива вода Frutiger Aero */
+    .aero-depth-bg {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
       pointer-events: none;
       z-index: 0;
       overflow: hidden;
-      background: radial-gradient(circle at 10% 10%, rgba(255, 185, 168, 0.35) 0%, transparent 50%),
-                  radial-gradient(circle at 90% 80%, rgba(247, 208, 178, 0.45) 0%, transparent 55%),
-                  radial-gradient(circle at 50% 50%, rgba(250, 245, 240, 1) 0%, transparent 100%);
+    }
+    .aero-bubble {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(40px);
+      opacity: 0.75;
+      animation: floatBubble 14s infinite alternate ease-in-out;
+    }
+    .bubble-1 {
+      width: 320px; height: 320px;
+      background: radial-gradient(circle, #FFA48A 0%, rgba(255,164,138,0) 70%);
+      top: -60px; right: -80px;
+      animation-duration: 12s;
+    }
+    .bubble-2 {
+      width: 380px; height: 380px;
+      background: radial-gradient(circle, #FFC799 0%, rgba(255,199,153,0) 70%);
+      bottom: -40px; left: -100px;
+      animation-duration: 18s;
+      animation-delay: -3s;
+    }
+    .bubble-3 {
+      width: 240px; height: 240px;
+      background: radial-gradient(circle, #FF8E75 0%, rgba(255,142,117,0) 70%);
+      top: 40%; left: 40%;
+      animation-duration: 15s;
+    }
+
+    @keyframes floatBubble {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(-30px, 40px) scale(1.15); }
     }
 
     #app {
@@ -83,24 +113,24 @@
       overflow: hidden;
     }
 
-    /* iOS-стиль перехода між екранами */
+    /* Анімація переходу екранів у стилі iOS Sheet / Push */
     .screen {
       display: none;
       flex-direction: column;
       padding: 24px 20px;
       min-height: 100vh;
-      transform: translate3d(0, 0, 0);
+      width: 100%;
     }
 
     .screen.active {
       display: flex;
-      animation: iosScreenIn 0.42s var(--spring-curve) forwards;
+      animation: iosPushIn 0.36s var(--spring-snap) forwards;
     }
 
-    @keyframes iosScreenIn {
+    @keyframes iosPushIn {
       0% {
-        opacity: 0.6;
-        transform: translate3d(24px, 0, 0) scale(0.97);
+        opacity: 0.4;
+        transform: translate3d(36px, 0, 0) scale(0.96);
       }
       100% {
         opacity: 1;
@@ -112,78 +142,79 @@
     h1 {
       font-family: 'Playfair Display', Georgia, serif;
       font-size: 32px;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: -0.6px;
-      color: var(--text-espresso);
+      color: var(--text-main);
       line-height: 1.15;
       margin-bottom: 8px;
     }
     h2 {
       font-family: 'Playfair Display', Georgia, serif;
-      font-size: 21px;
+      font-size: 22px;
       font-weight: 600;
-      color: var(--text-espresso);
+      color: var(--text-main);
       letter-spacing: -0.3px;
       margin-bottom: 8px;
     }
     p {
       font-size: 14px;
-      color: var(--text-muted);
+      color: var(--text-sub);
       line-height: 1.45;
     }
 
-    /* iOS тактильні кнопки (Spring Active) */
+    /* Кнопки та картки з відчутним фізичним стисканням */
+    .interactive-press {
+      transition: transform 0.16s cubic-bezier(0.2, 0.9, 0.3, 1.2), box-shadow 0.16s ease;
+      will-change: transform;
+    }
+    .interactive-press:active, .interactive-press.is-pressed {
+      transform: scale(0.93) translateZ(0) !important;
+      box-shadow: var(--shadow-pressed) !important;
+    }
+
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 17px 24px;
+      padding: 18px 24px;
       border-radius: var(--radius-lg);
       font-size: 15px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       border: none;
-      transition: transform 0.22s var(--spring-curve), filter 0.2s ease, box-shadow 0.22s ease;
       text-align: center;
       gap: 10px;
       position: relative;
     }
-    .btn:active {
-      transform: scale(0.95);
-    }
     .btn-primary {
-      background: linear-gradient(135deg, #2D1D19 0%, #170F0D 100%);
-      color: #FAF5F0;
-      box-shadow: 0 8px 24px rgba(45, 29, 25, 0.25);
+      background: linear-gradient(135deg, #2D1812 0%, #150906 100%);
+      color: #FFF6F3;
+      box-shadow: 0 10px 28px rgba(35, 15, 10, 0.28);
+      border: 1px solid rgba(255, 255, 255, 0.25);
     }
     .btn-primary:active {
-      box-shadow: 0 2px 10px rgba(45, 29, 25, 0.3);
-      filter: brightness(1.1);
+      filter: brightness(1.15);
     }
 
     .btn-secondary {
-      background: var(--glass-coral-card);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      color: var(--text-espresso);
-      border: 1px solid var(--glass-border);
-      box-shadow: var(--shadow-glass), var(--glass-specular);
-    }
-    .btn-secondary:active {
-      background: rgba(255, 230, 222, 0.85);
+      background: var(--glass-sheen), var(--glass-card);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      color: var(--text-main);
+      border-top: 1.5px solid var(--glass-border-light);
+      border-left: 1px solid var(--glass-border-light);
+      border-right: 1px solid var(--glass-border-bottom);
+      border-bottom: 1.5px solid var(--glass-border-bottom);
+      box-shadow: var(--shadow-aero), var(--glass-specular);
     }
 
     .btn-outline {
-      border: 1px solid var(--glass-border-subtle);
-      background: rgba(255, 255, 255, 0.45);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      color: var(--text-espresso);
+      border: 1px solid var(--glass-border-light);
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      color: var(--text-main);
       box-shadow: var(--glass-specular);
-    }
-    .btn-outline:active {
-      transform: scale(0.96);
-      background: rgba(255, 255, 255, 0.7);
     }
 
     /* Навігаційний бар */
@@ -195,45 +226,43 @@
     }
     .brand-mark {
       font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 2px;
+      font-weight: 800;
+      letter-spacing: 2.2px;
       text-transform: uppercase;
-      color: var(--text-muted);
+      color: var(--text-sub);
       display: flex;
       align-items: center;
       gap: 8px;
     }
     .brand-mark-dot {
-      width: 7px;
-      height: 7px;
+      width: 8px;
+      height: 8px;
       background: var(--accent-coral);
       border-radius: 50%;
-      box-shadow: 0 0 10px var(--accent-coral);
+      box-shadow: 0 0 12px var(--accent-coral);
     }
     .icon-btn {
-      background: var(--glass-coral);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--glass-border);
-      box-shadow: var(--shadow-glass), var(--glass-specular);
+      background: var(--glass-sheen), var(--glass-surface);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-top: 1.5px solid var(--glass-border-light);
+      border-left: 1px solid var(--glass-border-light);
+      border-bottom: 1.5px solid var(--glass-border-bottom);
+      border-right: 1px solid var(--glass-border-bottom);
+      box-shadow: var(--shadow-aero), var(--glass-specular);
       border-radius: 50%;
-      width: 44px;
-      height: 44px;
+      width: 46px;
+      height: 46px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 18px;
-      color: var(--text-espresso);
-      transition: transform 0.2s var(--spring-curve);
-    }
-    .icon-btn:active {
-      transform: scale(0.88);
-      background: rgba(255, 255, 255, 0.9);
+      font-size: 19px;
+      color: var(--text-main);
     }
 
     .hero-header {
-      margin: 10px 0 26px;
+      margin: 10px 0 24px;
     }
     .hero-badge {
       display: inline-flex;
@@ -241,48 +270,46 @@
       gap: 6px;
       padding: 6px 14px;
       border-radius: 30px;
-      background: rgba(244, 122, 97, 0.14);
-      border: 1px solid rgba(244, 122, 97, 0.32);
-      font-size: 11.5px;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border-light);
+      font-size: 11px;
       text-transform: uppercase;
-      letter-spacing: 1.2px;
+      letter-spacing: 1.4px;
       color: var(--accent-coral-deep);
-      font-weight: 700;
+      font-weight: 800;
       margin-bottom: 12px;
-      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6);
+      box-shadow: 0 4px 14px rgba(220, 80, 60, 0.1);
     }
 
-    /* Коралове скло карток (Frutiger Aero look) */
+    /* Картки Frutiger Aero Glass */
     .choice-card {
-      background: var(--glass-gloss), var(--glass-coral-card);
-      backdrop-filter: blur(26px);
-      -webkit-backdrop-filter: blur(26px);
-      border: 1px solid var(--glass-border);
+      background: var(--glass-sheen), var(--glass-card);
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
+      border-top: 2px solid var(--glass-border-light);
+      border-left: 1.5px solid var(--glass-border-light);
+      border-right: 1.5px solid var(--glass-border-bottom);
+      border-bottom: 2px solid var(--glass-border-bottom);
       border-radius: var(--radius-xl);
       padding: 24px;
       margin-bottom: 16px;
       cursor: pointer;
-      box-shadow: var(--shadow-glass), var(--glass-specular);
-      transition: transform 0.24s var(--spring-curve), background 0.2s ease, box-shadow 0.24s ease;
+      box-shadow: var(--shadow-aero), var(--glass-specular);
       position: relative;
       overflow: hidden;
     }
-    .choice-card:active {
-      transform: scale(0.96);
-      box-shadow: var(--shadow-tap);
-      background: rgba(255, 238, 232, 0.88);
-    }
     .choice-card .icon-bubble {
-      width: 52px;
-      height: 52px;
-      border-radius: 18px;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 220, 210, 0.7) 100%);
-      border: 1px solid var(--glass-border);
-      box-shadow: 0 6px 16px rgba(244, 122, 97, 0.18), inset 0 1px 2px #fff;
+      width: 54px;
+      height: 54px;
+      border-radius: 20px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 215, 205, 0.75) 100%);
+      border: 1.5px solid #fff;
+      box-shadow: 0 8px 20px rgba(230, 83, 56, 0.22), inset 0 2px 2px #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
+      font-size: 26px;
       margin-bottom: 16px;
     }
 
@@ -290,13 +317,13 @@
     .outfit-slots-panel {
       position: sticky;
       top: 0;
-      background: rgba(250, 245, 240, 0.82);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      background: rgba(251, 230, 222, 0.72);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       z-index: 10;
       padding: 4px 0 16px;
       margin-bottom: 16px;
-      border-bottom: 1px solid rgba(244, 140, 118, 0.2);
+      border-bottom: 1.5px solid rgba(255, 255, 255, 0.6);
     }
     .slots-grid {
       display: grid;
@@ -304,12 +331,15 @@
       gap: 10px;
     }
     .slot-item {
-      background: var(--glass-gloss), var(--glass-coral-card);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--glass-border);
+      background: var(--glass-sheen), var(--glass-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1.5px solid var(--glass-border-light);
+      border-left: 1px solid var(--glass-border-light);
+      border-right: 1px solid var(--glass-border-bottom);
+      border-bottom: 1.5px solid var(--glass-border-bottom);
       border-radius: var(--radius-lg);
-      height: 102px;
+      height: 104px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -319,40 +349,36 @@
       cursor: pointer;
       text-align: center;
       padding: 4px;
-      box-shadow: var(--shadow-glass), var(--glass-specular);
-      transition: transform 0.2s var(--spring-curve);
-    }
-    .slot-item:active {
-      transform: scale(0.92);
+      box-shadow: var(--shadow-aero), var(--glass-specular);
     }
     .slot-item.filled {
-      border: 1.5px solid var(--accent-coral);
-      box-shadow: 0 8px 24px rgba(227, 94, 67, 0.24);
-      animation: popSlot 0.35s var(--spring-curve);
+      border: 2px solid var(--accent-coral);
+      box-shadow: 0 10px 28px rgba(230, 83, 56, 0.32);
+      animation: popSlot 0.32s var(--spring-snap);
     }
     @keyframes popSlot {
-      0% { transform: scale(0.88); }
-      50% { transform: scale(1.06); }
+      0% { transform: scale(0.85); }
+      60% { transform: scale(1.08); }
       100% { transform: scale(1); }
     }
     .slot-item img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 16px;
+      border-radius: 18px;
     }
     .slot-label {
-      font-size: 10.5px;
-      font-weight: 700;
-      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-sub);
       letter-spacing: 0.6px;
       text-transform: uppercase;
     }
     .slot-clear {
       position: absolute;
-      top: 5px;
-      right: 5px;
-      background: rgba(32, 23, 21, 0.75);
+      top: 6px;
+      right: 6px;
+      background: rgba(36, 20, 16, 0.85);
       color: #fff;
       border: none;
       border-radius: 50%;
@@ -363,8 +389,8 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      backdrop-filter: blur(4px);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
     }
 
     /* Фільтри */
@@ -378,28 +404,27 @@
     }
     .filters-scroll::-webkit-scrollbar { display: none; }
     .filter-chip {
-      background: var(--glass-coral-card);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1px solid var(--glass-border);
-      padding: 9px 18px;
+      background: var(--glass-sheen), var(--glass-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1.5px solid var(--glass-border-light);
+      border-left: 1px solid var(--glass-border-light);
+      border-right: 1px solid var(--glass-border-bottom);
+      border-bottom: 1.5px solid var(--glass-border-bottom);
+      padding: 10px 18px;
       border-radius: 30px;
       font-size: 13.5px;
       white-space: nowrap;
       cursor: pointer;
-      color: var(--text-espresso);
-      font-weight: 600;
-      box-shadow: var(--shadow-glass), var(--glass-specular);
-      transition: transform 0.2s var(--spring-curve), background 0.2s ease;
-    }
-    .filter-chip:active {
-      transform: scale(0.92);
+      color: var(--text-main);
+      font-weight: 700;
+      box-shadow: var(--shadow-aero), var(--glass-specular);
     }
     .filter-chip.active {
-      background: linear-gradient(135deg, #2D1D19 0%, #170F0D 100%);
-      color: #FAF5F0;
-      border-color: #2D1D19;
-      box-shadow: 0 6px 18px rgba(45, 29, 25, 0.22);
+      background: linear-gradient(135deg, #2D1812 0%, #150906 100%);
+      color: #FFF6F3;
+      border-color: #2D1812;
+      box-shadow: 0 8px 20px rgba(35, 15, 10, 0.3);
     }
 
     /* Каталог речей */
@@ -410,34 +435,32 @@
       margin-bottom: 24px;
     }
     .item-card {
-      background: var(--glass-gloss), var(--glass-coral-card);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      background: var(--glass-sheen), var(--glass-card);
+      backdrop-filter: blur(26px);
+      -webkit-backdrop-filter: blur(26px);
       border-radius: var(--radius-lg);
-      border: 1px solid var(--glass-border);
-      padding: 11px;
+      border-top: 1.5px solid var(--glass-border-light);
+      border-left: 1px solid var(--glass-border-light);
+      border-right: 1px solid var(--glass-border-bottom);
+      border-bottom: 1.5px solid var(--glass-border-bottom);
+      padding: 12px;
       display: flex;
       flex-direction: column;
       cursor: pointer;
       position: relative;
-      box-shadow: var(--shadow-glass), var(--glass-specular);
-      transition: transform 0.22s var(--spring-curve), box-shadow 0.22s ease;
-    }
-    .item-card:active {
-      transform: scale(0.94);
-      box-shadow: var(--shadow-tap);
+      box-shadow: var(--shadow-aero), var(--glass-specular);
     }
     .item-img-wrap {
       width: 100%;
       height: 155px;
       border-radius: var(--radius-md);
-      background: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.65);
       overflow: hidden;
       margin-bottom: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid rgba(255, 255, 255, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.7);
     }
     .item-img-wrap img {
       width: 100%;
@@ -446,13 +469,13 @@
     }
     .item-title {
       font-size: 13.5px;
-      font-weight: 600;
+      font-weight: 700;
       margin-bottom: 4px;
       line-height: 1.3;
     }
     .item-sub {
       font-size: 12px;
-      color: var(--text-muted);
+      color: var(--text-sub);
       display: flex;
       align-items: center;
       gap: 6px;
@@ -461,7 +484,8 @@
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      border: 1px solid rgba(0,0,0,0.12);
+      border: 1.5px solid #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
       display: inline-block;
     }
 
@@ -469,41 +493,36 @@
       display: flex;
       gap: 6px;
       margin-top: 10px;
-      border-top: 1px solid rgba(244, 140, 118, 0.2);
+      border-top: 1px solid rgba(230, 90, 70, 0.2);
       padding-top: 8px;
     }
     .action-sub-btn {
       flex: 1;
       padding: 8px 0;
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 700;
       border-radius: var(--radius-sm);
-      border: 1px solid var(--glass-border);
-      background: rgba(255, 255, 255, 0.7);
-      color: var(--text-espresso);
+      border: 1px solid var(--glass-border-light);
+      background: rgba(255, 255, 255, 0.75);
+      color: var(--text-main);
       cursor: pointer;
-      transition: transform 0.15s ease;
-    }
-    .action-sub-btn:active {
-      transform: scale(0.92);
-      background: #fff;
     }
 
     /* Пропозиції сумісності */
     .recommendations-banner {
-      background: linear-gradient(135deg, rgba(255, 240, 235, 0.95) 0%, rgba(255, 222, 212, 0.85) 100%);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--glass-border);
+      background: linear-gradient(135deg, rgba(255, 245, 240, 0.95) 0%, rgba(255, 220, 210, 0.9) 100%);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1.5px solid var(--glass-border-light);
       border-radius: var(--radius-lg);
-      padding: 15px 16px;
+      padding: 16px;
       margin-bottom: 18px;
       display: none;
-      box-shadow: var(--shadow-glass), var(--glass-specular);
+      box-shadow: var(--shadow-aero), var(--glass-specular);
     }
     .recommendations-banner.active {
       display: block;
-      animation: popSlot 0.35s var(--spring-curve);
+      animation: popSlot 0.35s var(--spring-snap);
     }
     .rec-header {
       display: flex;
@@ -512,46 +531,49 @@
       margin-bottom: 10px;
     }
     .rec-header span {
-      font-size: 12.5px;
-      font-weight: 700;
+      font-size: 13px;
+      font-weight: 800;
       color: var(--accent-coral-deep);
       letter-spacing: 0.4px;
     }
 
     /* Картка погоди */
     .smart-weather-box {
-      background: var(--glass-gloss), var(--glass-coral-card);
-      backdrop-filter: blur(26px);
-      -webkit-backdrop-filter: blur(26px);
-      border: 1px solid var(--glass-border);
+      background: var(--glass-sheen), var(--glass-card);
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
+      border-top: 2px solid var(--glass-border-light);
+      border-left: 1.5px solid var(--glass-border-light);
+      border-right: 1.5px solid var(--glass-border-bottom);
+      border-bottom: 2px solid var(--glass-border-bottom);
       border-radius: var(--radius-xl);
       padding: 22px;
       margin-bottom: 22px;
-      box-shadow: var(--shadow-glass), var(--glass-specular);
+      box-shadow: var(--shadow-aero), var(--glass-specular);
       position: relative;
       overflow: hidden;
     }
     .weather-main-row {
       display: flex;
       align-items: center;
-      gap: 14px;
-      margin-bottom: 12px;
+      gap: 16px;
+      margin-bottom: 14px;
     }
     .weather-icon-large {
-      font-size: 38px;
-      filter: drop-shadow(0 4px 10px rgba(244, 122, 97, 0.3));
+      font-size: 40px;
+      filter: drop-shadow(0 4px 12px rgba(230, 83, 56, 0.35));
     }
     .weather-temp-main {
       font-family: 'Playfair Display', Georgia, serif;
-      font-size: 24px;
-      font-weight: 600;
-      color: var(--text-espresso);
+      font-size: 25px;
+      font-weight: 700;
+      color: var(--text-main);
     }
     .weather-insights {
       display: flex;
       flex-direction: column;
-      gap: 9px;
-      border-top: 1px dashed rgba(244, 140, 118, 0.3);
+      gap: 10px;
+      border-top: 1px dashed rgba(230, 90, 70, 0.3);
       padding-top: 14px;
       font-size: 13.5px;
       line-height: 1.45;
@@ -562,15 +584,17 @@
       gap: 10px;
     }
 
-    /* Фінальна картка образу */
+    /* Фінальна картка */
     .final-look-card {
-      background: var(--glass-gloss), var(--glass-coral-card);
-      backdrop-filter: blur(28px);
-      -webkit-backdrop-filter: blur(28px);
+      background: var(--glass-sheen), var(--glass-card);
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
       border-radius: var(--radius-xl);
-      border: 1px solid var(--glass-border);
+      border-top: 2px solid var(--glass-border-light);
+      border-left: 1.5px solid var(--glass-border-light);
+      border-bottom: 2px solid var(--glass-border-bottom);
       padding: 24px;
-      box-shadow: var(--shadow-glass), var(--glass-specular);
+      box-shadow: var(--shadow-aero), var(--glass-specular);
       margin-bottom: 24px;
     }
     .final-items-list {
@@ -585,37 +609,38 @@
       gap: 16px;
     }
     .final-item-row img {
-      width: 72px;
-      height: 72px;
+      width: 74px;
+      height: 74px;
       border-radius: var(--radius-md);
       object-fit: cover;
-      background: rgba(255, 255, 255, 0.6);
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid #fff;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
     }
 
-    /* Модальне вікно знизу (iOS Bottom Sheet) */
+    /* Модальне вікно */
     .modal {
       display: none;
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(32, 23, 21, 0.45);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      background: rgba(30, 15, 10, 0.5);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       z-index: 100;
       align-items: flex-end;
       justify-content: center;
     }
     .modal.active { display: flex; }
     .modal-sheet {
-      background: linear-gradient(180deg, #FFFFFF 0%, #FFF8F5 100%);
+      background: linear-gradient(180deg, #FFFFFF 0%, #FFF7F3 100%);
       width: 100%;
       max-width: 460px;
-      border-radius: 32px 32px 0 0;
-      padding: 28px 22px 42px;
+      border-radius: 34px 34px 0 0;
+      padding: 28px 22px 44px;
       max-height: 90vh;
       overflow-y: auto;
-      box-shadow: 0 -12px 45px rgba(0,0,0,0.14);
-      animation: sheetSlideUp 0.38s var(--spring-curve);
+      box-shadow: 0 -14px 45px rgba(0,0,0,0.18);
+      animation: sheetSlideUp 0.38s var(--spring-snap);
     }
     @keyframes sheetSlideUp {
       from { transform: translateY(100%); }
@@ -628,29 +653,28 @@
     .form-group label {
       display: block;
       font-size: 11.5px;
-      font-weight: 700;
+      font-weight: 800;
       margin-bottom: 8px;
       text-transform: uppercase;
       letter-spacing: 0.8px;
-      color: var(--text-muted);
+      color: var(--text-sub);
     }
     .form-control {
       width: 100%;
       padding: 14px 16px;
       border-radius: var(--radius-md);
-      border: 1px solid var(--glass-border-subtle);
+      border: 1.5px solid rgba(230, 110, 90, 0.25);
       font-size: 14.5px;
       outline: none;
-      background: #FAF8F5;
-      transition: all 0.2s ease;
+      background: #FAF6F3;
     }
     .form-control:focus {
       border-color: var(--accent-coral);
       background: #fff;
-      box-shadow: 0 0 0 3px rgba(227, 94, 67, 0.14);
+      box-shadow: 0 0 0 3px rgba(230, 83, 56, 0.18);
     }
 
-    /* Палітра */
+    /* Палітра кольорів */
     .color-swatches-grid {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
@@ -666,19 +690,17 @@
       align-items: center;
       justify-content: center;
       position: relative;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      transition: transform 0.2s var(--spring-curve);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
     }
-    .color-swatch-item:active { transform: scale(0.85); }
     .color-swatch-item.selected {
-      border-color: var(--text-espresso);
+      border-color: var(--text-main);
       transform: scale(1.15);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.24);
     }
     .color-swatch-item.selected::after {
       content: '✓';
       color: #fff;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: bold;
       text-shadow: 0 1px 2px rgba(0,0,0,0.5);
     }
@@ -689,15 +711,15 @@
     .custom-color-btn {
       height: 38px;
       border-radius: 50%;
-      border: 1px dashed var(--glass-border-subtle);
-      background: #FAF5F0;
+      border: 1.5px dashed rgba(230, 110, 90, 0.35);
+      background: #FAF6F3;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       position: relative;
       overflow: hidden;
-      font-size: 15px;
+      font-size: 16px;
     }
     .custom-color-btn input[type="color"] {
       position: absolute;
@@ -711,29 +733,29 @@
       position: absolute;
       top: 8px;
       left: 8px;
-      background: rgba(32, 23, 21, 0.82);
-      color: #FAF5F0;
+      background: rgba(36, 20, 16, 0.85);
+      color: #FFF6F3;
       font-size: 9px;
       padding: 4px 8px;
       border-radius: 6px;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: 0.4px;
-      backdrop-filter: blur(4px);
+      backdrop-filter: blur(6px);
     }
     .empty-state {
       text-align: center;
       padding: 50px 20px;
-      color: var(--text-muted);
+      color: var(--text-sub);
       grid-column: 1 / -1;
       font-style: italic;
     }
 
-    /* Тактильні іскорки при дотику */
+    /* Частинки сяйва */
     .sparkle-particle {
       position: fixed;
       pointer-events: none;
       font-size: 20px;
-      animation: sparkleFly 0.75s var(--spring-curve) forwards;
+      animation: sparkleFly 0.75s var(--spring-snap) forwards;
       z-index: 9999;
     }
     @keyframes sparkleFly {
@@ -744,8 +766,12 @@
 </head>
 <body>
 
-  <!-- Напівпрозора підкладка -->
-  <div class="ambient-bg"></div>
+  <!-- Фон із Frutiger Aero бульбашками та градієнтом світла -->
+  <div class="aero-depth-bg">
+    <div class="aero-bubble bubble-1"></div>
+    <div class="aero-bubble bubble-2"></div>
+    <div class="aero-bubble bubble-3"></div>
+  </div>
 
   <div id="app">
     <!-- 1. ГОЛОВНИЙ ЕКРАН -->
@@ -755,7 +781,7 @@
           <span class="brand-mark-dot"></span>
           Atelier Studio
         </div>
-        <button class="icon-btn" onclick="openAddEditModal()" title="Додати річ">+</button>
+        <button class="icon-btn interactive-press" onclick="openAddEditModal()" title="Додати річ">+</button>
       </div>
 
       <div class="hero-header">
@@ -764,33 +790,33 @@
         <p>Обери сьогоднішній настрій або зазирни у свою колекцію гардероба.</p>
       </div>
 
-      <div class="choice-card" onclick="goToManualFlow()">
+      <div class="choice-card interactive-press" onclick="delayedNavigate(this, () => goToManualFlow())">
         <div class="icon-bubble">🌸</div>
         <h2>Я знаю, на що мій настрій</h2>
         <p>Збери свій аутфіт власноруч: відкривай каталог та обирай найкращі поєднання.</p>
       </div>
 
-      <div class="choice-card" onclick="goToQuizFlow()">
+      <div class="choice-card interactive-press" onclick="delayedNavigate(this, () => goToQuizFlow())">
         <div class="icon-bubble">🎲</div>
         <h2>Не знаю, що вдягнути</h2>
         <p>Три швидких запитання про формат дня та погоду — гармонійний сет без вагань.</p>
       </div>
 
-      <div class="choice-card" style="background: var(--glass-gloss), rgba(255, 225, 215, 0.75);" onclick="goToWardrobeManager()">
+      <div class="choice-card interactive-press" style="background: var(--glass-sheen), rgba(255, 215, 202, 0.7);" onclick="delayedNavigate(this, () => goToWardrobeManager())">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <div style="display:flex; align-items:center; gap:14px;">
-            <div style="font-size:24px;">👗</div>
+            <div style="font-size:25px;">👗</div>
             <div>
-              <h2 style="font-size:16.5px; margin:0 0 2px;">Мій гардероб</h2>
+              <h2 style="font-size:17px; margin:0 0 2px;">Мій гардероб</h2>
               <p style="font-size:12.5px; margin:0;">Всього речей: <span id="total-items-count">0</span> • переглянути / змінити</p>
             </div>
           </div>
-          <span style="font-size:19px; color:var(--accent-coral);">→</span>
+          <span style="font-size:20px; color:var(--accent-coral-deep); font-weight:800;">→</span>
         </div>
       </div>
 
       <div style="margin-top: 10px;">
-        <button class="btn btn-outline" style="width: 100%; font-size: 13.5px;" onclick="showFavorites()">
+        <button class="btn btn-outline interactive-press" style="width: 100%; font-size: 14px;" onclick="delayedNavigate(this, () => showFavorites())">
           ❤️ Мої збережені аутфіти (<span id="fav-count">0</span>)
         </button>
       </div>
@@ -799,50 +825,50 @@
     <!-- 2. МЕНЕДЖЕР ГАРДЕРОБА -->
     <section id="screen-wardrobe-manager" class="screen">
       <div class="top-bar">
-        <button class="icon-btn" onclick="goToScreen('screen-home')">←</button>
-        <span style="font-weight: 600; font-size: 14.5px; letter-spacing: 0.5px;">Мій гардероб</span>
-        <button class="icon-btn" onclick="openAddEditModal()">+</button>
+        <button class="icon-btn interactive-press" onclick="delayedNavigate(this, () => goToScreen('screen-home'))">←</button>
+        <span style="font-weight: 700; font-size: 15px; letter-spacing: 0.5px;">Мій гардероб</span>
+        <button class="icon-btn interactive-press" onclick="openAddEditModal()">+</button>
       </div>
 
       <div style="display:flex; gap:8px; margin-bottom:14px;">
-        <button class="btn btn-outline" style="flex:1; padding:10px; font-size:12px;" onclick="exportWardrobeBackup()">💾 Зберегти копію</button>
-        <button class="btn btn-outline" style="flex:1; padding:10px; font-size:12px;" onclick="document.getElementById('import-file-input').click()">📥 Відновити</button>
+        <button class="btn btn-outline interactive-press" style="flex:1; padding:11px; font-size:12.5px;" onclick="exportWardrobeBackup()">💾 Зберегти копію</button>
+        <button class="btn btn-outline interactive-press" style="flex:1; padding:11px; font-size:12.5px;" onclick="document.getElementById('import-file-input').click()">📥 Відновити</button>
         <input type="file" id="import-file-input" accept=".json" style="display:none;" onchange="importWardrobeBackup(this)" />
       </div>
 
       <div class="filters-scroll" id="manager-cat-filters">
-        <button class="filter-chip active" onclick="filterManagerCat('all', this)">Всі</button>
-        <button class="filter-chip" onclick="filterManagerCat('top', this)">Верх</button>
-        <button class="filter-chip" onclick="filterManagerCat('bottom', this)">Низ</button>
-        <button class="filter-chip" onclick="filterManagerCat('layer', this)">Зіпки</button>
-        <button class="filter-chip" onclick="filterManagerCat('shoes', this)">Взуття</button>
+        <button class="filter-chip active interactive-press" onclick="filterManagerCat('all', this)">Всі</button>
+        <button class="filter-chip interactive-press" onclick="filterManagerCat('top', this)">Верх</button>
+        <button class="filter-chip interactive-press" onclick="filterManagerCat('bottom', this)">Низ</button>
+        <button class="filter-chip interactive-press" onclick="filterManagerCat('layer', this)">Зіпки</button>
+        <button class="filter-chip interactive-press" onclick="filterManagerCat('shoes', this)">Взуття</button>
       </div>
 
       <div class="items-grid" id="manager-grid"></div>
 
-      <button class="btn btn-primary" style="width:100%;" onclick="openAddEditModal()">+ Додати нову річ</button>
+      <button class="btn btn-primary interactive-press" style="width:100%;" onclick="openAddEditModal()">+ Додати нову річ</button>
     </section>
 
     <!-- 3. КОНСТРУКТОР ОБРАЗУ -->
     <section id="screen-manual" class="screen">
       <div class="top-bar">
-        <button class="icon-btn" onclick="goToScreen('screen-home')">←</button>
-        <span style="font-weight: 600; font-size: 14.5px; letter-spacing: 0.5px;">Конструктор образу</span>
-        <button class="icon-btn" onclick="openAddEditModal()">+</button>
+        <button class="icon-btn interactive-press" onclick="delayedNavigate(this, () => goToScreen('screen-home'))">←</button>
+        <span style="font-weight: 700; font-size: 15px; letter-spacing: 0.5px;">Конструктор образу</span>
+        <button class="icon-btn interactive-press" onclick="openAddEditModal()">+</button>
       </div>
 
       <div class="outfit-slots-panel">
         <div class="slots-grid">
-          <div class="slot-item" id="slot-top" onclick="filterByCategory('top')">
+          <div class="slot-item interactive-press" id="slot-top" onclick="filterByCategory('top')">
             <span class="slot-label">Верх</span>
           </div>
-          <div class="slot-item" id="slot-bottom" onclick="filterByCategory('bottom')">
+          <div class="slot-item interactive-press" id="slot-bottom" onclick="filterByCategory('bottom')">
             <span class="slot-label">Низ</span>
           </div>
-          <div class="slot-item" id="slot-layer" onclick="filterByCategory('layer')">
+          <div class="slot-item interactive-press" id="slot-layer" onclick="filterByCategory('layer')">
             <span class="slot-label">Зіпка</span>
           </div>
-          <div class="slot-item" id="slot-shoes" onclick="filterByCategory('shoes')">
+          <div class="slot-item interactive-press" id="slot-shoes" onclick="filterByCategory('shoes')">
             <span class="slot-label">Взуття</span>
           </div>
         </div>
@@ -851,7 +877,7 @@
       <div id="rec-banner" class="recommendations-banner">
         <div class="rec-header">
           <span id="rec-title">✨ Пропозиції до обраного:</span>
-          <button style="border:none; background:none; font-size:12.5px; color:var(--text-muted); cursor:pointer;" onclick="hideRecommendations()">Сховати</button>
+          <button style="border:none; background:none; font-size:12.5px; color:var(--text-sub); cursor:pointer; font-weight:700;" onclick="hideRecommendations()">Сховати</button>
         </div>
         <div id="rec-items-scroll" style="display:flex; gap:10px; overflow-x:auto; padding:4px 0;"></div>
       </div>
@@ -859,54 +885,54 @@
       <div class="filters-scroll" id="color-filters"></div>
 
       <div class="filters-scroll" id="cat-filters">
-        <button class="filter-chip active" onclick="filterByCategory('all', this)">Все</button>
-        <button class="filter-chip" onclick="filterByCategory('top', this)">Верх</button>
-        <button class="filter-chip" onclick="filterByCategory('bottom', this)">Низ</button>
-        <button class="filter-chip" onclick="filterByCategory('layer', this)">Зіпки</button>
-        <button class="filter-chip" onclick="filterByCategory('shoes', this)">Взуття</button>
+        <button class="filter-chip active interactive-press" onclick="filterByCategory('all', this)">Все</button>
+        <button class="filter-chip interactive-press" onclick="filterByCategory('top', this)">Верх</button>
+        <button class="filter-chip interactive-press" onclick="filterByCategory('bottom', this)">Низ</button>
+        <button class="filter-chip interactive-press" onclick="filterByCategory('layer', this)">Зіпки</button>
+        <button class="filter-chip interactive-press" onclick="filterByCategory('shoes', this)">Взуття</button>
       </div>
 
       <div class="items-grid" id="wardrobe-grid"></div>
 
-      <button class="btn btn-primary" style="width: 100%; margin-top: auto;" onclick="finishOutfit(event)">Готово ✨</button>
+      <button class="btn btn-primary interactive-press" style="width: 100%; margin-top: auto;" onclick="finishOutfit(event)">Готово ✨</button>
     </section>
 
-    <!-- 4. КВІЗ: ШВИДКИЙ ПІДБІР -->
+    <!-- 4. КВІЗ -->
     <section id="screen-quiz" class="screen">
       <div class="top-bar">
-        <button class="icon-btn" onclick="handleQuizBack()">←</button>
-        <span style="font-weight: 600; font-size: 14.5px; letter-spacing: 0.5px;">Швидкий підбір</span>
-        <button class="icon-btn" onclick="goToScreen('screen-home')" title="На головну">✕</button>
+        <button class="icon-btn interactive-press" onclick="handleQuizBack()">←</button>
+        <span style="font-weight: 700; font-size: 15px; letter-spacing: 0.5px;">Швидкий підбір</span>
+        <button class="icon-btn interactive-press" onclick="delayedNavigate(this, () => goToScreen('screen-home'))" title="На головну">✕</button>
       </div>
 
       <div id="quiz-step-container">
         <!-- КРОК 1 -->
         <div id="q-step-1" class="quiz-step">
-          <p style="text-transform:uppercase; font-size:11px; font-weight:700; color:var(--accent-coral-deep); margin-bottom:8px; letter-spacing:1px;">Крок 1 з 3</p>
+          <p style="text-transform:uppercase; font-size:11px; font-weight:800; color:var(--accent-coral-deep); margin-bottom:8px; letter-spacing:1px;">Крок 1 з 3</p>
           <h2>Який формат сьогоднішнього дня?</h2>
           <div style="display:flex; flex-direction:column; gap:12px; margin-top:20px;">
-            <button class="btn btn-secondary" onclick="answerQuiz('occasion', 'walk')">🚶‍♀️ Прогулянка</button>
-            <button class="btn btn-secondary" onclick="answerQuiz('occasion', 'study')">📚 Університет / Справи</button>
-            <button class="btn btn-secondary" onclick="answerQuiz('occasion', 'active')">👟 Активний день / багато ходити</button>
-            <button class="btn btn-secondary" onclick="answerQuiz('occasion', 'date')">✨ Побачення</button>
+            <button class="btn btn-secondary interactive-press" onclick="delayedNavigate(this, () => answerQuiz('occasion', 'walk'))">🚶‍♀️ Прогулянка</button>
+            <button class="btn btn-secondary interactive-press" onclick="delayedNavigate(this, () => answerQuiz('occasion', 'study'))">📚 Університет / Справи</button>
+            <button class="btn btn-secondary interactive-press" onclick="delayedNavigate(this, () => answerQuiz('occasion', 'active'))">👟 Активний день / багато ходити</button>
+            <button class="btn btn-secondary interactive-press" onclick="delayedNavigate(this, () => answerQuiz('occasion', 'date'))">✨ Побачення</button>
           </div>
         </div>
 
         <!-- КРОК 2 -->
         <div id="q-step-2" class="quiz-step" style="display:none;">
-          <p style="text-transform:uppercase; font-size:11px; font-weight:700; color:var(--accent-coral-deep); margin-bottom:8px; letter-spacing:1px;">Крок 2 з 3</p>
+          <p style="text-transform:uppercase; font-size:11px; font-weight:800; color:var(--accent-coral-deep); margin-bottom:8px; letter-spacing:1px;">Крок 2 з 3</p>
           <h2>Який кольоровий настрій?</h2>
           <div style="display:flex; flex-direction:column; gap:12px; margin-top:20px;">
-            <button class="btn btn-secondary" onclick="answerQuiz('palette', 'dark')">🖤 Темний / монохром</button>
-            <button class="btn btn-secondary" onclick="answerQuiz('palette', 'bright')">❤️ Яскравий акцент</button>
-            <button class="btn btn-secondary" onclick="answerQuiz('palette', 'pastel')">🌸 Пастельний (Беж / Ніжний / Світлий)</button>
-            <button class="btn btn-secondary" onclick="answerQuiz('palette', 'surprise')">🎲 Здивуй мене</button>
+            <button class="btn btn-secondary interactive-press" onclick="delayedNavigate(this, () => answerQuiz('palette', 'dark'))">🖤 Темний / монохром</button>
+            <button class="btn btn-secondary interactive-press" onclick="delayedNavigate(this, () => answerQuiz('palette', 'bright'))">❤️ Яскравий акцент</button>
+            <button class="btn btn-secondary interactive-press" onclick="delayedNavigate(this, () => answerQuiz('palette', 'pastel'))">🌸 Пастельний (Беж / Ніжний / Світлий)</button>
+            <button class="btn btn-secondary interactive-press" onclick="delayedNavigate(this, () => answerQuiz('palette', 'surprise'))">🎲 Здивуй мене</button>
           </div>
         </div>
 
         <!-- КРОК 3 -->
         <div id="q-step-3" class="quiz-step" style="display:none;">
-          <p style="text-transform:uppercase; font-size:11px; font-weight:700; color:var(--accent-coral-deep); margin-bottom:8px; letter-spacing:1px;">Крок 3 з 3</p>
+          <p style="text-transform:uppercase; font-size:11px; font-weight:800; color:var(--accent-coral-deep); margin-bottom:8px; letter-spacing:1px;">Крок 3 з 3</p>
           <h2>Що з комфортом і погодою?</h2>
 
           <div id="smart-weather-box" class="smart-weather-box">
@@ -914,7 +940,7 @@
               <div class="weather-icon-large" id="w-icon">⛅</div>
               <div>
                 <div class="weather-temp-main" id="w-temp">Визначаємо погоду...</div>
-                <div style="font-size:12.5px; color:var(--text-muted);" id="w-location">Твоя локація</div>
+                <div style="font-size:12.5px; color:var(--text-sub); font-weight:600;" id="w-location">Твоя локація</div>
               </div>
             </div>
             <div class="weather-insights" id="w-insights">
@@ -923,8 +949,8 @@
           </div>
 
           <div style="display:flex; flex-direction:column; gap:12px;">
-            <button class="btn btn-secondary" onclick="answerQuiz('layer', 'single')">☀️ Тепло (тільки один шар)</button>
-            <button class="btn btn-secondary" onclick="answerQuiz('layer', 'zipper')">🧥 Хочеться затишку (потрібна зіпка)</button>
+            <button class="btn btn-secondary interactive-press" onclick="delayedNavigate(this, () => answerQuiz('layer', 'single'))">☀️ Тепло (тільки один шар)</button>
+            <button class="btn btn-secondary interactive-press" onclick="delayedNavigate(this, () => answerQuiz('layer', 'zipper'))">🧥 Хочеться затишку (потрібна зіпка)</button>
           </div>
         </div>
       </div>
@@ -933,29 +959,29 @@
     <!-- 5. ФІНАЛЬНИЙ ЕКРАН -->
     <section id="screen-final" class="screen">
       <div class="top-bar">
-        <button class="icon-btn" onclick="goToScreen('screen-home')">✕</button>
-        <span style="font-weight: 600; font-size: 14.5px; letter-spacing: 0.5px;">Образ на сьогодні</span>
-        <button class="icon-btn" onclick="toggleFavoriteCurrent(event)">❤️</button>
+        <button class="icon-btn interactive-press" onclick="delayedNavigate(this, () => goToScreen('screen-home'))">✕</button>
+        <span style="font-weight: 700; font-size: 15px; letter-spacing: 0.5px;">Образ на сьогодні</span>
+        <button class="icon-btn interactive-press" onclick="toggleFavoriteCurrent(event)">❤️</button>
       </div>
 
       <div class="final-look-card">
-        <span style="font-size: 11px; text-transform:uppercase; letter-spacing:1.5px; color:var(--accent-coral-deep); font-weight:700;">Готовий сет</span>
+        <span style="font-size: 11px; text-transform:uppercase; letter-spacing:1.5px; color:var(--accent-coral-deep); font-weight:800;">Готовий сет</span>
         <h2 style="margin-top: 4px;">Ти виглядаєш неперевершено!</h2>
         <div class="final-items-list" id="final-items-container"></div>
       </div>
 
       <div style="margin-top:auto; display:flex; flex-direction:column; gap:12px;">
-        <button class="btn btn-primary" onclick="confirmTodayOutfit(event)">Сьогодні я в цьому ✨</button>
-        <button class="btn btn-outline" onclick="goToManualFlow()">Змінити щось в образі</button>
+        <button class="btn btn-primary interactive-press" onclick="confirmTodayOutfit(event)">Сьогодні я в цьому ✨</button>
+        <button class="btn btn-outline interactive-press" onclick="delayedNavigate(this, () => goToManualFlow())">Змінити щось в образі</button>
       </div>
     </section>
 
     <!-- 6. УЛЮБЛЕНІ -->
     <section id="screen-favorites" class="screen">
       <div class="top-bar">
-        <button class="icon-btn" onclick="goToScreen('screen-home')">←</button>
-        <span style="font-weight: 600; font-size: 14.5px; letter-spacing: 0.5px;">Улюблені аутфіти</span>
-        <div style="width:44px;"></div>
+        <button class="icon-btn interactive-press" onclick="delayedNavigate(this, () => goToScreen('screen-home'))">←</button>
+        <span style="font-weight: 700; font-size: 15px; letter-spacing: 0.5px;">Улюблені аутфіти</span>
+        <div style="width:46px;"></div>
       </div>
       <div id="favorites-list" style="display:flex; flex-direction:column; gap:16px;"></div>
     </section>
@@ -966,7 +992,7 @@
     <div class="modal-sheet">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
         <h2 id="modal-title" style="margin:0;">Додати річ</h2>
-        <button style="border:none; background:none; font-size:24px; cursor:pointer; color:var(--text-muted);" onclick="closeAddEditModal()">✕</button>
+        <button style="border:none; background:none; font-size:26px; cursor:pointer; color:var(--text-sub);" onclick="closeAddEditModal()">✕</button>
       </div>
 
       <input type="hidden" id="edit-item-id" />
@@ -982,7 +1008,7 @@
       </div>
 
       <div id="img-preview-box" style="display:none; margin-bottom:14px; text-align:center;">
-        <img id="img-preview" src="" style="width:96px; height:96px; border-radius:16px; object-fit:cover; border:1.5px solid var(--glass-border); box-shadow:var(--shadow-glass);" />
+        <img id="img-preview" src="" style="width:96px; height:96px; border-radius:18px; object-fit:cover; border:2px solid #fff; box-shadow:var(--shadow-aero);" />
       </div>
 
       <div class="form-group">
@@ -1002,14 +1028,14 @@
 
       <div class="form-group">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <label style="margin:0;">Колір: <b id="selected-color-label" style="color:var(--text-espresso); text-transform:none;">Чорний</b></label>
+          <label style="margin:0;">Колір: <b id="selected-color-label" style="color:var(--text-main); text-transform:none;">Чорний</b></label>
         </div>
         <div class="color-swatches-grid" id="swatches-container"></div>
         <input type="hidden" id="selected-color-val" value="Чорний" />
         <input type="hidden" id="selected-color-hex" value="#1c1b1a" />
       </div>
 
-      <button class="btn btn-primary" style="width:100%; margin-top:10px;" onclick="saveItem()">Зберегти в гардероб</button>
+      <button class="btn btn-primary interactive-press" style="width:100%; margin-top:10px;" onclick="saveItem()">Зберегти в гардероб</button>
     </div>
   </div>
 
@@ -1048,7 +1074,17 @@
     let quizAnswers = {};
     let currentQuizStep = 1;
 
-    /* ТАКТИЛЬНІ ЧАСТИНКИ ДЛЯ ТЕЛЕФОНУ */
+    /* ТАКТИЛЬНА ЗАТРИМКА (ЩОБ БУЛО ВИДНО ПРУЖНЕ НАТИСКАННЯ НА ТЕЛЕФОНІ) */
+    function delayedNavigate(element, callback) {
+      if (element) {
+        element.classList.add('is-pressed');
+      }
+      setTimeout(() => {
+        if (element) element.classList.remove('is-pressed');
+        callback();
+      }, 120);
+    }
+
     function triggerSparkles(event) {
       const touch = event && event.touches ? event.touches[0] : event;
       const x = touch ? touch.clientX : window.innerWidth / 2;
@@ -1116,7 +1152,7 @@
       updateCounts();
     }
 
-    /* РОЗУМНА ПОГОДА */
+    /* SMART WEATHER */
     async function fetchSmartWeather() {
       const tempEl = document.getElementById('w-temp');
       const iconEl = document.getElementById('w-icon');
@@ -1256,7 +1292,7 @@
       insightsEl.innerHTML = insightsHtml;
     }
 
-    /* КВІЗ ТА НАВІГАЦІЯ */
+    /* КВІЗ */
     function goToQuizFlow() {
       if (wardrobe.length < 2) {
         alert('Додайте хоча б кілька речей у гардероб!');
@@ -1298,7 +1334,7 @@
       }
     }
 
-    /* АЛГОРИТМ ПІДБОРУ */
+    /* АЛГОРИТМ */
     function generateQuizOutfit() {
       const yesterdayIds = yesterdayOutfit ? Object.values(yesterdayOutfit).filter(Boolean).map(x => x.id) : [];
 
@@ -1386,8 +1422,8 @@
         row.innerHTML = `
           <img src="${item.image}" alt="${item.name}" />
           <div>
-            <div style="font-weight:600; font-size:15px;">${item.name}</div>
-            <div style="font-size:12.5px; color:var(--text-muted); display:flex; align-items:center; gap:6px; margin-top:3px;">
+            <div style="font-weight:700; font-size:15px;">${item.name}</div>
+            <div style="font-size:12.5px; color:var(--text-sub); display:flex; align-items:center; gap:6px; margin-top:3px;">
               <span class="color-dot" style="background:${item.colorHex || '#999'}"></span>
               ${item.color}
             </div>
@@ -1443,7 +1479,7 @@
 
           card.innerHTML = `
             <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
-              <span style="font-size:12.5px; font-weight:600; color:var(--text-muted);">${fav.date}</span>
+              <span style="font-size:12.5px; font-weight:700; color:var(--text-sub);">${fav.date}</span>
             </div>
             <div style="display:flex; flex-wrap:wrap; gap:6px;">${imagesHtml}</div>
           `;
@@ -1454,7 +1490,7 @@
       goToScreen('screen-favorites');
     }
 
-    /* МОДАЛКА ТА КАТАЛОГ */
+    /* МОДАЛКА */
     function openAddEditModal(itemId = null) {
       const modal = document.getElementById('add-modal');
       const title = document.getElementById('modal-title');
@@ -1522,7 +1558,7 @@
 
       PALETTE.forEach(c => {
         const item = document.createElement('div');
-        item.className = `color-swatch-item ${c.isLight ? 'light' : ''} ${c.hex.toLowerCase() === currentHex.toLowerCase() ? 'selected' : ''}`;
+        item.className = `color-swatch-item interactive-press ${c.isLight ? 'light' : ''} ${c.hex.toLowerCase() === currentHex.toLowerCase() ? 'selected' : ''}`;
         item.style.backgroundColor = c.hex;
         item.title = c.name;
         item.onclick = () => selectPaletteColor(c.name, c.hex);
@@ -1530,7 +1566,7 @@
       });
 
       const customWrap = document.createElement('div');
-      customWrap.className = 'custom-color-btn';
+      customWrap.className = 'custom-color-btn interactive-press';
       customWrap.title = 'Свій відтінок';
       customWrap.innerHTML = `🎨<input type="color" onchange="handleCustomColor(this.value)"/>`;
       container.appendChild(customWrap);
@@ -1621,7 +1657,7 @@
 
       list.forEach(item => {
         const card = document.createElement('div');
-        card.className = 'item-card';
+        card.className = 'item-card interactive-press';
         card.innerHTML = `
           <div class="item-img-wrap">
             <img src="${item.image}" alt="${item.name}" />
@@ -1687,12 +1723,12 @@
 
     function buildColorFilters() {
       const container = document.getElementById('color-filters');
-      container.innerHTML = `<button class="filter-chip active" onclick="filterByColor('all', this)">Всі кольори</button>`;
+      container.innerHTML = `<button class="filter-chip active interactive-press" onclick="filterByColor('all', this)">Всі кольори</button>`;
 
       const existingColors = [...new Set(wardrobe.map(i => i.color))];
       existingColors.forEach(c => {
         const btn = document.createElement('button');
-        btn.className = 'filter-chip';
+        btn.className = 'filter-chip interactive-press';
         btn.innerText = c;
         btn.onclick = () => filterByColor(c, btn);
         container.appendChild(btn);
@@ -1761,7 +1797,7 @@
       list.forEach(item => {
         const isYesterday = yesterdayOutfit && Object.values(yesterdayOutfit).some(y => y && y.id === item.id);
         const card = document.createElement('div');
-        card.className = 'item-card';
+        card.className = 'item-card interactive-press';
         card.onclick = (e) => selectItem(item.id, e);
 
         card.innerHTML = `
@@ -1818,11 +1854,12 @@
 
       suggestions.slice(0, 4).forEach(s => {
         const thumb = document.createElement('div');
-        thumb.style = "min-width: 72px; cursor: pointer; text-align:center;";
+        thumb.style = "min-width: 74px; cursor: pointer; text-align:center;";
+        thumb.className = "interactive-press";
         thumb.onclick = (e) => selectItem(s.id, e);
         thumb.innerHTML = `
-          <img src="${s.image}" style="width:72px; height:72px; border-radius:14px; object-fit:cover; border:1px solid var(--glass-border); box-shadow:var(--shadow-glass);"/>
-          <div style="font-size:11px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:72px; margin-top:4px;">${s.name}</div>
+          <img src="${s.image}" style="width:74px; height:74px; border-radius:14px; object-fit:cover; border:1.5px solid #fff; box-shadow:var(--shadow-aero);"/>
+          <div style="font-size:11px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:74px; margin-top:4px;">${s.name}</div>
         `;
         container.appendChild(thumb);
       });
