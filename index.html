@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Atelier Studio ✨ [v3.8 Variety Engine]</title>
+  <title>Atelier Studio ✨ [v3.9 Living Wardrobe]</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -523,7 +523,6 @@
       position: relative;
       box-shadow: var(--shadow-aero), inset 0 1.5px 1.5px rgba(255,255,255,0.7);
     }
-
     .item-img-wrap {
       width: 100%;
       height: 155px;
@@ -696,17 +695,6 @@
       to { transform: translateY(0); }
     }
 
-    .modal-sheet h2,
-    .modal-sheet label,
-    .modal-sheet input,
-    .modal-sheet select,
-    .modal-sheet .smart-pill {
-      color: #24130F !important;
-    }
-    .modal-sheet label {
-      color: #7D564C !important;
-    }
-
     .form-group { margin-bottom: 16px; }
     .form-group label {
       display: block;
@@ -715,6 +703,7 @@
       margin-bottom: 8px;
       text-transform: uppercase;
       letter-spacing: 0.8px;
+      color: #7D564C !important;
     }
     .form-control {
       width: 100%;
@@ -724,6 +713,7 @@
       font-size: 14.5px;
       outline: none;
       background: #F9F5F1 !important;
+      color: #24130F !important;
     }
     .form-control:focus {
       border-color: #D9725B !important;
@@ -745,6 +735,7 @@
       font-size: 12.5px;
       font-weight: 700;
       cursor: pointer;
+      color: #24130F !important;
     }
     .smart-pill.active {
       background: #24130F !important;
@@ -1014,7 +1005,7 @@
       </div>
     </section>
 
-    <!-- 2. МЕНЕДЖЕР ГАРДЕРОБА -->
+    <!-- 2. МЕНЕДЖЕР ГАРДЕРОБА (З BIG VIEW КАРТКОЮ) -->
     <section id="screen-wardrobe-manager" class="screen">
       <div class="top-bar">
         <button class="icon-btn interactive-press" onclick="delayedNavigate(this, () => goToScreen('screen-home'))">←</button>
@@ -1137,7 +1128,7 @@
             <button class="btn btn-secondary interactive-press" onclick="delayedNavigate(this, () => answerQuiz('palette', 'dark'))">🖤 Темний / монохром</button>
             <button class="btn btn-secondary interactive-press" onclick="delayedNavigate(this, () => answerQuiz('palette', 'bright'))">❤️ Яскравий акцент</button>
             <button class="btn btn-secondary interactive-press" onclick="delayedNavigate(this, () => answerQuiz('palette', 'pastel'))">🌸 Пастельний (Беж / Світлий)</button>
-            <button class="btn btn-secondary interactive-press" onclick="delayedNavigate(this, () => answerQuiz('palette', 'surprise'))">🎲 Здивуй мене</button>
+            <button class="btn btn-secondary interactive-press" onclick="delayedNavigate(this, () => answerQuiz('palette', 'surprise'))">🎲 Здивуй мене (Рандом)</button>
           </div>
         </div>
 
@@ -1224,6 +1215,28 @@
       <button id="details-wear-btn" class="btn btn-primary interactive-press" style="width:100%;" onclick="applyModalOutfitToday()">
         ✨ Вдягнути цей сет сьогодні
       </button>
+    </div>
+  </div>
+
+  <!-- BIG VIEW КАРТКА ОГЛЯДУ РЕЧІ (ФІКС БАГУ 1) -->
+  <div class="modal" id="item-big-view-modal">
+    <div class="modal-sheet" style="text-align:center;">
+      <div style="display:flex; justify-content:flex-end; margin-bottom:10px;">
+        <button style="border:none; background:none; font-size:26px; cursor:pointer; color:#7D564C;" onclick="closeItemBigView()">✕</button>
+      </div>
+      <img id="bv-img" src="" style="width:160px; height:160px; border-radius:24px; object-fit:cover; border:3px solid #fff; box-shadow:0 12px 30px rgba(0,0,0,0.15); margin-bottom:16px;" />
+      <h2 id="bv-name" style="margin-bottom:4px;">Назва речі</h2>
+      <p id="bv-sub" style="font-size:13.5px; margin-bottom:20px;">Категорія • Колір</p>
+      
+      <div style="background:#F9F5F1; padding:14px; border-radius:16px; margin-bottom:20px; text-align:left; border:1px solid #E2D7CF;">
+        <div style="font-size:12px; font-weight:800; color:#7D564C; text-transform:uppercase; margin-bottom:4px;">Статус у гардеробі</div>
+        <div id="bv-status" style="font-size:14px; font-weight:700; color:#24130F;">Свіжа та готова до виходу ✨</div>
+      </div>
+
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-secondary interactive-press" style="flex:1; padding:14px;" onclick="editItemFromBigView()">✏️ Редагувати</button>
+        <button class="btn btn-primary interactive-press" style="flex:1; padding:14px;" onclick="buildOutfitWithItem()">✨ Зібрати лук з нею</button>
+      </div>
     </div>
   </div>
 
@@ -1315,7 +1328,6 @@
     let favorites = JSON.parse(localStorage.getItem('outfit_favorites')) || [];
     let favoriteItemIds = JSON.parse(localStorage.getItem('favorite_item_ids')) || [];
     
-    // Історія носіння тепер спирається на лічильник циклів
     let currentWearCycle = parseInt(localStorage.getItem('current_wear_cycle') || '0', 10);
     let wearHistory = JSON.parse(localStorage.getItem('wear_history_v4')) || [];
     let dailyOutfitsLog = JSON.parse(localStorage.getItem('daily_outfits_log_v1')) || [];
@@ -1323,9 +1335,7 @@
     let selectedOutfit = { top: null, bottom: null, layer: null, outerwear: null, shoes: null, accessories: null };
     let currentOutfitSource = 'quiz';
 
-    // Чорний список відхилених речей для поточної примірки
     let rejectedItemIds = { top: [], bottom: [], layer: [], outerwear: [], shoes: [], accessories: [] };
-    // Пам'ять останніх згенерованих комбінацій для запобігання дублювання
     let recentOutfitSignatures = JSON.parse(localStorage.getItem('recent_outfit_sigs') || '[]');
 
     let activeCategoryFilter = 'all';
@@ -1340,6 +1350,7 @@
     let smartFilters = { favs: false, ready: false, rare: false };
     let managerSmartFilters = { favs: false, ready: false, rare: false };
     let modalSelectedOutfit = null;
+    let currentlyViewedItemId = null; // Для Big View
 
     function startFreshManualFlow() {
       selectedOutfit = { top: null, bottom: null, layer: null, outerwear: null, shoes: null, accessories: null };
@@ -1347,43 +1358,29 @@
       goToManualFlow();
     }
 
-    /* ЛОГІКА КУЛДАУНУ ПО ЦИКЛАХ (ПРАЦЮЄ НАВІТЬ ПРИ ТЕСТІ ЗА 1 ХВИЛИНУ) */
+    /* ЖИВИЙ КУЛДАУН ПО ЦИКЛАХ (СВЕТРИ ТА ФУТБОЛКИ — 2-3 ЦИКЛИ ВІДПОЧИНКУ) */
     function getItemCooldownStatus(itemId) {
       const item = wardrobe.find(i => i.id === itemId);
       const history = wearHistory.filter(h => h.id === itemId);
-      if (history.length === 0) return { inCooldown: false, isDeprioritized: false, cyclesLeft: 0, label: '' };
+      if (history.length === 0) return { inCooldown: false, isDeprioritized: false, cyclesLeft: 0, label: '', daysIdle: 99 };
 
       const last = history[history.length - 1];
       const cyclesAgo = currentWearCycle - last.cycle;
 
-      // Взуття та аксесуари не блокуються
       if (item && ['shoes', 'accessories'].includes(item.category)) {
-        // Якщо взуття вдягалось прямо в останньому циклі — легкий депріоритет для різноманітності
-        if (cyclesAgo === 0) return { inCooldown: false, isDeprioritized: true, cyclesLeft: 0, label: 'Вчорашнє' };
-        return { inCooldown: false, isDeprioritized: false, cyclesLeft: 0, label: '' };
+        if (cyclesAgo === 0) return { inCooldown: false, isDeprioritized: true, cyclesLeft: 0, label: 'Вчорашнє', daysIdle: cyclesAgo };
+        return { inCooldown: false, isDeprioritized: false, cyclesLeft: 0, label: '', daysIdle: cyclesAgo };
       }
 
-      // Штани та куртки: тільки 1 цикл депріоритету
-      if (item && ['bottom', 'layer', 'outerwear'].includes(item.category)) {
-        if (cyclesAgo === 0) {
-          return { inCooldown: false, isDeprioritized: true, cyclesLeft: 1, label: 'Вчорашні' };
-        }
-        return { inCooldown: false, isDeprioritized: false, cyclesLeft: 0, label: '' };
+      // Для других шарів (светри, зіпки, штани) — мінімум 2 цикли перерви
+      const COOLDOWN_CYCLES = ['bottom', 'layer', 'outerwear'].includes(item?.category) ? 2 : 3;
+
+      if (cyclesAgo < COOLDOWN_CYCLES) {
+        const left = COOLDOWN_CYCLES - cyclesAgo;
+        return { inCooldown: true, isDeprioritized: false, cyclesLeft: left, label: `⏳ Ще ${left} дн.`, daysIdle: cyclesAgo };
       }
 
-      // Якщо футболка була під глухим светром
-      if (!last.visible) {
-        if (cyclesAgo === 0) return { inCooldown: false, isDeprioritized: true, cyclesLeft: 0, label: 'Під светр' };
-        return { inCooldown: false, isDeprioritized: false, cyclesLeft: 0, label: '' };
-      }
-
-      // Видимий верх: блокується на 2 цикли (cyclesAgo < 2)
-      if (cyclesAgo < 2) {
-        const left = 2 - cyclesAgo;
-        return { inCooldown: true, isDeprioritized: false, cyclesLeft: left, label: `⏳ Ще ${left} дн.` };
-      }
-
-      return { inCooldown: false, isDeprioritized: false, cyclesLeft: 0, label: '' };
+      return { inCooldown: false, isDeprioritized: false, cyclesLeft: 0, label: '', daysIdle: cyclesAgo };
     }
 
     function resetWearHistory() {
@@ -1449,59 +1446,22 @@
         return;
       }
 
-      // Кандидати, яких ще не відхиляли в цій сесії
       let candidates = pool.filter(i => !rejectedItemIds[category].includes(i.id));
-
       if (candidates.length === 0) {
-        // Якщо перебрали всіх — скидаємо чорний список і беремо будь-яку іншу річ
         rejectedItemIds[category] = [currentItem.id];
         candidates = pool.filter(i => i.id !== currentItem.id);
       }
 
-      // Фільтруємо кулдаун
       const freshCandidates = candidates.filter(i => !getItemCooldownStatus(i.id).inCooldown);
       if (freshCandidates.length > 0) candidates = freshCandidates;
 
-      // Сумісність верху під светр
-      if (category === 'top') {
-        const isClosedLayer = selectedOutfit.layer && (
-          selectedOutfit.layer.layerType === 'closed' ||
-          ['светр', 'худі', 'світшот'].some(w => selectedOutfit.layer.name.toLowerCase().includes(w))
-        );
-        if (isClosedLayer) {
-          const suitableTops = candidates.filter(i => 
-            i.sleeve !== 'long' && 
-            !['лонгслів', 'реглан', 'сорочк'].some(w => i.name.toLowerCase().includes(w))
-          );
-          if (suitableTops.length > 0) candidates = suitableTops;
-        }
-      }
-
-      // Сортування: Улюблені спочатку, далі рандомізація серед кращих
       candidates.sort((a, b) => {
-        const aFav = favoriteItemIds.includes(a.id) ? 1 : 0;
-        const bFav = favoriteItemIds.includes(b.id) ? 1 : 0;
-        return (bFav - aFav) || (Math.random() - 0.5);
+        const aStatus = getItemCooldownStatus(a.id);
+        const bStatus = getItemCooldownStatus(b.id);
+        return (bStatus.daysIdle - aStatus.daysIdle) || (Math.random() - 0.5);
       });
 
       selectedOutfit[category] = candidates[0];
-
-      // Якщо замінили шар на глухий светр — адаптуємо верх
-      if (category === 'layer') {
-        const isNowClosed = selectedOutfit.layer && (
-          selectedOutfit.layer.layerType === 'closed' ||
-          ['светр', 'худі', 'світшот'].some(w => selectedOutfit.layer.name.toLowerCase().includes(w))
-        );
-        if (isNowClosed && selectedOutfit.top) {
-          const topIsLong = selectedOutfit.top.sleeve === 'long' || 
-            ['лонгслів', 'реглан'].some(w => selectedOutfit.top.name.toLowerCase().includes(w));
-          if (topIsLong) {
-            const shortTop = wardrobe.find(i => i.category === 'top' && i.sleeve !== 'long' && !getItemCooldownStatus(i.id).inCooldown);
-            if (shortTop) selectedOutfit.top = shortTop;
-          }
-        }
-      }
-
       renderFinalScreenItems();
       triggerSparkles();
     }
@@ -1517,7 +1477,6 @@
 
         const row = document.createElement('div');
         row.className = 'final-item-row';
-
         const swapBtnHtml = (currentOutfitSource === 'quiz')
           ? `<button class="btn-swap-item interactive-press" onclick="rejectAndSwapItem('${cat}')">Не хочу ✕</button>`
           : '';
@@ -1539,6 +1498,51 @@
       });
     }
 
+    /* РЕЖИМ BIG VIEW (КЛІК ПО КАРТЦІ В ГАРДЕРОБІ) */
+    function openItemBigView(itemId, event) {
+      if (event) event.stopPropagation();
+      const item = wardrobe.find(i => i.id === itemId);
+      if (!item) return;
+
+      currentlyViewedItemId = itemId;
+      document.getElementById('bv-img').src = item.image;
+      document.getElementById('bv-name').innerText = item.name;
+      document.getElementById('bv-sub').innerText = `${item.category.toUpperCase()} • ${item.color}`;
+
+      const statusEl = document.getElementById('bv-status');
+      const cooldown = getItemCooldownStatus(itemId);
+      if (cooldown.inCooldown) {
+        statusEl.innerHTML = `<span style="color:#D9725B;">⏳ На відпочинку (${cooldown.label})</span>`;
+      } else if (cooldown.daysIdle > 5) {
+        statusEl.innerHTML = `<span style="color:#225C84;">💤 Довго лежало в шафі — ідеально на сьогодні!</span>`;
+      } else {
+        statusEl.innerHTML = `<span style="color:#15803d;">✨ Свіжа та готова до виходу</span>`;
+      }
+
+      document.getElementById('item-big-view-modal').classList.add('active');
+    }
+
+    function closeItemBigView() {
+      document.getElementById('item-big-view-modal').classList.remove('active');
+    }
+
+    function editItemFromBigView() {
+      closeItemBigView();
+      openAddEditModal(currentlyViewedItemId);
+    }
+
+    function buildOutfitWithItem() {
+      closeItemBigView();
+      const item = wardrobe.find(i => i.id === currentlyViewedItemId);
+      if (!item) return;
+
+      selectedOutfit = { top: null, bottom: null, layer: null, outerwear: null, shoes: null, accessories: null };
+      selectedOutfit[item.category] = item;
+      currentOutfitSource = 'manual';
+      goToManualFlow();
+    }
+
+    /* РОЗУМНИЙ ПАРСЕР ТА ПАЛІТРА */
     function handleSmartTitleInput(text) {
       if (!text) return;
       const lower = text.toLowerCase();
@@ -1952,31 +1956,36 @@
       }
     }
 
-    /* ДОПОМІЖНА ФУНКЦІЯ: ВИБІР З РОЗУМНОЮ РОТАЦІЄЮ (НЕ [0]) */
-    function pickSmartItem(candidates) {
+    /* ЖИВИЙ РОЗУМНИЙ АЛГОРИТМ (З ВАГОВОЮ РУЛЕТКОЮ ТА ЗДИВУЙ МЕНЕ) */
+    function pickWeightedRandomItem(candidates) {
       if (!candidates || candidates.length === 0) return null;
       if (candidates.length === 1) return candidates[0];
 
-      // Сортуємо: 1) не на кулдауні 2) не вчорашні 3) улюблені
-      candidates.sort((a, b) => {
-        const aStatus = getItemCooldownStatus(a.id);
-        const bStatus = getItemCooldownStatus(b.id);
+      // Рахуємо бали: чим довше річ не носили (daysIdle), тим вища її вага
+      let weightedPool = [];
+      candidates.forEach(item => {
+        const status = getItemCooldownStatus(item.id);
+        if (status.inCooldown) return; // виключено
 
-        const aCool = aStatus.inCooldown ? -10 : (aStatus.isDeprioritized ? -2 : 2);
-        const bCool = bStatus.inCooldown ? -10 : (bStatus.isDeprioritized ? -2 : 2);
+        // Базова вага = дні простою + бонус улюбленим
+        let weight = Math.max(1, status.daysIdle || 1);
+        if (favoriteItemIds.includes(item.id)) weight += 3;
+        if (status.isDeprioritized) weight = 0.5; // щойно носили — шанс дуже низький, але не нульовий
 
-        const aFav = favoriteItemIds.includes(a.id) ? 1 : 0;
-        const bFav = favoriteItemIds.includes(b.id) ? 1 : 0;
-
-        return (bCool + bFav) - (aCool + aFav);
+        for (let w = 0; w < Math.ceil(weight * 2); w++) {
+          weightedPool.push(item);
+        }
       });
 
-      // Беремо топ-2 найкращих кандидатів і випадково обираємо між ними
-      const topPool = candidates.slice(0, Math.min(2, candidates.length));
-      return topPool[Math.floor(Math.random() * topPool.length)];
+      if (weightedPool.length === 0) {
+        // Якщо все в кулдауні — беремо найменш ношену
+        candidates.sort((a,b) => getItemCooldownStatus(b.id).daysIdle - getItemCooldownStatus(a.id).daysIdle);
+        return candidates[0];
+      }
+
+      return weightedPool[Math.floor(Math.random() * weightedPool.length)];
     }
 
-    /* РОЗУМНИЙ АЛГОРИТМ ПІДБОРУ ДЛЯ КВІЗУ (З РОТАЦІЄЮ ВСІХ КАТЕГОРІЙ) */
     function generateQuizOutfit() {
       currentOutfitSource = 'quiz';
       rejectedItemIds = { top: [], bottom: [], layer: [], outerwear: [], shoes: [], accessories: [] };
@@ -1985,31 +1994,33 @@
       let chosenCandidate = null;
 
       while (attempts < 8) {
-        chosenCandidate = buildCandidateOutfit();
+        chosenCandidate = buildWeightedCandidateOutfit();
         const sig = generateOutfitSignature(chosenCandidate);
         
-        // Якщо аутфіт не повторює нещодавні — затверджуємо
         if (!recentOutfitSignatures.includes(sig)) {
           break;
         }
-
-        // Інакше додаємо в тимчасовий блок випадковий елемент сету і пробуємо знову
         attempts++;
       }
 
       selectedOutfit = chosenCandidate;
+      const finalSig = generateOutfitSignature(selectedOutfit);
+      if (!recentOutfitSignatures.includes(finalSig)) recentOutfitSignatures.push(finalSig);
+
       finishOutfit(null, 'quiz');
     }
 
-    function buildCandidateOutfit() {
+    function buildWeightedCandidateOutfit() {
       let pool = [...wardrobe];
+      const p = quizAnswers.palette;
+      const isSurprise = (p === 'surprise'); // режим "Здивуй мене"
 
-      // 1. ТЕПЛИЙ ШАР
+      // 1. Теплий шар
       let pickLayer = null;
-      if (quizAnswers.layer === 'layer_needed') {
-        let layers = pool.filter(i => i.category === 'layer' && !getItemCooldownStatus(i.id).inCooldown && !rejectedItemIds.layer.includes(i.id));
+      if (quizAnswers.layer === 'layer_needed' || isSurprise) {
+        let layers = pool.filter(i => i.category === 'layer' && !getItemCooldownStatus(i.id).inCooldown);
         if (layers.length === 0) layers = pool.filter(i => i.category === 'layer');
-        pickLayer = pickSmartItem(layers);
+        pickLayer = pickWeightedRandomItem(layers);
       }
 
       const isClosedLayer = pickLayer && (
@@ -2017,63 +2028,39 @@
         ['светр', 'худі', 'світшот'].some(w => pickLayer.name.toLowerCase().includes(w))
       );
 
-      // 2. БАЗОВИЙ ВЕРХ
-      let tops = pool.filter(i => i.category === 'top' && !getItemCooldownStatus(i.id).inCooldown && !rejectedItemIds.top.includes(i.id));
+      // 2. Базовий верх
+      let tops = pool.filter(i => i.category === 'top' && !getItemCooldownStatus(i.id).inCooldown);
       if (tops.length === 0) tops = pool.filter(i => i.category === 'top');
 
       if (isClosedLayer) {
-        const underSweaterTops = tops.filter(i => 
-          i.sleeve !== 'long' &&
-          !['лонгслів', 'реглан', 'сорочк'].some(w => i.name.toLowerCase().includes(w))
-        );
-        if (underSweaterTops.length > 0) tops = underSweaterTops;
-      } else if (currentOutdoorTemp !== null && currentOutdoorTemp < 15 && !pickLayer) {
-        const warmTops = tops.filter(i => !i.name.toLowerCase().includes('кроп'));
-        if (warmTops.length > 0) tops = warmTops;
+        tops = tops.filter(i => i.sleeve !== 'long' && !['лонгслів', 'реглан'].some(w => i.name.toLowerCase().includes(w)));
       }
 
-      // Фільтр кольору верху
-      const p = quizAnswers.palette;
       let matchedTops = tops;
-      if (p === 'dark') {
-        matchedTops = tops.filter(i => ['чорн', 'графіт', 'темн'].some(c => i.color.toLowerCase().includes(c)));
-      } else if (p === 'bright') {
-        matchedTops = tops.filter(i => ['червон', 'рожев', 'зелен', 'жовт', 'помаранч', 'синій'].some(c => i.color.toLowerCase().includes(c)));
-      } else if (p === 'pastel') {
-        matchedTops = tops.filter(i => ['беж', 'світло-сір', 'біл', 'блакит'].some(c => i.color.toLowerCase().includes(c)));
+      if (!isSurprise) {
+        if (p === 'dark') matchedTops = tops.filter(i => ['чорн', 'графіт', 'темн'].some(c => i.color.toLowerCase().includes(c)));
+        else if (p === 'bright') matchedTops = tops.filter(i => ['червон', 'рожев', 'зелен', 'жовт', 'синій'].some(c => i.color.toLowerCase().includes(c)));
+        else if (p === 'pastel') matchedTops = tops.filter(i => ['беж', 'світло-сір', 'біл', 'блакит'].some(c => i.color.toLowerCase().includes(c)));
       }
       if (!matchedTops || matchedTops.length === 0) matchedTops = tops;
 
-      let pickTop = pickSmartItem(matchedTops);
+      let pickTop = pickWeightedRandomItem(matchedTops);
 
-      // 3. НИЗ (ДИНАМІЧНА РОТАЦІЯ МІЖ ШТАНАМИ/ДЖИНСАМИ)
-      let bottoms = pool.filter(i => i.category === 'bottom' && !getItemCooldownStatus(i.id).inCooldown && !rejectedItemIds.bottom.includes(i.id));
+      // 3. Низ
+      let bottoms = pool.filter(i => i.category === 'bottom' && !getItemCooldownStatus(i.id).inCooldown);
       if (bottoms.length === 0) bottoms = pool.filter(i => i.category === 'bottom');
+      let pickBottom = pickWeightedRandomItem(bottoms);
 
-      const occ = quizAnswers.occasion;
-      let matchedBottoms = bottoms;
-      if (occ === 'study') {
-        matchedBottoms = bottoms.filter(i => ['штани', 'джинси'].some(w => i.name.toLowerCase().includes(w)));
-      } else if (occ === 'active' || occ === 'walk') {
-        matchedBottoms = bottoms.filter(i => ['джинси', 'штани', 'карго'].some(w => i.name.toLowerCase().includes(w)));
-      }
-      if (!matchedBottoms || matchedBottoms.length === 0) matchedBottoms = bottoms;
+      // 4. Взуття
+      let shoesPool = pool.filter(i => i.category === 'shoes');
+      let pickShoes = pickWeightedRandomItem(shoesPool);
 
-      let pickBottom = pickSmartItem(matchedBottoms);
-
-      // 4. ВЗУТТЯ (РОТАЦІЯ БЕЗ ЗАШИТИХ КОНВЕРСІВ)
-      let shoesPool = pool.filter(i => i.category === 'shoes' && !rejectedItemIds.shoes.includes(i.id));
-      if (shoesPool.length === 0) shoesPool = pool.filter(i => i.category === 'shoes');
-
-      let pickShoes = pickSmartItem(shoesPool);
-
-      // 5. ВЕРХНІЙ ОДЯГ ТА АКСЕСУАРИ
+      // 5. Верхній одяг та аксесуари
       let outerwears = pool.filter(i => i.category === 'outerwear');
       let pickOuterwear = (currentOutdoorTemp !== null && currentOutdoorTemp <= 12 && outerwears.length > 0) ? outerwears[0] : null;
 
       let accessoriesPool = pool.filter(i => i.category === 'accessories');
-      let pickAccessory = (accessoriesPool.length > 0 && (occ === 'date' || occ === 'walk'))
-        ? accessoriesPool[Math.floor(Math.random() * accessoriesPool.length)] : null;
+      let pickAccessory = (accessoriesPool.length > 0 && Math.random() > 0.4) ? accessoriesPool[Math.floor(Math.random() * accessoriesPool.length)] : null;
 
       return {
         top: pickTop || null,
@@ -2092,7 +2079,6 @@
       goToScreen('screen-final');
     }
 
-    /* ФІКСАЦІЯ АУТФІТУ ДНЯ (+1 ЦИКЛ КУЛДАУНУ) */
     function confirmTodayOutfit(event = null) {
       if (event) triggerSparkles(event);
 
@@ -2101,7 +2087,6 @@
         ['светр', 'худі', 'світшот'].some(w => selectedOutfit.layer.name.toLowerCase().includes(w))
       );
 
-      // Інкрементуємо цикл носіння
       currentWearCycle++;
       localStorage.setItem('current_wear_cycle', currentWearCycle.toString());
 
@@ -2112,7 +2097,6 @@
       if (selectedOutfit.layer) wearHistory.push({ id: selectedOutfit.layer.id, cycle: currentWearCycle, date: nowTime, visible: true });
       if (selectedOutfit.shoes) wearHistory.push({ id: selectedOutfit.shoes.id, cycle: currentWearCycle, date: nowTime, visible: true });
 
-      // Зберігаємо сигнатуру образу в історію недавніх (до 6 штук), щоб не повторювати
       const sig = generateOutfitSignature(selectedOutfit);
       recentOutfitSignatures.unshift(sig);
       if (recentOutfitSignatures.length > 6) recentOutfitSignatures.pop();
@@ -2443,6 +2427,8 @@
 
         const card = document.createElement('div');
         card.className = 'item-card interactive-press';
+        // ФІКС БАГУ 1: Клік по картці відкриває Big View
+        card.onclick = (e) => openItemBigView(item.id, e);
 
         let badgeHtml = '';
         if (cooldown.label) {
@@ -2462,8 +2448,8 @@
             ${item.color}
           </div>
           <div class="item-card-actions">
-            <button class="action-sub-btn" onclick="openAddEditModal('${item.id}')">✏️ Змінити</button>
-            <button class="action-sub-btn" style="color:var(--accent-theme-deep);" onclick="deleteItem('${item.id}')">🗑️</button>
+            <button class="action-sub-btn" onclick="event.stopPropagation(); openAddEditModal('${item.id}')">✏️ Змінити</button>
+            <button class="action-sub-btn" style="color:var(--accent-theme-deep);" onclick="event.stopPropagation(); deleteItem('${item.id}')">🗑️</button>
           </div>
         `;
         grid.appendChild(card);
@@ -2648,6 +2634,7 @@
       renderWardrobe();
     }
 
+    // Запуск застосунку
     applyDynamicAtmosphere(0);
     initWeatherOnLoad();
     setRandomGreeting();
