@@ -10,35 +10,177 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
+    /* ==========================================================================
+       FRUTIGER AERO DYNAMIC THEMES MATRIX
+       ========================================================================== */
     :root {
-      /* Контрастні та соковиті кольори підкладки для справжнього скла */
-      --bg-gradient: linear-gradient(160deg, #FFE3D8 0%, #F6CFC0 35%, #FDE8D7 70%, #F5D3C4 100%);
-      
-      /* Соковите Frutiger Aero Coral Glass */
-      --glass-surface: rgba(255, 255, 255, 0.42);
-      --glass-card: rgba(255, 245, 240, 0.55);
-      --glass-coral-tint: rgba(255, 120, 95, 0.16);
-      --glass-border-light: rgba(255, 255, 255, 0.88);
-      --glass-border-bottom: rgba(220, 110, 90, 0.35);
-      
-      /* Глянцевий відблиск зверху скла */
-      --glass-sheen: linear-gradient(135deg, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.15) 40%, rgba(255,130,105,0.08) 100%);
-      --glass-specular: inset 0 2px 2px 0 rgba(255, 255, 255, 0.95), inset 0 -2px 3px 0 rgba(200, 80, 60, 0.15);
-      
-      --text-main: #241410;
-      --text-sub: #7A5B52;
-      --accent-coral: #E65338;
-      --accent-coral-deep: #B8341D;
-      
-      --shadow-aero: 0 16px 40px -10px rgba(180, 65, 45, 0.2), 0 4px 16px rgba(0, 0, 0, 0.04);
-      --shadow-pressed: 0 4px 14px rgba(180, 65, 45, 0.12);
-      
+      --spring-snap: cubic-bezier(0.25, 1, 0.3, 1);
       --radius-xl: 32px;
-      --radius-lg: 24px;
+      --radius-lg: 22px;
       --radius-md: 16px;
       --radius-sm: 10px;
+    }
 
-      --spring-snap: cubic-bezier(0.25, 1, 0.3, 1);
+    /* 1. РАНОК - ЯСНО (Світлий корал) */
+    body.theme-morning.weather-clear {
+      --bg-gradient: linear-gradient(165deg, #FFEFEA 0%, #FCD8CE 40%, #FDEEE7 100%);
+      --bubble-1: #FFA48D;
+      --bubble-2: #FFD4C4;
+      --bubble-3: #FF8F74;
+      --glass-surface: rgba(255, 255, 255, 0.52);
+      --glass-card: rgba(255, 244, 239, 0.62);
+      --glass-border-top: rgba(255, 255, 255, 0.95);
+      --glass-border-bot: rgba(217, 114, 91, 0.35);
+      --glass-gloss: linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.2) 40%, rgba(217,114,91,0.12) 100%);
+      --text-main: #24130F;
+      --text-sub: #7D564C;
+      --accent-theme: #D9725B;
+      --accent-theme-deep: #B44A32;
+      --shadow-aero: 0 16px 40px -10px rgba(180, 75, 50, 0.22);
+    }
+
+    /* 1.2 РАНОК - ПОХМУРО (Затишний кашеміровий туман) */
+    body.theme-morning.weather-cloudy {
+      --bg-gradient: linear-gradient(165deg, #F8EBE7 0%, #EBD5D0 40%, #F5E5E0 100%);
+      --bubble-1: #E6B5AC;
+      --bubble-2: #F7DCD6;
+      --bubble-3: #DFC1B8;
+      --glass-surface: rgba(255, 255, 255, 0.58);
+      --glass-card: rgba(255, 246, 244, 0.68);
+      --glass-border-top: rgba(255, 255, 255, 0.95);
+      --glass-border-bot: rgba(180, 130, 120, 0.3);
+      --glass-gloss: linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.2) 45%, rgba(200,150,140,0.1) 100%);
+      --text-main: #291816;
+      --text-sub: #7A5E59;
+      --accent-theme: #C46E60;
+      --accent-theme-deep: #A3483A;
+      --shadow-aero: 0 16px 40px -10px rgba(140, 90, 80, 0.18);
+    }
+
+    /* 1.3 РАНОК - ДОЩИК (Теплий чайний туман) */
+    body.theme-morning.weather-rain {
+      --bg-gradient: linear-gradient(165deg, #EBE5E8 0%, #D8CDD6 40%, #E8DFE5 100%);
+      --bubble-1: #C9AEC4;
+      --bubble-2: #E3D1DF;
+      --bubble-3: #B99DB4;
+      --glass-surface: rgba(255, 255, 255, 0.55);
+      --glass-card: rgba(252, 247, 250, 0.65);
+      --glass-border-top: rgba(255, 255, 255, 0.95);
+      --glass-border-bot: rgba(150, 110, 140, 0.3);
+      --glass-gloss: linear-gradient(135deg, rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.2) 45%, rgba(180,140,170,0.1) 100%);
+      --text-main: #231622;
+      --text-sub: #6E5369;
+      --accent-theme: #9E5B8E;
+      --accent-theme-deep: #7D396E;
+      --shadow-aero: 0 16px 40px -10px rgba(120, 70, 110, 0.18);
+    }
+
+    /* 2. ДЕНЬ - ЯСНО (Сонячний теплий мед) */
+    body.theme-day.weather-clear {
+      --bg-gradient: linear-gradient(165deg, #FFF5EA 0%, #FDE4C9 40%, #FDEFD9 100%);
+      --bubble-1: #F7BA7C;
+      --bubble-2: #FFE0BA;
+      --bubble-3: #FFAA55;
+      --glass-surface: rgba(255, 255, 255, 0.52);
+      --glass-card: rgba(255, 248, 238, 0.64);
+      --glass-border-top: rgba(255, 255, 255, 0.98);
+      --glass-border-bot: rgba(225, 145, 65, 0.32);
+      --glass-gloss: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.25) 40%, rgba(247,186,124,0.14) 100%);
+      --text-main: #261505;
+      --text-sub: #7C5833;
+      --accent-theme: #E5872A;
+      --accent-theme-deep: #BA640F;
+      --shadow-aero: 0 16px 40px -10px rgba(190, 110, 30, 0.22);
+    }
+
+    /* 2.2 ДЕНЬ - ПОХМУРО (Затишний золотистий льон) */
+    body.theme-day.weather-cloudy {
+      --bg-gradient: linear-gradient(165deg, #F9F1E7 0%, #EBDBCB 40%, #F4E8DB 100%);
+      --bubble-1: #DFC4AA;
+      --bubble-2: #F5E6D8;
+      --bubble-3: #D0B092;
+      --glass-surface: rgba(255, 255, 255, 0.56);
+      --glass-card: rgba(255, 250, 245, 0.68);
+      --glass-border-top: rgba(255, 255, 255, 0.95);
+      --glass-border-bot: rgba(185, 145, 110, 0.3);
+      --glass-gloss: linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.2) 45%, rgba(210,165,130,0.1) 100%);
+      --text-main: #241A12;
+      --text-sub: #755B49;
+      --accent-theme: #B87C4A;
+      --accent-theme-deep: #925828;
+      --shadow-aero: 0 16px 40px -10px rgba(150, 110, 75, 0.16);
+    }
+
+    /* 2.3 ДЕНЬ - ДОЩИК (Свіжий блакитний сланець) */
+    body.theme-day.weather-rain {
+      --bg-gradient: linear-gradient(165deg, #EBF1F5 0%, #D5E1EA 40%, #E4EDF3 100%);
+      --bubble-1: #ADC8DC;
+      --bubble-2: #D4E6F2;
+      --bubble-3: #95B7CE;
+      --glass-surface: rgba(255, 255, 255, 0.55);
+      --glass-card: rgba(247, 251, 254, 0.66);
+      --glass-border-top: rgba(255, 255, 255, 0.98);
+      --glass-border-bot: rgba(110, 155, 185, 0.32);
+      --glass-gloss: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.2) 45%, rgba(140,190,225,0.12) 100%);
+      --text-main: #131E26;
+      --text-sub: #4A6577;
+      --accent-theme: #3F7EAA;
+      --accent-theme-deep: #225C84;
+      --shadow-aero: 0 16px 40px -10px rgba(60, 115, 155, 0.2);
+    }
+
+    /* 3. НІЧ - ЯСНО (Сутінковий оксамит #7477B5) */
+    body.theme-night.weather-clear {
+      --bg-gradient: linear-gradient(165deg, #EBEBF7 0%, #D4D6EE 40%, #E2E4F5 100%);
+      --bubble-1: #9DA0DA;
+      --bubble-2: #C8CAF2;
+      --bubble-3: #7477B5;
+      --glass-surface: rgba(255, 255, 255, 0.52);
+      --glass-card: rgba(248, 248, 255, 0.65);
+      --glass-border-top: rgba(255, 255, 255, 0.95);
+      --glass-border-bot: rgba(116, 119, 181, 0.35);
+      --glass-gloss: linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.2) 40%, rgba(116,119,181,0.14) 100%);
+      --text-main: #191A2E;
+      --text-sub: #535678;
+      --accent-theme: #5B5FA8;
+      --accent-theme-deep: #3C3F85;
+      --shadow-aero: 0 16px 40px -10px rgba(85, 90, 160, 0.22);
+    }
+
+    /* 3.2 НІЧ - ПОХМУРО (Сутінковий аметист) */
+    body.theme-night.weather-cloudy {
+      --bg-gradient: linear-gradient(165deg, #ECE6EF 0%, #D7CADC 40%, #E3D6E7 100%);
+      --bubble-1: #B49EBD;
+      --bubble-2: #DECDE4;
+      --bubble-3: #9C80A7;
+      --glass-surface: rgba(255, 255, 255, 0.56);
+      --glass-card: rgba(251, 248, 253, 0.68);
+      --glass-border-top: rgba(255, 255, 255, 0.95);
+      --glass-border-bot: rgba(140, 110, 155, 0.3);
+      --glass-gloss: linear-gradient(135deg, rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.2) 45%, rgba(160,125,175,0.1) 100%);
+      --text-main: #241629;
+      --text-sub: #66506E;
+      --accent-theme: #895899;
+      --accent-theme-deep: #663575;
+      --shadow-aero: 0 16px 40px -10px rgba(115, 70, 130, 0.18);
+    }
+
+    /* 3.3 НІЧ - ДОЩИК (Нічний сапфір) */
+    body.theme-night.weather-rain {
+      --bg-gradient: linear-gradient(165deg, #E2E6F0 0%, #C7D0E2 40%, #D6DFEF 100%);
+      --bubble-1: #95A6C7;
+      --bubble-2: #C4D3EE;
+      --bubble-3: #758DB7;
+      --glass-surface: rgba(255, 255, 255, 0.55);
+      --glass-card: rgba(245, 248, 254, 0.66);
+      --glass-border-top: rgba(255, 255, 255, 0.95);
+      --glass-border-bot: rgba(90, 120, 165, 0.35);
+      --glass-gloss: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.2) 45%, rgba(110,145,200,0.12) 100%);
+      --text-main: #131A26;
+      --text-sub: #495B7A;
+      --accent-theme: #41639B;
+      --accent-theme-deep: #25467A;
+      --shadow-aero: 0 16px 40px -10px rgba(50, 80, 135, 0.2);
     }
 
     * {
@@ -59,9 +201,10 @@
       min-height: 100vh;
       overflow-x: hidden;
       position: relative;
+      transition: background 0.8s ease;
     }
 
-    /* Фоновий глибокий контраст: сфери світла та жива вода Frutiger Aero */
+    /* Frutiger Aero бульбашки підкладки */
     .aero-depth-bg {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -72,33 +215,28 @@
     .aero-bubble {
       position: absolute;
       border-radius: 50%;
-      filter: blur(40px);
-      opacity: 0.75;
+      filter: blur(45px);
+      opacity: 0.78;
       animation: floatBubble 14s infinite alternate ease-in-out;
+      transition: background 0.8s ease;
     }
     .bubble-1 {
       width: 320px; height: 320px;
-      background: radial-gradient(circle, #FFA48A 0%, rgba(255,164,138,0) 70%);
+      background: radial-gradient(circle, var(--bubble-1) 0%, transparent 70%);
       top: -60px; right: -80px;
       animation-duration: 12s;
     }
     .bubble-2 {
       width: 380px; height: 380px;
-      background: radial-gradient(circle, #FFC799 0%, rgba(255,199,153,0) 70%);
+      background: radial-gradient(circle, var(--bubble-2) 0%, transparent 70%);
       bottom: -40px; left: -100px;
       animation-duration: 18s;
       animation-delay: -3s;
     }
-    .bubble-3 {
-      width: 240px; height: 240px;
-      background: radial-gradient(circle, #FF8E75 0%, rgba(255,142,117,0) 70%);
-      top: 40%; left: 40%;
-      animation-duration: 15s;
-    }
 
     @keyframes floatBubble {
       0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(-30px, 40px) scale(1.15); }
+      100% { transform: translate(-30px, 35px) scale(1.12); }
     }
 
     #app {
@@ -110,10 +248,9 @@
       position: relative;
       padding-bottom: env(safe-area-inset-bottom, 34px);
       z-index: 1;
-      overflow: hidden;
     }
 
-    /* Анімація переходу екранів у стилі iOS Sheet / Push */
+    /* Вертикальний м'який підйом (iOS Modal Lift) */
     .screen {
       display: none;
       flex-direction: column;
@@ -124,13 +261,13 @@
 
     .screen.active {
       display: flex;
-      animation: iosPushIn 0.36s var(--spring-snap) forwards;
+      animation: iosLiftUp 0.36s var(--spring-snap) forwards;
     }
 
-    @keyframes iosPushIn {
+    @keyframes iosLiftUp {
       0% {
-        opacity: 0.4;
-        transform: translate3d(36px, 0, 0) scale(0.96);
+        opacity: 0;
+        transform: translate3d(0, 22px, 0) scale(0.97);
       }
       100% {
         opacity: 1;
@@ -138,7 +275,6 @@
       }
     }
 
-    /* Типографіка */
     h1 {
       font-family: 'Playfair Display', Georgia, serif;
       font-size: 32px;
@@ -150,7 +286,7 @@
     }
     h2 {
       font-family: 'Playfair Display', Georgia, serif;
-      font-size: 22px;
+      font-size: 21px;
       font-weight: 600;
       color: var(--text-main);
       letter-spacing: -0.3px;
@@ -162,14 +298,14 @@
       line-height: 1.45;
     }
 
-    /* Кнопки та картки з відчутним фізичним стисканням */
+    /* Тактильні кнопки */
     .interactive-press {
       transition: transform 0.16s cubic-bezier(0.2, 0.9, 0.3, 1.2), box-shadow 0.16s ease;
       will-change: transform;
     }
     .interactive-press:active, .interactive-press.is-pressed {
-      transform: scale(0.93) translateZ(0) !important;
-      box-shadow: var(--shadow-pressed) !important;
+      transform: scale(0.94) translateZ(0) !important;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.12) !important;
     }
 
     .btn {
@@ -187,34 +323,30 @@
       position: relative;
     }
     .btn-primary {
-      background: linear-gradient(135deg, #2D1812 0%, #150906 100%);
+      background: linear-gradient(135deg, var(--text-main) 0%, #150906 100%);
       color: #FFF6F3;
-      box-shadow: 0 10px 28px rgba(35, 15, 10, 0.28);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
       border: 1px solid rgba(255, 255, 255, 0.25);
-    }
-    .btn-primary:active {
-      filter: brightness(1.15);
     }
 
     .btn-secondary {
-      background: var(--glass-sheen), var(--glass-card);
+      background: var(--glass-gloss), var(--glass-card);
       backdrop-filter: blur(28px);
       -webkit-backdrop-filter: blur(28px);
       color: var(--text-main);
-      border-top: 1.5px solid var(--glass-border-light);
-      border-left: 1px solid var(--glass-border-light);
-      border-right: 1px solid var(--glass-border-bottom);
-      border-bottom: 1.5px solid var(--glass-border-bottom);
-      box-shadow: var(--shadow-aero), var(--glass-specular);
+      border-top: 1.5px solid var(--glass-border-top);
+      border-left: 1px solid var(--glass-border-top);
+      border-right: 1px solid var(--glass-border-bot);
+      border-bottom: 1.5px solid var(--glass-border-bot);
+      box-shadow: var(--shadow-aero), inset 0 2px 2px #fff;
     }
 
     .btn-outline {
-      border: 1px solid var(--glass-border-light);
+      border: 1px solid var(--glass-border-top);
       background: rgba(255, 255, 255, 0.4);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
       color: var(--text-main);
-      box-shadow: var(--glass-specular);
     }
 
     /* Навігаційний бар */
@@ -227,7 +359,7 @@
     .brand-mark {
       font-size: 11px;
       font-weight: 800;
-      letter-spacing: 2.2px;
+      letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--text-sub);
       display: flex;
@@ -237,19 +369,19 @@
     .brand-mark-dot {
       width: 8px;
       height: 8px;
-      background: var(--accent-coral);
+      background: var(--accent-theme);
       border-radius: 50%;
-      box-shadow: 0 0 12px var(--accent-coral);
+      box-shadow: 0 0 12px var(--accent-theme);
     }
     .icon-btn {
-      background: var(--glass-sheen), var(--glass-surface);
+      background: var(--glass-gloss), var(--glass-surface);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
-      border-top: 1.5px solid var(--glass-border-light);
-      border-left: 1px solid var(--glass-border-light);
-      border-bottom: 1.5px solid var(--glass-border-bottom);
-      border-right: 1px solid var(--glass-border-bottom);
-      box-shadow: var(--shadow-aero), var(--glass-specular);
+      border-top: 1.5px solid var(--glass-border-top);
+      border-left: 1px solid var(--glass-border-top);
+      border-bottom: 1.5px solid var(--glass-border-bot);
+      border-right: 1px solid var(--glass-border-bot);
+      box-shadow: var(--shadow-aero), inset 0 1.5px 1.5px #fff;
       border-radius: 50%;
       width: 46px;
       height: 46px;
@@ -270,32 +402,32 @@
       gap: 6px;
       padding: 6px 14px;
       border-radius: 30px;
-      background: rgba(255, 255, 255, 0.6);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--glass-border-light);
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--glass-border-top);
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 1.4px;
-      color: var(--accent-coral-deep);
+      color: var(--accent-theme-deep);
       font-weight: 800;
       margin-bottom: 12px;
-      box-shadow: 0 4px 14px rgba(220, 80, 60, 0.1);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
     }
 
     /* Картки Frutiger Aero Glass */
     .choice-card {
-      background: var(--glass-sheen), var(--glass-card);
+      background: var(--glass-gloss), var(--glass-card);
       backdrop-filter: blur(32px);
       -webkit-backdrop-filter: blur(32px);
-      border-top: 2px solid var(--glass-border-light);
-      border-left: 1.5px solid var(--glass-border-light);
-      border-right: 1.5px solid var(--glass-border-bottom);
-      border-bottom: 2px solid var(--glass-border-bottom);
+      border-top: 2px solid var(--glass-border-top);
+      border-left: 1.5px solid var(--glass-border-top);
+      border-right: 1.5px solid var(--glass-border-bot);
+      border-bottom: 2px solid var(--glass-border-bot);
       border-radius: var(--radius-xl);
       padding: 24px;
       margin-bottom: 16px;
       cursor: pointer;
-      box-shadow: var(--shadow-aero), var(--glass-specular);
+      box-shadow: var(--shadow-aero), inset 0 2px 2px #fff;
       position: relative;
       overflow: hidden;
     }
@@ -303,9 +435,9 @@
       width: 54px;
       height: 54px;
       border-radius: 20px;
-      background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 215, 205, 0.75) 100%);
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 230, 220, 0.75) 100%);
       border: 1.5px solid #fff;
-      box-shadow: 0 8px 20px rgba(230, 83, 56, 0.22), inset 0 2px 2px #fff;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08), inset 0 2px 2px #fff;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -317,7 +449,7 @@
     .outfit-slots-panel {
       position: sticky;
       top: 0;
-      background: rgba(251, 230, 222, 0.72);
+      background: rgba(255, 255, 255, 0.4);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
       z-index: 10;
@@ -328,18 +460,23 @@
     .slots-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
+      gap: 8px;
+    }
+    .extra-slots-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
     }
     .slot-item {
       background: var(--glass-sheen), var(--glass-surface);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border-top: 1.5px solid var(--glass-border-light);
-      border-left: 1px solid var(--glass-border-light);
-      border-right: 1px solid var(--glass-border-bottom);
-      border-bottom: 1.5px solid var(--glass-border-bottom);
-      border-radius: var(--radius-lg);
-      height: 104px;
+      border-top: 1.5px solid var(--glass-border-top);
+      border-left: 1px solid var(--glass-border-top);
+      border-right: 1px solid var(--glass-border-bot);
+      border-bottom: 1.5px solid var(--glass-border-bot);
+      border-radius: var(--radius-md);
+      height: 96px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -349,54 +486,55 @@
       cursor: pointer;
       text-align: center;
       padding: 4px;
-      box-shadow: var(--shadow-aero), var(--glass-specular);
+      box-shadow: var(--shadow-aero), inset 0 1.5px 1.5px #fff;
+      flex: 1;
     }
     .slot-item.filled {
-      border: 2px solid var(--accent-coral);
-      box-shadow: 0 10px 28px rgba(230, 83, 56, 0.32);
+      border: 2px solid var(--accent-theme);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
       animation: popSlot 0.32s var(--spring-snap);
     }
     @keyframes popSlot {
-      0% { transform: scale(0.85); }
-      60% { transform: scale(1.08); }
+      0% { transform: scale(0.88); }
+      60% { transform: scale(1.06); }
       100% { transform: scale(1); }
     }
     .slot-item img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 18px;
+      border-radius: 12px;
     }
     .slot-label {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 800;
       color: var(--text-sub);
-      letter-spacing: 0.6px;
+      letter-spacing: 0.5px;
       text-transform: uppercase;
+      line-height: 1.2;
     }
     .slot-clear {
       position: absolute;
-      top: 6px;
-      right: 6px;
+      top: 5px;
+      right: 5px;
       background: rgba(36, 20, 16, 0.85);
       color: #fff;
       border: none;
       border-radius: 50%;
-      width: 22px;
-      height: 22px;
-      font-size: 11px;
+      width: 20px;
+      height: 20px;
+      font-size: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       backdrop-filter: blur(6px);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
     }
 
     /* Фільтри */
     .filters-scroll {
       display: flex;
-      gap: 9px;
+      gap: 8px;
       overflow-x: auto;
       padding-bottom: 12px;
       margin-bottom: 12px;
@@ -407,27 +545,27 @@
       background: var(--glass-sheen), var(--glass-surface);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border-top: 1.5px solid var(--glass-border-light);
-      border-left: 1px solid var(--glass-border-light);
-      border-right: 1px solid var(--glass-border-bottom);
-      border-bottom: 1.5px solid var(--glass-border-bottom);
-      padding: 10px 18px;
+      border-top: 1.5px solid var(--glass-border-top);
+      border-left: 1px solid var(--glass-border-top);
+      border-right: 1px solid var(--glass-border-bot);
+      border-bottom: 1.5px solid var(--glass-border-bot);
+      padding: 9px 16px;
       border-radius: 30px;
-      font-size: 13.5px;
+      font-size: 13px;
       white-space: nowrap;
       cursor: pointer;
       color: var(--text-main);
       font-weight: 700;
-      box-shadow: var(--shadow-aero), var(--glass-specular);
+      box-shadow: var(--shadow-aero), inset 0 1.5px 1.5px #fff;
     }
     .filter-chip.active {
-      background: linear-gradient(135deg, #2D1812 0%, #150906 100%);
+      background: linear-gradient(135deg, var(--text-main) 0%, #150906 100%);
       color: #FFF6F3;
-      border-color: #2D1812;
-      box-shadow: 0 8px 20px rgba(35, 15, 10, 0.3);
+      border-color: var(--text-main);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     }
 
-    /* Каталог речей */
+    /* Каталог */
     .items-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -439,16 +577,16 @@
       backdrop-filter: blur(26px);
       -webkit-backdrop-filter: blur(26px);
       border-radius: var(--radius-lg);
-      border-top: 1.5px solid var(--glass-border-light);
-      border-left: 1px solid var(--glass-border-light);
-      border-right: 1px solid var(--glass-border-bottom);
-      border-bottom: 1.5px solid var(--glass-border-bottom);
+      border-top: 1.5px solid var(--glass-border-top);
+      border-left: 1px solid var(--glass-border-top);
+      border-right: 1px solid var(--glass-border-bot);
+      border-bottom: 1.5px solid var(--glass-border-bot);
       padding: 12px;
       display: flex;
       flex-direction: column;
       cursor: pointer;
       position: relative;
-      box-shadow: var(--shadow-aero), var(--glass-specular);
+      box-shadow: var(--shadow-aero), inset 0 1.5px 1.5px #fff;
     }
     .item-img-wrap {
       width: 100%;
@@ -493,7 +631,7 @@
       display: flex;
       gap: 6px;
       margin-top: 10px;
-      border-top: 1px solid rgba(230, 90, 70, 0.2);
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
       padding-top: 8px;
     }
     .action-sub-btn {
@@ -502,23 +640,23 @@
       font-size: 12px;
       font-weight: 700;
       border-radius: var(--radius-sm);
-      border: 1px solid var(--glass-border-light);
+      border: 1px solid var(--glass-border-top);
       background: rgba(255, 255, 255, 0.75);
       color: var(--text-main);
       cursor: pointer;
     }
 
-    /* Пропозиції сумісності */
+    /* Блок пропозицій */
     .recommendations-banner {
-      background: linear-gradient(135deg, rgba(255, 245, 240, 0.95) 0%, rgba(255, 220, 210, 0.9) 100%);
+      background: var(--glass-sheen), var(--glass-card);
       backdrop-filter: blur(28px);
       -webkit-backdrop-filter: blur(28px);
-      border: 1.5px solid var(--glass-border-light);
+      border: 1.5px solid var(--glass-border-top);
       border-radius: var(--radius-lg);
       padding: 16px;
       margin-bottom: 18px;
       display: none;
-      box-shadow: var(--shadow-aero), var(--glass-specular);
+      box-shadow: var(--shadow-aero), inset 0 2px 2px #fff;
     }
     .recommendations-banner.active {
       display: block;
@@ -533,7 +671,7 @@
     .rec-header span {
       font-size: 13px;
       font-weight: 800;
-      color: var(--accent-coral-deep);
+      color: var(--accent-theme-deep);
       letter-spacing: 0.4px;
     }
 
@@ -542,14 +680,14 @@
       background: var(--glass-sheen), var(--glass-card);
       backdrop-filter: blur(32px);
       -webkit-backdrop-filter: blur(32px);
-      border-top: 2px solid var(--glass-border-light);
-      border-left: 1.5px solid var(--glass-border-light);
-      border-right: 1.5px solid var(--glass-border-bottom);
-      border-bottom: 2px solid var(--glass-border-bottom);
+      border-top: 2px solid var(--glass-border-top);
+      border-left: 1.5px solid var(--glass-border-top);
+      border-right: 1.5px solid var(--glass-border-bot);
+      border-bottom: 2px solid var(--glass-border-bot);
       border-radius: var(--radius-xl);
       padding: 22px;
       margin-bottom: 22px;
-      box-shadow: var(--shadow-aero), var(--glass-specular);
+      box-shadow: var(--shadow-aero), inset 0 2px 2px #fff;
       position: relative;
       overflow: hidden;
     }
@@ -561,7 +699,7 @@
     }
     .weather-icon-large {
       font-size: 40px;
-      filter: drop-shadow(0 4px 12px rgba(230, 83, 56, 0.35));
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
     }
     .weather-temp-main {
       font-family: 'Playfair Display', Georgia, serif;
@@ -573,7 +711,7 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      border-top: 1px dashed rgba(230, 90, 70, 0.3);
+      border-top: 1px dashed rgba(0, 0, 0, 0.12);
       padding-top: 14px;
       font-size: 13.5px;
       line-height: 1.45;
@@ -590,17 +728,17 @@
       backdrop-filter: blur(32px);
       -webkit-backdrop-filter: blur(32px);
       border-radius: var(--radius-xl);
-      border-top: 2px solid var(--glass-border-light);
-      border-left: 1.5px solid var(--glass-border-light);
-      border-bottom: 2px solid var(--glass-border-bottom);
+      border-top: 2px solid var(--glass-border-top);
+      border-left: 1.5px solid var(--glass-border-top);
+      border-bottom: 2px solid var(--glass-border-bot);
       padding: 24px;
-      box-shadow: var(--shadow-aero), var(--glass-specular);
+      box-shadow: var(--shadow-aero), inset 0 2px 2px #fff;
       margin-bottom: 24px;
     }
     .final-items-list {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
       margin: 20px 0;
     }
     .final-item-row {
@@ -609,8 +747,8 @@
       gap: 16px;
     }
     .final-item-row img {
-      width: 74px;
-      height: 74px;
+      width: 68px;
+      height: 68px;
       border-radius: var(--radius-md);
       object-fit: cover;
       background: rgba(255, 255, 255, 0.75);
@@ -623,7 +761,7 @@
       display: none;
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(30, 15, 10, 0.5);
+      background: rgba(20, 15, 12, 0.45);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       z-index: 100;
@@ -632,7 +770,7 @@
     }
     .modal.active { display: flex; }
     .modal-sheet {
-      background: linear-gradient(180deg, #FFFFFF 0%, #FFF7F3 100%);
+      background: linear-gradient(180deg, #FFFFFF 0%, #FAF5F0 100%);
       width: 100%;
       max-width: 460px;
       border-radius: 34px 34px 0 0;
@@ -663,18 +801,17 @@
       width: 100%;
       padding: 14px 16px;
       border-radius: var(--radius-md);
-      border: 1.5px solid rgba(230, 110, 90, 0.25);
+      border: 1.5px solid rgba(0, 0, 0, 0.12);
       font-size: 14.5px;
       outline: none;
       background: #FAF6F3;
     }
     .form-control:focus {
-      border-color: var(--accent-coral);
+      border-color: var(--accent-theme);
       background: #fff;
-      box-shadow: 0 0 0 3px rgba(230, 83, 56, 0.18);
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
     }
 
-    /* Палітра кольорів */
     .color-swatches-grid {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
@@ -711,7 +848,7 @@
     .custom-color-btn {
       height: 38px;
       border-radius: 50%;
-      border: 1.5px dashed rgba(230, 110, 90, 0.35);
+      border: 1.5px dashed rgba(0, 0, 0, 0.2);
       background: #FAF6F3;
       display: flex;
       align-items: center;
@@ -750,7 +887,6 @@
       font-style: italic;
     }
 
-    /* Частинки сяйва */
     .sparkle-particle {
       position: fixed;
       pointer-events: none;
@@ -764,13 +900,11 @@
     }
   </style>
 </head>
-<body>
+<body class="theme-day weather-clear">
 
-  <!-- Фон із Frutiger Aero бульбашками та градієнтом світла -->
   <div class="aero-depth-bg">
     <div class="aero-bubble bubble-1"></div>
     <div class="aero-bubble bubble-2"></div>
-    <div class="aero-bubble bubble-3"></div>
   </div>
 
   <div id="app">
@@ -779,13 +913,13 @@
       <div class="top-bar">
         <div class="brand-mark">
           <span class="brand-mark-dot"></span>
-          Atelier Studio
+          <span id="theme-status-label">Atelier Studio</span>
         </div>
         <button class="icon-btn interactive-press" onclick="openAddEditModal()" title="Додати річ">+</button>
       </div>
 
       <div class="hero-header">
-        <div class="hero-badge">✨ Ранковий ритуал</div>
+        <div class="hero-badge" id="weather-badge-text">✨ Ранковий ритуал</div>
         <h1 id="greeting-text">Привіт ✨</h1>
         <p>Обери сьогоднішній настрій або зазирни у свою колекцію гардероба.</p>
       </div>
@@ -802,7 +936,7 @@
         <p>Три швидких запитання про формат дня та погоду — гармонійний сет без вагань.</p>
       </div>
 
-      <div class="choice-card interactive-press" style="background: var(--glass-sheen), rgba(255, 215, 202, 0.7);" onclick="delayedNavigate(this, () => goToWardrobeManager())">
+      <div class="choice-card interactive-press" style="background: var(--glass-gloss), rgba(255, 255, 255, 0.45);" onclick="delayedNavigate(this, () => goToWardrobeManager())">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <div style="display:flex; align-items:center; gap:14px;">
             <div style="font-size:25px;">👗</div>
@@ -811,7 +945,7 @@
               <p style="font-size:12.5px; margin:0;">Всього речей: <span id="total-items-count">0</span> • переглянути / змінити</p>
             </div>
           </div>
-          <span style="font-size:20px; color:var(--accent-coral-deep); font-weight:800;">→</span>
+          <span style="font-size:20px; color:var(--accent-theme-deep); font-weight:800;">→</span>
         </div>
       </div>
 
@@ -840,8 +974,10 @@
         <button class="filter-chip active interactive-press" onclick="filterManagerCat('all', this)">Всі</button>
         <button class="filter-chip interactive-press" onclick="filterManagerCat('top', this)">Верх</button>
         <button class="filter-chip interactive-press" onclick="filterManagerCat('bottom', this)">Низ</button>
-        <button class="filter-chip interactive-press" onclick="filterManagerCat('layer', this)">Зіпки</button>
+        <button class="filter-chip interactive-press" onclick="filterManagerCat('layer', this)">Теплий шар</button>
+        <button class="filter-chip interactive-press" onclick="filterManagerCat('outerwear', this)">Верхній одяг</button>
         <button class="filter-chip interactive-press" onclick="filterManagerCat('shoes', this)">Взуття</button>
+        <button class="filter-chip interactive-press" onclick="filterManagerCat('accessories', this)">Аксесуари</button>
       </div>
 
       <div class="items-grid" id="manager-grid"></div>
@@ -860,16 +996,25 @@
       <div class="outfit-slots-panel">
         <div class="slots-grid">
           <div class="slot-item interactive-press" id="slot-top" onclick="filterByCategory('top')">
-            <span class="slot-label">Верх</span>
+            <span class="slot-label">Базовий верх</span>
           </div>
           <div class="slot-item interactive-press" id="slot-bottom" onclick="filterByCategory('bottom')">
             <span class="slot-label">Низ</span>
           </div>
           <div class="slot-item interactive-press" id="slot-layer" onclick="filterByCategory('layer')">
-            <span class="slot-label">Зіпка</span>
+            <span class="slot-label">Теплий шар</span>
           </div>
           <div class="slot-item interactive-press" id="slot-shoes" onclick="filterByCategory('shoes')">
             <span class="slot-label">Взуття</span>
+          </div>
+        </div>
+
+        <div class="extra-slots-row">
+          <div class="slot-item interactive-press" style="height:70px;" id="slot-outerwear" onclick="filterByCategory('outerwear')">
+            <span class="slot-label">+ Верхній одяг</span>
+          </div>
+          <div class="slot-item interactive-press" style="height:70px;" id="slot-accessories" onclick="filterByCategory('accessories')">
+            <span class="slot-label">+ Аксесуари</span>
           </div>
         </div>
       </div>
@@ -888,8 +1033,10 @@
         <button class="filter-chip active interactive-press" onclick="filterByCategory('all', this)">Все</button>
         <button class="filter-chip interactive-press" onclick="filterByCategory('top', this)">Верх</button>
         <button class="filter-chip interactive-press" onclick="filterByCategory('bottom', this)">Низ</button>
-        <button class="filter-chip interactive-press" onclick="filterByCategory('layer', this)">Зіпки</button>
+        <button class="filter-chip interactive-press" onclick="filterByCategory('layer', this)">Теплий шар</button>
+        <button class="filter-chip interactive-press" onclick="filterByCategory('outerwear', this)">Верхній одяг</button>
         <button class="filter-chip interactive-press" onclick="filterByCategory('shoes', this)">Взуття</button>
+        <button class="filter-chip interactive-press" onclick="filterByCategory('accessories', this)">Аксесуари</button>
       </div>
 
       <div class="items-grid" id="wardrobe-grid"></div>
@@ -908,7 +1055,7 @@
       <div id="quiz-step-container">
         <!-- КРОК 1 -->
         <div id="q-step-1" class="quiz-step">
-          <p style="text-transform:uppercase; font-size:11px; font-weight:800; color:var(--accent-coral-deep); margin-bottom:8px; letter-spacing:1px;">Крок 1 з 3</p>
+          <p style="text-transform:uppercase; font-size:11px; font-weight:800; color:var(--accent-theme-deep); margin-bottom:8px; letter-spacing:1px;">Крок 1 з 3</p>
           <h2>Який формат сьогоднішнього дня?</h2>
           <div style="display:flex; flex-direction:column; gap:12px; margin-top:20px;">
             <button class="btn btn-secondary interactive-press" onclick="delayedNavigate(this, () => answerQuiz('occasion', 'walk'))">🚶‍♀️ Прогулянка</button>
@@ -920,19 +1067,19 @@
 
         <!-- КРОК 2 -->
         <div id="q-step-2" class="quiz-step" style="display:none;">
-          <p style="text-transform:uppercase; font-size:11px; font-weight:800; color:var(--accent-coral-deep); margin-bottom:8px; letter-spacing:1px;">Крок 2 з 3</p>
+          <p style="text-transform:uppercase; font-size:11px; font-weight:800; color:var(--accent-theme-deep); margin-bottom:8px; letter-spacing:1px;">Крок 2 з 3</p>
           <h2>Який кольоровий настрій?</h2>
           <div style="display:flex; flex-direction:column; gap:12px; margin-top:20px;">
             <button class="btn btn-secondary interactive-press" onclick="delayedNavigate(this, () => answerQuiz('palette', 'dark'))">🖤 Темний / монохром</button>
             <button class="btn btn-secondary interactive-press" onclick="delayedNavigate(this, () => answerQuiz('palette', 'bright'))">❤️ Яскравий акцент</button>
-            <button class="btn btn-secondary interactive-press" onclick="delayedNavigate(this, () => answerQuiz('palette', 'pastel'))">🌸 Пастельний (Беж / Ніжний / Світлий)</button>
+            <button class="btn btn-secondary interactive-press" onclick="delayedNavigate(this, () => answerQuiz('palette', 'pastel'))">🌸 Пастельний (Беж / Світлий)</button>
             <button class="btn btn-secondary interactive-press" onclick="delayedNavigate(this, () => answerQuiz('palette', 'surprise'))">🎲 Здивуй мене</button>
           </div>
         </div>
 
         <!-- КРОК 3 -->
         <div id="q-step-3" class="quiz-step" style="display:none;">
-          <p style="text-transform:uppercase; font-size:11px; font-weight:800; color:var(--accent-coral-deep); margin-bottom:8px; letter-spacing:1px;">Крок 3 з 3</p>
+          <p style="text-transform:uppercase; font-size:11px; font-weight:800; color:var(--accent-theme-deep); margin-bottom:8px; letter-spacing:1px;">Крок 3 з 3</p>
           <h2>Що з комфортом і погодою?</h2>
 
           <div id="smart-weather-box" class="smart-weather-box">
@@ -950,7 +1097,7 @@
 
           <div style="display:flex; flex-direction:column; gap:12px;">
             <button class="btn btn-secondary interactive-press" onclick="delayedNavigate(this, () => answerQuiz('layer', 'single'))">☀️ Тепло (тільки один шар)</button>
-            <button class="btn btn-secondary interactive-press" onclick="delayedNavigate(this, () => answerQuiz('layer', 'zipper'))">🧥 Хочеться затишку (потрібна зіпка)</button>
+            <button class="btn btn-secondary interactive-press" onclick="delayedNavigate(this, () => answerQuiz('layer', 'layer_needed'))">🧥 Потрібен теплий шар / зіпка</button>
           </div>
         </div>
       </div>
@@ -965,7 +1112,7 @@
       </div>
 
       <div class="final-look-card">
-        <span style="font-size: 11px; text-transform:uppercase; letter-spacing:1.5px; color:var(--accent-coral-deep); font-weight:800;">Готовий сет</span>
+        <span style="font-size: 11px; text-transform:uppercase; letter-spacing:1.5px; color:var(--accent-theme-deep); font-weight:800;">Готовий сет</span>
         <h2 style="margin-top: 4px;">Ти виглядаєш неперевершено!</h2>
         <div class="final-items-list" id="final-items-container"></div>
       </div>
@@ -1013,16 +1160,18 @@
 
       <div class="form-group">
         <label>Назва речі</label>
-        <input type="text" id="item-title-input" class="form-control" placeholder="Напр. Чорна футболка в обтяжку" />
+        <input type="text" id="item-title-input" class="form-control" placeholder="Напр. Лонгслів реглан чорно-білий" />
       </div>
 
       <div class="form-group">
-        <label>Категорія</label>
+        <label>Категорія гардероба</label>
         <select id="item-cat-input" class="form-control">
-          <option value="top">Верх (футболка, топ, сорочка)</option>
-          <option value="bottom">Низ (джинси, штани, спідниця)</option>
-          <option value="layer">Другий шар (зіпка, жакет, светр)</option>
-          <option value="shoes">Взуття</option>
+          <option value="top">Базовий верх (футболка, топ, лонгслів, сорочка)</option>
+          <option value="bottom">Низ (джинси, штани, спідниця, шорти)</option>
+          <option value="layer">Теплий шар (зіпка, худі, світшот, светр, кардиган)</option>
+          <option value="outerwear">Верхній одяг (куртка, пальто, тренч, бомбер)</option>
+          <option value="shoes">Взуття (кросівки, кеди, черевики)</option>
+          <option value="accessories">Аксесуари (прикраси, сумка, ремінь)</option>
         </select>
       </div>
 
@@ -1066,19 +1215,61 @@
     let favorites = JSON.parse(localStorage.getItem('outfit_favorites')) || [];
     let yesterdayOutfit = JSON.parse(localStorage.getItem('yesterday_outfit')) || null;
 
-    let selectedOutfit = { top: null, bottom: null, layer: null, shoes: null };
+    let selectedOutfit = { top: null, bottom: null, layer: null, outerwear: null, shoes: null, accessories: null };
     let activeCategoryFilter = 'all';
     let activeColorFilter = 'all';
     let managerFilter = 'all';
     let currentUploadBase64 = null;
     let quizAnswers = {};
     let currentQuizStep = 1;
+    let currentOutdoorTemp = 20;
 
-    /* ТАКТИЛЬНА ЗАТРИМКА (ЩОБ БУЛО ВИДНО ПРУЖНЕ НАТИСКАННЯ НА ТЕЛЕФОНІ) */
-    function delayedNavigate(element, callback) {
-      if (element) {
-        element.classList.add('is-pressed');
+    /* ==========================================================================
+       ДИНАМІЧНИЙ ДВИГУН АТМОСФЕРИ (Час доби + Погода)
+       ========================================================================== */
+    function applyDynamicAtmosphere(weatherCode = 0) {
+      const now = new Date();
+      const h = now.getHours();
+
+      let timeClass = 'theme-day';
+      let timeLabel = 'День';
+
+      if (h >= 6 && h < 12) {
+        timeClass = 'theme-morning';
+        timeLabel = 'Ранок';
+      } else if (h >= 12 && h < 18) {
+        timeClass = 'theme-day';
+        timeLabel = 'День';
+      } else {
+        timeClass = 'theme-night';
+        timeLabel = 'Вечір';
       }
+
+      let weatherClass = 'weather-clear';
+      let weatherLabel = 'Ясно';
+
+      if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(weatherCode)) {
+        weatherClass = 'weather-rain';
+        weatherLabel = 'Дощик';
+      } else if ([1, 2, 3].includes(weatherCode)) {
+        weatherClass = 'weather-cloudy';
+        weatherLabel = 'Похмуро';
+      }
+
+      document.body.className = `${timeClass} ${weatherClass}`;
+
+      const badge = document.getElementById('weather-badge-text');
+      if (badge) {
+        badge.innerText = `✨ ${timeLabel} • ${weatherLabel}`;
+      }
+      const label = document.getElementById('theme-status-label');
+      if (label) {
+        label.innerText = `Atelier • ${timeLabel}`;
+      }
+    }
+
+    function delayedNavigate(element, callback) {
+      if (element) element.classList.add('is-pressed');
       setTimeout(() => {
         if (element) element.classList.remove('is-pressed');
         callback();
@@ -1187,11 +1378,14 @@
       const now = new Date();
       const currentHour = now.getHours();
       const currentTemp = Math.round(data.current.temperature_2m);
+      currentOutdoorTemp = currentTemp;
       const windSpeed = Math.round(data.current.wind_speed_10m / 3.6);
 
       tempEl.innerText = `Зараз ${currentTemp}°C`;
 
       const code = data.current.weather_code;
+      applyDynamicAtmosphere(code);
+
       let cloudDesc = 'Ясно';
       let icon = '☀️';
 
@@ -1206,9 +1400,7 @@
         icon = '🌧️';
       }
 
-      if ((currentHour >= 21 || currentHour <= 5) && icon === '☀️') {
-        icon = '🌙';
-      }
+      if ((currentHour >= 21 || currentHour <= 5) && icon === '☀️') icon = '🌙';
       iconEl.innerText = icon;
 
       const hourlyTemps = data.hourly.temperature_2m;
@@ -1244,7 +1436,7 @@
           insightsHtml += `
             <div class="insight-item">
               <span>📉</span>
-              <span>Зараз <b>${currentTemp}°C</b>, але до <b>${dropHour}:00</b> похолоднішає до <b>+${Math.round(minNextTemp)}°C</b>. Якщо плануєш бути на вулиці довго — зіпка знадобиться!</span>
+              <span>Зараз <b>${currentTemp}°C</b>, але до <b>${dropHour}:00</b> похолоднішає до <b>+${Math.round(minNextTemp)}°C</b>. Якщо плануєш бути на вулиці довго — теплий шар знадобиться!</span>
             </div>`;
         } else {
           insightsHtml += `
@@ -1262,14 +1454,14 @@
         const h = currentHour + i;
         if (hourlyPrecipProb[h] >= 40 || hourlyPrecip[h] > 0.2) {
           rainHour = h % 24;
-          if (hourlyPrecip[h] > 2.0) rainIntensity = 'відчутний / злива';
+          if (hourlyPrecip[h] > 2.0) rainIntensity = 'відчутний';
           break;
         }
       }
 
       if (rainHour !== -1) {
         insightsHtml += `
-          <div class="insight-item" style="color:var(--accent-coral-deep);">
+          <div class="insight-item" style="color:var(--accent-theme-deep);">
             <span>🌧️</span>
             <span>Увага: близько <b>${rainHour}:00</b> можливий <b>${rainIntensity} дощ</b>. Захопи парасольку чи щільне взуття!</span>
           </div>`;
@@ -1310,9 +1502,7 @@
       document.getElementById('q-step-2').style.display = step === 2 ? 'block' : 'none';
       document.getElementById('q-step-3').style.display = step === 3 ? 'block' : 'none';
 
-      if (step === 3) {
-        fetchSmartWeather();
-      }
+      if (step === 3) fetchSmartWeather();
     }
 
     function handleQuizBack() {
@@ -1334,27 +1524,35 @@
       }
     }
 
-    /* АЛГОРИТМ */
+    /* РОЗУМНИЙ АЛГОРИТМ ПІДБОРУ */
     function generateQuizOutfit() {
       const yesterdayIds = yesterdayOutfit ? Object.values(yesterdayOutfit).filter(Boolean).map(x => x.id) : [];
 
-      let nonShoesPool = wardrobe.filter(item => item.category !== 'shoes' && !yesterdayIds.includes(item.id));
-      if (nonShoesPool.length < 2) nonShoesPool = wardrobe.filter(item => item.category !== 'shoes');
+      let pool = wardrobe.filter(item => ['shoes', 'accessories'].includes(item.category) || !yesterdayIds.includes(item.id));
+      if (pool.length < 2) pool = [...wardrobe];
 
-      let shoesPool = wardrobe.filter(item => item.category === 'shoes');
-      if (shoesPool.length === 0) shoesPool = wardrobe;
+      let tops = pool.filter(i => i.category === 'top');
+      if (currentOutdoorTemp < 15) {
+        const closedTops = tops.filter(i => !i.name.toLowerCase().includes('кроп'));
+        if (closedTops.length > 0) tops = closedTops;
+      }
 
-      let tops = nonShoesPool.filter(i => i.category === 'top');
-      let bottoms = nonShoesPool.filter(i => i.category === 'bottom');
-      let layers = nonShoesPool.filter(i => i.category === 'layer');
+      let bottoms = pool.filter(i => i.category === 'bottom');
+      let layers = pool.filter(i => i.category === 'layer');
+      let outerwears = pool.filter(i => i.category === 'outerwear');
+      let shoesPool = pool.filter(i => i.category === 'shoes');
+      let accessoriesPool = pool.filter(i => i.category === 'accessories');
 
       if (tops.length === 0) tops = wardrobe.filter(i => i.category === 'top');
       if (bottoms.length === 0) bottoms = wardrobe.filter(i => i.category === 'bottom');
+      if (shoesPool.length === 0) shoesPool = wardrobe;
 
       let pickTop = null;
       let pickBottom = null;
       let pickShoes = null;
       let pickLayer = null;
+      let pickOuterwear = null;
+      let pickAccessory = null;
 
       const p = quizAnswers.palette;
       if (p === 'dark') {
@@ -1386,7 +1584,7 @@
         pickShoes = shoesPool[0];
       }
 
-      if (quizAnswers.layer === 'zipper' && layers.length > 0) {
+      if (quizAnswers.layer === 'layer_needed' && layers.length > 0) {
         if (pickTop && pickTop.color.toLowerCase().includes('червон')) {
           pickLayer = layers.find(l => l.color.toLowerCase().includes('син') || l.color.toLowerCase().includes('чорн')) || layers[0];
         } else {
@@ -1394,11 +1592,21 @@
         }
       }
 
+      if (currentOutdoorTemp <= 12 && outerwears.length > 0) {
+        pickOuterwear = outerwears[0];
+      }
+
+      if (accessoriesPool.length > 0 && (occ === 'date' || occ === 'walk')) {
+        pickAccessory = accessoriesPool[Math.floor(Math.random() * accessoriesPool.length)];
+      }
+
       selectedOutfit = {
         top: pickTop || null,
         bottom: pickBottom || null,
         layer: pickLayer || null,
-        shoes: pickShoes || null
+        outerwear: pickOuterwear || null,
+        shoes: pickShoes || null,
+        accessories: pickAccessory || null
       };
 
       finishOutfit();
@@ -1651,7 +1859,7 @@
       const list = wardrobe.filter(item => managerFilter === 'all' || item.category === managerFilter);
 
       if (list.length === 0) {
-        grid.innerHTML = `<div class="empty-state">У гардеробі немає речей.<br>Натисніть «+ Додати нову річ» або завантажте їх у wardrobe.json.</div>`;
+        grid.innerHTML = `<div class="empty-state">У гардеробі немає речей для цієї категорії.<br>Натисніть «+ Додати нову річ».</div>`;
         return;
       }
 
@@ -1669,7 +1877,7 @@
           </div>
           <div class="item-card-actions">
             <button class="action-sub-btn" onclick="openAddEditModal('${item.id}')">✏️ Змінити</button>
-            <button class="action-sub-btn" style="color:var(--accent-coral-deep);" onclick="deleteItem('${item.id}')">🗑️</button>
+            <button class="action-sub-btn" style="color:var(--accent-theme-deep);" onclick="deleteItem('${item.id}')">🗑️</button>
           </div>
         `;
         grid.appendChild(card);
@@ -1743,11 +1951,19 @@
     }
 
     function renderSlots() {
-      const cats = ['top', 'bottom', 'layer', 'shoes'];
-      const labels = { top: 'Верх', bottom: 'Низ', layer: 'Зіпка', shoes: 'Взуття' };
+      const allSlotCats = ['top', 'bottom', 'layer', 'shoes', 'outerwear', 'accessories'];
+      const labels = {
+        top: 'Базовий верх',
+        bottom: 'Низ',
+        layer: 'Теплий шар',
+        shoes: 'Взуття',
+        outerwear: '+ Верхній одяг',
+        accessories: '+ Аксесуари'
+      };
 
-      cats.forEach(cat => {
+      allSlotCats.forEach(cat => {
         const slot = document.getElementById(`slot-${cat}`);
+        if (!slot) return;
         const item = selectedOutfit[cat];
 
         if (item) {
@@ -1872,7 +2088,8 @@
       document.getElementById('rec-banner').classList.remove('active');
     }
 
-    // Запуск застосунку
+    // Запуск та початкова атмосфера
+    applyDynamicAtmosphere(0);
     setRandomGreeting();
     buildSwatches();
     loadWardrobeFromGitHub();
