@@ -868,6 +868,7 @@
       100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1.3); }
     }
 
+    /* ФІКСОВАНА КНОПКА ТА ПАНЕЛЬ ДЕБАГУ */
     #fixed-debug-btn {
       position: fixed;
       top: 16px;
@@ -983,7 +984,6 @@
         <p>Обери сьогоднішній настрій або зазирни у свою колекцію гардероба.</p>
       </div>
 
-      <!-- ФІКС БАГУ 1: Обнуляємо старий вибір перед відкриттям ручного конструктора -->
       <div class="choice-card interactive-press" onclick="delayedNavigate(this, () => startFreshManualFlow())">
         <div class="icon-bubble">🌸</div>
         <h2>Я знаю, на що мій настрій</h2>
@@ -1013,7 +1013,6 @@
         <button class="btn btn-outline interactive-press" style="flex:1; font-size: 13.5px;" onclick="delayedNavigate(this, () => showFavorites())">
           ❤️ Збережені (<span id="fav-count">0</span>)
         </button>
-        <!-- НОВА ФІЧА: Історія образів (хронологія того, що реально носилось) -->
         <button class="btn btn-outline interactive-press" style="flex:1; font-size: 13.5px;" onclick="delayedNavigate(this, () => showHistoryLog())">
           📅 Історія образів
         </button>
@@ -1172,7 +1171,7 @@
       </div>
     </section>
 
-    <!-- 5. ФІНАЛЬНИЙ ЕКРАН (Кнопка "Не хочу" показується ЛИШЕ для квізу) -->
+    <!-- 5. ФІНАЛЬНИЙ ЕКРАН -->
     <section id="screen-final" class="screen">
       <div class="top-bar">
         <button class="icon-btn interactive-press" onclick="delayedNavigate(this, () => goToScreen('screen-home'))">✕</button>
@@ -1202,7 +1201,7 @@
       <div id="favorites-list" style="display:flex; flex-direction:column; gap:16px;"></div>
     </section>
 
-    <!-- 7. НОВА СТОРІНКА: ІСТОРІЯ ОБРАЗІВ (ХРОНОЛОГІЯ НОСІННЯ) -->
+    <!-- 7. ІСТОРІЯ ОБРАЗІВ -->
     <section id="screen-history" class="screen">
       <div class="top-bar">
         <button class="icon-btn interactive-press" onclick="delayedNavigate(this, () => goToScreen('screen-home'))">←</button>
@@ -1214,7 +1213,7 @@
     </section>
   </div>
 
-  <!-- ДЕТАЛЬНЕ МОДАЛЬНЕ ВІКНО ПЕРЕГЛЯДУ ОБРАЗУ (З ЗБЕРЕЖЕНИХ ЧИ ІСТОРІЇ) -->
+  <!-- ДЕТАЛЬНИЙ ПЕРЕГЛЯД АУТФІТУ -->
   <div class="modal" id="outfit-details-modal">
     <div class="modal-sheet">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
@@ -1321,12 +1320,20 @@
     let favorites = JSON.parse(localStorage.getItem('outfit_favorites')) || [];
     let favoriteItemIds = JSON.parse(localStorage.getItem('favorite_item_ids')) || [];
     let wearHistory = JSON.parse(localStorage.getItem('wear_history_v3')) || [];
-    
-    // Нове сховище повноцінної історії образів по днях
     let dailyOutfitsLog = JSON.parse(localStorage.getItem('daily_outfits_log_v1')) || [];
 
     let selectedOutfit = { top: null, bottom: null, layer: null, outerwear: null, shoes: null, accessories: null };
     let currentOutfitSource = 'quiz'; // 'quiz' | 'manual' | 'history'
+
+    // Чорний список для поточної примірки (виправлення зациклення "Не хочу")
+    let rejectedItemIds = {
+      top: [],
+      bottom: [],
+      layer: [],
+      outerwear: [],
+      shoes: [],
+      accessories: []
+    };
 
     let activeCategoryFilter = 'all';
     let activeColorFilter = 'all';
@@ -1343,13 +1350,12 @@
 
     /* СТАРТ ЧИСТОГО РУЧНОГО КОНСТРУКТОРА */
     function startFreshManualFlow() {
-      // Обнуляємо попередньо згенероване, щоб конструктор був чистим
       selectedOutfit = { top: null, bottom: null, layer: null, outerwear: null, shoes: null, accessories: null };
       currentOutfitSource = 'manual';
       goToManualFlow();
     }
 
-    /* КУЛДАУН (2 ДНІ ВІДПОЧИНКУ ДЛЯ ВИДИМОГО ВЕРХУ) */
+    /* КУЛДАУН: 2 ДНІ ВІДПОЧИНКУ (3 ЦИКЛИ) */
     function getItemCooldownStatus(itemId) {
       const item = wardrobe.find(i => i.id === itemId);
       const history = wearHistory.filter(h => h.id === itemId);
@@ -1420,27 +1426,78 @@
       renderManagerGrid();
     }
 
-    /* ЗАМІНА "НЕ ХОЧУ ЦЕ" (ТІЛЬКИ ДЛЯ КВІЗУ) */
+    /* ЗАМІНА "НЕ ХОЧУ ЦЕ" БЕЗ ЗАЦИКЛЕННЯ */
     function rejectAndSwapItem(category) {
       const currentItem = selectedOutfit[category];
       if (!currentItem) return;
 
-      const pool = wardrobe.filter(i => i.category === category && i.id !== currentItem.id);
-      if (pool.length === 0) {
+      // 1. Додаємо поточну річ у чорний список поточної сесії
+      if (!rejectedItemIds[category]) rejectedItemIds[category] = [];
+      if (!rejectedItemIds[category].includes(currentItem.id)) {
+        rejectedItemIds[category].push(currentItem.id);
+      }
+
+      // 2. Базовий пул речей цієї категорії
+      let pool = wardrobe.filter(i => i.category === category);
+      if (pool.length <= 1) {
         alert('У гардеробі немає іншої речі цієї категорії!');
         return;
       }
 
-      let candidates = pool.filter(i => !getItemCooldownStatus(i.id).inCooldown);
-      if (candidates.length === 0) candidates = pool;
+      // 3. Відсікаємо ті, що вже були відхилені під час цього вибору
+      let candidates = pool.filter(i => !rejectedItemIds[category].includes(i.id));
 
+      // Якщо перебрали весь асортимент — скидаємо чорний список і починаємо коло заново
+      if (candidates.length === 0) {
+        rejectedItemIds[category] = [currentItem.id];
+        candidates = pool.filter(i => i.id !== currentItem.id);
+      }
+
+      // 4. М'який кулдаун (пріоритет свіжим)
+      const freshCandidates = candidates.filter(i => !getItemCooldownStatus(i.id).inCooldown);
+      if (freshCandidates.length > 0) candidates = freshCandidates;
+
+      // 5. Сумісність шарів (під глухий светр — не пхати довгий рукав)
+      if (category === 'top') {
+        const isClosedLayer = selectedOutfit.layer && (
+          selectedOutfit.layer.layerType === 'closed' ||
+          ['светр', 'худі', 'світшот'].some(w => selectedOutfit.layer.name.toLowerCase().includes(w))
+        );
+        if (isClosedLayer) {
+          const suitableTops = candidates.filter(i => 
+            i.sleeve !== 'long' && 
+            !['лонгслів', 'реглан', 'сорочк'].some(w => i.name.toLowerCase().includes(w))
+          );
+          if (suitableTops.length > 0) candidates = suitableTops;
+        }
+      }
+
+      // 6. Сортування за улюбленими
       candidates.sort((a, b) => {
         const aFav = favoriteItemIds.includes(a.id) ? 1 : 0;
         const bFav = favoriteItemIds.includes(b.id) ? 1 : 0;
         return bFav - aFav;
       });
 
+      // Підставляємо новий елемент
       selectedOutfit[category] = candidates[0];
+
+      // Якщо змінили теплий шар на глухий светр — адаптуємо верх
+      if (category === 'layer') {
+        const isNowClosed = selectedOutfit.layer && (
+          selectedOutfit.layer.layerType === 'closed' ||
+          ['светр', 'худі', 'світшот'].some(w => selectedOutfit.layer.name.toLowerCase().includes(w))
+        );
+        if (isNowClosed && selectedOutfit.top) {
+          const topIsLong = selectedOutfit.top.sleeve === 'long' || 
+            ['лонгслів', 'реглан'].some(w => selectedOutfit.top.name.toLowerCase().includes(w));
+          if (topIsLong) {
+            const shortTop = wardrobe.find(i => i.category === 'top' && i.sleeve !== 'long' && !getItemCooldownStatus(i.id).inCooldown);
+            if (shortTop) selectedOutfit.top = shortTop;
+          }
+        }
+      }
+
       renderFinalScreenItems();
       triggerSparkles();
     }
@@ -1457,7 +1514,6 @@
         const row = document.createElement('div');
         row.className = 'final-item-row';
 
-        // ФІКС БАГУ 2: Кнопка "Не хочу ✕" показується ЛИШЕ якщо аутфіт був згенерований квізом
         const swapBtnHtml = (currentOutfitSource === 'quiz')
           ? `<button class="btn-swap-item interactive-press" onclick="rejectAndSwapItem('${cat}')">Не хочу ✕</button>`
           : '';
@@ -1893,6 +1949,10 @@
     /* АЛГОРИТМ ПІДБОРУ ДЛЯ КВІЗУ */
     function generateQuizOutfit() {
       currentOutfitSource = 'quiz';
+      
+      // Скидаємо чорний список сесії при новому запуску квізу
+      rejectedItemIds = { top: [], bottom: [], layer: [], outerwear: [], shoes: [], accessories: [] };
+
       let pool = [...wardrobe];
 
       let layers = pool.filter(i => i.category === 'layer' && !getItemCooldownStatus(i.id).inCooldown);
@@ -2005,7 +2065,7 @@
       goToScreen('screen-final');
     }
 
-    /* ФІКСАЦІЯ АУТФІТУ ДНЯ (ДОДАЄТЬСЯ В ІСТОРІЮ) */
+    /* ФІКСАЦІЯ АУТФІТУ ДНЯ */
     function confirmTodayOutfit(event = null) {
       if (event) triggerSparkles(event);
 
@@ -2020,7 +2080,6 @@
       if (selectedOutfit.bottom) wearHistory.push({ id: selectedOutfit.bottom.id, date: nowTime, visible: true });
       if (selectedOutfit.layer) wearHistory.push({ id: selectedOutfit.layer.id, date: nowTime, visible: true });
 
-      // Запис в щоденну стрічку історії образів
       dailyOutfitsLog.unshift({
         id: 'log-' + nowTime,
         dateString: new Date().toLocaleDateString('uk-UA', { weekday: 'long', day: 'numeric', month: 'long' }),
@@ -2052,7 +2111,7 @@
       alert('Аутфіт збережено в улюблені! ❤️');
     }
 
-    /* ПЕРЕГЛЯД ЗБЕРЕЖЕНИХ АУТФІТІВ */
+    /* ПЕРЕГЛЯД ЗБЕРЕЖЕНИХ */
     function showFavorites() {
       const list = document.getElementById('favorites-list');
       list.innerHTML = '';
@@ -2093,7 +2152,7 @@
       showFavorites();
     }
 
-    /* НОВА ФІЧА: СТРІЧКА ІСТОРІЇ ОБРАЗІВ (ХРОНОЛОГІЯ) */
+    /* СТРІЧКА ІСТОРІЇ ОБРАЗІВ */
     function showHistoryLog() {
       const list = document.getElementById('history-log-list');
       list.innerHTML = '';
@@ -2126,7 +2185,6 @@
       goToScreen('screen-history');
     }
 
-    /* ДЕТАЛЬНИЙ ПЕРЕГЛЯД АУТФІТУ (З ЗБЕРЕЖЕНИХ ТА ІСТОРІЇ) */
     function openDetailsModal(outfit, titleText) {
       modalSelectedOutfit = outfit;
       document.getElementById('details-modal-title').innerText = titleText;
@@ -2163,7 +2221,7 @@
       finishOutfit(null, 'history');
     }
 
-    /* МОДАЛКА ДОДАВАННЯ */
+    /* МОДАЛКА */
     function openAddEditModal(itemId = null) {
       const modal = document.getElementById('add-modal');
       const title = document.getElementById('modal-title');
@@ -2557,7 +2615,7 @@
       renderWardrobe();
     }
 
-    // Запуск та початкова атмосфера
+    // Запуск застосунку
     applyDynamicAtmosphere(0);
     initWeatherOnLoad();
     setRandomGreeting();
