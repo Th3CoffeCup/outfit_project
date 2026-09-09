@@ -14,6 +14,7 @@
       --text: #211f1e;
       --muted: #8c857b;
       --border: #eae4dc;
+      --danger: #d9534f;
       --shadow: 0 4px 20px rgba(0,0,0,0.06);
       --radius-lg: 24px;
       --radius-md: 16px;
@@ -48,7 +49,6 @@
       padding-bottom: 40px;
     }
 
-    /* Анімації переходів */
     .screen {
       display: none;
       flex-direction: column;
@@ -65,12 +65,10 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Типографіка */
     h1 { font-size: 26px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.5px; }
     h2 { font-size: 20px; font-weight: 600; margin-bottom: 12px; }
     p { font-size: 14px; color: var(--muted); line-height: 1.4; }
 
-    /* Кнопки */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -89,8 +87,8 @@
     .btn-primary { background: var(--accent); color: #fff; }
     .btn-secondary { background: var(--accent-soft); color: var(--accent); }
     .btn-outline { border: 1.5px solid var(--border); background: transparent; color: var(--text); }
+    .btn-danger { background: #ffebee; color: var(--danger); }
 
-    /* Верхній бар навігації */
     .top-bar {
       display: flex;
       align-items: center;
@@ -110,9 +108,8 @@
       font-size: 18px;
     }
 
-    /* ГОЛОВНИЙ ЕКРАН */
     .hero-header {
-      margin: 40px 0 32px;
+      margin: 30px 0 24px;
       text-align: left;
     }
     .hero-header span {
@@ -122,12 +119,13 @@
       text-transform: uppercase;
       letter-spacing: 1px;
     }
+
     .choice-card {
       background: var(--card-bg);
       border: 1.5px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 24px;
-      margin-bottom: 16px;
+      padding: 20px;
+      margin-bottom: 14px;
       cursor: pointer;
       box-shadow: var(--shadow);
       transition: border-color 0.2s ease, transform 0.15s ease;
@@ -137,18 +135,17 @@
       border-color: var(--accent);
     }
     .choice-card .icon-bubble {
-      width: 48px;
-      height: 48px;
-      border-radius: 14px;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
       background: var(--accent-soft);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
-      margin-bottom: 16px;
+      font-size: 22px;
+      margin-bottom: 12px;
     }
 
-    /* СЛОТИ КОНСТРУКТОРА */
     .outfit-slots-panel {
       position: sticky;
       top: 0;
@@ -211,7 +208,6 @@
       cursor: pointer;
     }
 
-    /* ФІЛЬТРИ */
     .filters-scroll {
       display: flex;
       gap: 8px;
@@ -236,7 +232,6 @@
       border-color: var(--accent);
     }
 
-    /* КАТАЛОГ РЕЧЕЙ */
     .items-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -279,7 +274,24 @@
       color: var(--muted);
     }
 
-    /* ПАНЕЛЬ ПРОПОЗИЦІЙ */
+    .item-card-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+      border-top: 1px solid var(--border);
+      padding-top: 8px;
+    }
+    .action-sub-btn {
+      flex: 1;
+      padding: 6px 0;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      cursor: pointer;
+    }
+
     .recommendations-banner {
       background: #fdf5ec;
       border: 1px solid #f1d3b5;
@@ -303,7 +315,6 @@
       color: var(--accent-highlight);
     }
 
-    /* ФІНАЛЬНИЙ ЕКРАН */
     .final-look-card {
       background: var(--card-bg);
       border-radius: var(--radius-lg);
@@ -331,7 +342,6 @@
       background: var(--accent-soft);
     }
 
-    /* МОДАЛКА ДОДАВАННЯ */
     .modal {
       display: none;
       position: fixed;
@@ -391,43 +401,80 @@
     <section id="screen-home" class="screen active">
       <div class="top-bar">
         <div style="font-weight: 700; font-size: 14px; letter-spacing: 0.5px;">OUTFIT STUDIO</div>
-        <button class="icon-btn" onclick="openAddModal()" title="Додати річ">+</button>
+        <button class="icon-btn" onclick="openAddEditModal()" title="Швидко додати річ">+</button>
       </div>
 
       <div class="hero-header">
         <span>Що вдягнемо сьогодні?</span>
-        <h1>Привіт, красуне ✨</h1>
-        <p>Обери настрій або довірся магії ранкового вибору.</p>
+        <h1 id="greeting-text">Привіт ✨</h1>
+        <p>Обери настрій на день або підглянь у свій гардероб.</p>
       </div>
 
       <div class="choice-card" onclick="goToManualFlow()">
         <div class="icon-bubble">🌸</div>
         <h2>Я знаю, на що мій настрій</h2>
-        <p>Збери свій аутфіт самостійно, переглядаючи каталог і підказки комбінацій.</p>
+        <p>Збери аутфіт самостійно: клікай на речі та дивись гармонійні поєднання.</p>
       </div>
 
       <div class="choice-card" onclick="goToQuizFlow()">
         <div class="icon-bubble">🎲</div>
         <h2>Не знаю, що вдягнути</h2>
-        <p>3 швидких запитання про формат дня та вайб — і готовий образ перед очима.</p>
+        <p>3 коротких запитання про день і вайб — готовий образ без роздумів.</p>
       </div>
 
-      <div style="margin-top: auto; padding-top: 20px;">
+      <div class="choice-card" style="background: var(--accent-soft); border-color: transparent;" onclick="goToWardrobeManager()">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="font-size:22px;">👗</div>
+            <div>
+              <h2 style="font-size:16px; margin:0;">Мій гардероб</h2>
+              <p style="font-size:12px; margin:0;">Всього речей: <span id="total-items-count">0</span> • переглянути / змінити</p>
+            </div>
+          </div>
+          <span style="font-size:18px; color:var(--accent);">→</span>
+        </div>
+      </div>
+
+      <div style="margin-top: 10px;">
         <button class="btn btn-outline" style="width: 100%; font-size: 13px;" onclick="showFavorites()">
           ❤️ Мої збережені аутфіти (<span id="fav-count">0</span>)
         </button>
       </div>
     </section>
 
-    <!-- 2. СЦЕНАРІЙ: КОНСТРУКТОР («Я знаю на що настрій») -->
+    <!-- 2. ЕКРАН ПЕРЕГЛЯДУ ТА РЕДАГУВАННЯ ГАРДЕРОБА -->
+    <section id="screen-wardrobe-manager" class="screen">
+      <div class="top-bar">
+        <button class="icon-btn" onclick="goToScreen('screen-home')">←</button>
+        <span style="font-weight: 600; font-size: 14px;">Мій гардероб</span>
+        <button class="icon-btn" onclick="openAddEditModal()">+</button>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <p>Керуй речами: додавай фото, змінюй або видаляй</p>
+      </div>
+
+      <div class="filters-scroll" id="manager-cat-filters">
+        <button class="filter-chip active" onclick="filterManagerCat('all', this)">Всі</button>
+        <button class="filter-chip" onclick="filterManagerCat('top', this)">Верх</button>
+        <button class="filter-chip" onclick="filterManagerCat('bottom', this)">Низ</button>
+        <button class="filter-chip" onclick="filterManagerCat('layer', this)">Зіпки</button>
+        <button class="filter-chip" onclick="filterManagerCat('shoes', this)">Взуття</button>
+      </div>
+
+      <div class="items-grid" id="manager-grid"></div>
+
+      <button class="btn btn-primary" style="width:100%;" onclick="openAddEditModal()">+ Додати нову річ</button>
+    </section>
+
+    <!-- 3. СЦЕНАРІЙ: КОНСТРУКТОР -->
     <section id="screen-manual" class="screen">
       <div class="top-bar">
         <button class="icon-btn" onclick="goToScreen('screen-home')">←</button>
         <span style="font-weight: 600; font-size: 14px;">Конструктор образу</span>
-        <button class="icon-btn" onclick="openAddModal()">+</button>
+        <button class="icon-btn" onclick="openAddEditModal()">+</button>
       </div>
 
-      <!-- Зона закріплених слотів образу -->
       <div class="outfit-slots-panel">
         <div class="slots-grid">
           <div class="slot-item" id="slot-top" onclick="filterByCategory('top')">
@@ -437,7 +484,7 @@
             <span class="slot-label">Низ</span>
           </div>
           <div class="slot-item" id="slot-layer" onclick="filterByCategory('layer')">
-            <span class="slot-label">Другий шар</span>
+            <span class="slot-label">Зіпка</span>
           </div>
           <div class="slot-item" id="slot-shoes" onclick="filterByCategory('shoes')">
             <span class="slot-label">Взуття</span>
@@ -445,7 +492,6 @@
         </div>
       </div>
 
-      <!-- Блок пропозицій сумісності (якщо обрано річ) -->
       <div id="rec-banner" class="recommendations-banner">
         <div class="rec-header">
           <span id="rec-title">✨ Пропозиції до обраного:</span>
@@ -454,7 +500,6 @@
         <div id="rec-items-scroll" style="display:flex; gap:8px; overflow-x:auto; padding:4px 0;"></div>
       </div>
 
-      <!-- Фільтри кольорів та категорій -->
       <div class="filters-scroll" id="color-filters">
         <button class="filter-chip active" onclick="filterByColor('all', this)">Всі кольори</button>
         <button class="filter-chip" onclick="filterByColor('чорний', this)">Чорний</button>
@@ -467,19 +512,18 @@
 
       <div class="filters-scroll" id="cat-filters">
         <button class="filter-chip active" onclick="filterByCategory('all', this)">Все</button>
-        <button class="filter-chip" onclick="filterByCategory('top', this)">Верх (Футболки)</button>
-        <button class="filter-chip" onclick="filterByCategory('bottom', this)">Низ (Джинси/Штани)</button>
-        <button class="filter-chip" onclick="filterByCategory('layer', this)">Зіпки / Кофти</button>
+        <button class="filter-chip" onclick="filterByCategory('top', this)">Верх</button>
+        <button class="filter-chip" onclick="filterByCategory('bottom', this)">Низ</button>
+        <button class="filter-chip" onclick="filterByCategory('layer', this)">Зіпки</button>
         <button class="filter-chip" onclick="filterByCategory('shoes', this)">Взуття</button>
       </div>
 
-      <!-- Каталог речей -->
       <div class="items-grid" id="wardrobe-grid"></div>
 
       <button class="btn btn-primary" style="width: 100%; margin-top: auto;" onclick="finishOutfit()">Готово ✨</button>
     </section>
 
-    <!-- 3. СЦЕНАРІЙ: КВІЗ («Не знаю що вдягнути») -->
+    <!-- 4. СЦЕНАРІЙ: КВІЗ -->
     <section id="screen-quiz" class="screen">
       <div class="top-bar">
         <button class="icon-btn" onclick="goToScreen('screen-home')">←</button>
@@ -488,7 +532,6 @@
       </div>
 
       <div id="quiz-step-container">
-        <!-- Крок 1 -->
         <div id="q-step-1" class="quiz-step">
           <p style="text-transform:uppercase; font-size:11px; font-weight:700; color:var(--accent-highlight); margin-bottom:8px;">Крок 1 з 3</p>
           <h2>Який формат сьогоднішнього дня?</h2>
@@ -499,7 +542,6 @@
           </div>
         </div>
 
-        <!-- Крок 2 -->
         <div id="q-step-2" class="quiz-step" style="display:none;">
           <p style="text-transform:uppercase; font-size:11px; font-weight:700; color:var(--accent-highlight); margin-bottom:8px;">Крок 2 з 3</p>
           <h2>Який кольоровий настрій?</h2>
@@ -510,24 +552,23 @@
           </div>
         </div>
 
-        <!-- Крок 3 -->
         <div id="q-step-3" class="quiz-step" style="display:none;">
           <p style="text-transform:uppercase; font-size:11px; font-weight:700; color:var(--accent-highlight); margin-bottom:8px;">Крок 3 з 3</p>
           <h2>Що з погодою та комфортом?</h2>
           <div style="display:flex; flex-direction:column; gap:12px; margin-top:20px;">
-            <button class="btn btn-secondary" onclick="answerQuiz('layer', 'single')">☀️ Тепло (тільки перший шар)</button>
+            <button class="btn btn-secondary" onclick="answerQuiz('layer', 'single')">☀️ Тепло (тільки один шар)</button>
             <button class="btn btn-secondary" onclick="answerQuiz('layer', 'zipper')">🧥 Хочеться затишку (потрібна зіпка)</button>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 4. ФІНАЛЬНИЙ ЕКРАН (ГОТОВИЙ ОБРАЗ) -->
+    <!-- 5. ФІНАЛЬНИЙ ЕКРАН -->
     <section id="screen-final" class="screen">
       <div class="top-bar">
         <button class="icon-btn" onclick="goToScreen('screen-home')">✕</button>
         <span style="font-weight: 600; font-size: 14px;">Образ на сьогодні</span>
-        <button class="icon-btn" onclick="toggleFavoriteCurrent()" id="final-fav-btn">❤️</button>
+        <button class="icon-btn" onclick="toggleFavoriteCurrent()">❤️</button>
       </div>
 
       <div class="final-look-card">
@@ -542,33 +583,35 @@
       </div>
     </section>
 
-    <!-- 5. ЕКРАН УЛЮБЛЕНИХ ОБРАЗІВ -->
+    <!-- 6. ЕКРАН УЛЮБЛЕНИХ -->
     <section id="screen-favorites" class="screen">
       <div class="top-bar">
         <button class="icon-btn" onclick="goToScreen('screen-home')">←</button>
-        <span style="font-weight: 600; font-size: 14px;">Улюблені образи</span>
+        <span style="font-weight: 600; font-size: 14px;">Улюблені аутфіти</span>
         <div style="width:40px;"></div>
       </div>
       <div id="favorites-list" style="display:flex; flex-direction:column; gap:16px;"></div>
     </section>
   </div>
 
-  <!-- МОДАЛКА: ДОДАВАННЯ РЕЧІ -->
+  <!-- МОДАЛЬНЕ ВІКНО ДОДАВАННЯ / РЕДАГУВАННЯ -->
   <div class="modal" id="add-modal">
     <div class="modal-sheet">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-        <h2>Додати річ</h2>
-        <button style="border:none; background:none; font-size:22px; cursor:pointer;" onclick="closeAddModal()">✕</button>
+        <h2 id="modal-title">Додати річ</h2>
+        <button style="border:none; background:none; font-size:22px; cursor:pointer;" onclick="closeAddEditModal()">✕</button>
       </div>
+
+      <input type="hidden" id="edit-item-id" />
 
       <div class="form-group">
         <label>Назва речі</label>
-        <input type="text" id="new-item-title" class="form-control" placeholder="Напр. Графітова футболка оверсайз" />
+        <input type="text" id="item-title-input" class="form-control" placeholder="Напр. Червона футболка в обтяжку" />
       </div>
 
       <div class="form-group">
         <label>Категорія</label>
-        <select id="new-item-cat" class="form-control">
+        <select id="item-cat-input" class="form-control">
           <option value="top">Верх (футболка, топ)</option>
           <option value="bottom">Низ (джинси, штани)</option>
           <option value="layer">Другий шар (зіпка, кофта)</option>
@@ -578,11 +621,11 @@
 
       <div class="form-group">
         <label>Колір</label>
-        <select id="new-item-color" class="form-control">
+        <select id="item-color-input" class="form-control">
           <option value="чорний">Чорний</option>
           <option value="червоний">Червоний</option>
           <option value="сірий">Світло-сірий</option>
-          <option value="синій">Синій / Денім</option>
+          <option value="синій">Синій</option>
           <option value="коричневий">Коричневий</option>
           <option value="срібний">Срібний</option>
           <option value="інший">Інший</option>
@@ -590,25 +633,28 @@
       </div>
 
       <div class="form-group">
-        <label>Фото з галереї/камери</label>
-        <input type="file" id="new-item-file" accept="image/*" class="form-control" onchange="previewUploadedImage(this)" />
+        <label>Фото з галереї / камери</label>
+        <input type="file" id="item-file-input" accept="image/*" class="form-control" onchange="handleImageUpload(this)" />
       </div>
 
       <div class="form-group">
-        <label>Або посилання на фото з інтернету</label>
-        <input type="url" id="new-item-url" class="form-control" placeholder="https://..." />
+        <label>Або посилання на фото</label>
+        <input type="url" id="item-url-input" class="form-control" placeholder="https://..." />
       </div>
 
-      <button class="btn btn-primary" style="width:100%; margin-top:12px;" onclick="saveNewItem()">Зберегти в гардероб</button>
+      <div id="img-preview-box" style="display:none; margin-bottom:14px; text-align:center;">
+        <img id="img-preview" src="" style="width:80px; height:80px; border-radius:8px; object-fit:cover; border:1px solid var(--border);" />
+      </div>
+
+      <button class="btn btn-primary" style="width:100%;" onclick="saveItem()">Зберегти</button>
     </div>
   </div>
 
   <script>
     /* ==========================================================================
-       ПОЧАТКОВИЙ ГАРДЕРОБ (Згідно з вашим описом)
+       ПОЧАТКОВИЙ ГАРДЕРОБ
        ========================================================================== */
-    const initialWardrobe = [
-      // Футболки
+    const defaultWardrobe = [
       {
         id: 't-red',
         name: 'Червона футболка в обтяжку',
@@ -636,8 +682,6 @@
         style: 'casual',
         image: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400&q=80'
       },
-
-      // Низ
       {
         id: 'j-black',
         name: 'Чорні напів оверсайз джинси',
@@ -665,8 +709,6 @@
         style: 'smart',
         image: 'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=400&q=80'
       },
-
-      // Другий шар (зіпки)
       {
         id: 'z-brown',
         name: 'Коричнева зіпка',
@@ -685,8 +727,6 @@
         style: 'chill',
         image: 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=400&q=80'
       },
-
-      // Взуття
       {
         id: 's-nb',
         name: 'Срібні New Balance',
@@ -708,68 +748,218 @@
     ];
 
     /* ==========================================================================
-       СТАН ЗАСТОСУНКУ
+       СТАН ТА ІНІЦІАЛІЗАЦІЯ
        ========================================================================== */
-    let wardrobe = JSON.parse(localStorage.getItem('wardrobe_items')) || initialWardrobe;
+    let wardrobe = JSON.parse(localStorage.getItem('wardrobe_items')) || defaultWardrobe;
     let favorites = JSON.parse(localStorage.getItem('outfit_favorites')) || [];
     let yesterdayOutfit = JSON.parse(localStorage.getItem('yesterday_outfit')) || null;
 
-    let selectedOutfit = {
-      top: null,
-      bottom: null,
-      layer: null,
-      shoes: null
-    };
-
+    let selectedOutfit = { top: null, bottom: null, layer: null, shoes: null };
     let activeCategoryFilter = 'all';
     let activeColorFilter = 'all';
-    let uploadedImageBase64 = null;
+    let managerFilter = 'all';
+    let currentUploadBase64 = null;
     let quizAnswers = {};
 
-    /* ==========================================================================
-       НАВІГАЦІЯ
-       ========================================================================== */
+    // Динамічне тепле звернення
+    function setRandomGreeting() {
+      const names = ['Сонце', 'Гарнюнько', 'Манюня', 'Діанка', 'Крихітко'];
+      const chosen = names[Math.floor(Math.random() * names.length)];
+      document.getElementById('greeting-text').innerText = `Привіт, ${chosen} ✨`;
+    }
+
+    function updateCounts() {
+      document.getElementById('fav-count').innerText = favorites.length;
+      document.getElementById('total-items-count').innerText = wardrobe.length;
+    }
+
     function goToScreen(screenId) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       document.getElementById(screenId).classList.add('active');
       window.scrollTo(0, 0);
-      updateFavCount();
+      updateCounts();
     }
 
+    /* ==========================================================================
+       МЕНЕДЖЕР ГАРДЕРОБА (ПЕРЕГЛЯД ТА РЕДАГУВАННЯ)
+       ========================================================================== */
+    function goToWardrobeManager() {
+      renderManagerGrid();
+      goToScreen('screen-wardrobe-manager');
+    }
+
+    function filterManagerCat(cat, btn = null) {
+      managerFilter = cat;
+      if (btn) {
+        document.querySelectorAll('#manager-cat-filters .filter-chip').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+      }
+      renderManagerGrid();
+    }
+
+    function renderManagerGrid() {
+      const grid = document.getElementById('manager-grid');
+      grid.innerHTML = '';
+
+      const list = wardrobe.filter(item => managerFilter === 'all' || item.category === managerFilter);
+
+      list.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'item-card';
+        card.innerHTML = `
+          <div class="item-img-wrap">
+            <img src="${item.image}" alt="${item.name}" />
+          </div>
+          <div class="item-title">${item.name}</div>
+          <div class="item-sub">${item.color}</div>
+          <div class="item-card-actions">
+            <button class="action-sub-btn" onclick="editItem('${item.id}')">✏️ Змінити</button>
+            <button class="action-sub-btn" style="color:var(--danger);" onclick="deleteItem('${item.id}')">🗑️</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function deleteItem(id) {
+      if (!confirm('Видалити цю річ з гардероба?')) return;
+      wardrobe = wardrobe.filter(item => item.id !== id);
+      localStorage.setItem('wardrobe_items', JSON.stringify(wardrobe));
+      renderManagerGrid();
+      updateCounts();
+    }
+
+    /* ==========================================================================
+       ФОРМА ДОДАВАННЯ / РЕДАГУВАННЯ
+       ========================================================================== */
+    function openAddEditModal(itemId = null) {
+      const modal = document.getElementById('add-modal');
+      const title = document.getElementById('modal-title');
+      const idField = document.getElementById('edit-item-id');
+      const nameField = document.getElementById('item-title-input');
+      const catField = document.getElementById('item-cat-input');
+      const colorField = document.getElementById('item-color-input');
+      const urlField = document.getElementById('item-url-input');
+      const fileField = document.getElementById('item-file-input');
+      const previewBox = document.getElementById('img-preview-box');
+      const previewImg = document.getElementById('img-preview');
+
+      fileField.value = '';
+      currentUploadBase64 = null;
+
+      if (itemId) {
+        const item = wardrobe.find(i => i.id === itemId);
+        title.innerText = 'Редагувати річ';
+        idField.value = item.id;
+        nameField.value = item.name;
+        catField.value = item.category;
+        colorField.value = item.color;
+        urlField.value = item.image.startsWith('data:') ? '' : item.image;
+
+        previewImg.src = item.image;
+        previewBox.style.display = 'block';
+      } else {
+        title.innerText = 'Додати річ';
+        idField.value = '';
+        nameField.value = '';
+        catField.value = 'top';
+        colorField.value = 'чорний';
+        urlField.value = '';
+        previewBox.style.display = 'none';
+      }
+
+      modal.classList.add('active');
+    }
+
+    function closeAddEditModal() {
+      document.getElementById('add-modal').classList.remove('active');
+    }
+
+    function handleImageUpload(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          currentUploadBase64 = e.target.result;
+          document.getElementById('img-preview').src = currentUploadBase64;
+          document.getElementById('img-preview-box').style.display = 'block';
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function editItem(id) {
+      openAddEditModal(id);
+    }
+
+    function saveItem() {
+      const id = document.getElementById('edit-item-id').value;
+      const name = document.getElementById('item-title-input').value.trim();
+      const cat = document.getElementById('item-cat-input').value;
+      const color = document.getElementById('item-color-input').value;
+      const url = document.getElementById('item-url-input').value.trim();
+
+      if (!name) {
+        alert('Будь ласка, введіть назву');
+        return;
+      }
+
+      let image = currentUploadBase64 || url;
+
+      if (id) {
+        // Редагування існуючої речі
+        const index = wardrobe.findIndex(i => i.id === id);
+        if (index !== -1) {
+          wardrobe[index].name = name;
+          wardrobe[index].category = cat;
+          wardrobe[index].color = color;
+          if (image) wardrobe[index].image = image;
+        }
+      } else {
+        // Створення нової речі
+        const newItem = {
+          id: 'item-' + Date.now(),
+          name: name,
+          category: cat,
+          color: color,
+          style: 'casual',
+          image: image || 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=400&q=80'
+        };
+        wardrobe.unshift(newItem);
+      }
+
+      localStorage.setItem('wardrobe_items', JSON.stringify(wardrobe));
+      closeAddEditModal();
+      renderManagerGrid();
+      renderWardrobe();
+      updateCounts();
+    }
+
+    /* ==========================================================================
+       КОНСТРУКТОР ТА РЕКОМЕНДАЦІЇ
+       ========================================================================== */
     function goToManualFlow() {
       renderWardrobe();
       renderSlots();
       goToScreen('screen-manual');
     }
 
-    function goToQuizFlow() {
-      quizAnswers = {};
-      document.getElementById('q-step-1').style.display = 'block';
-      document.getElementById('q-step-2').style.display = 'none';
-      document.getElementById('q-step-3').style.display = 'none';
-      goToScreen('screen-quiz');
-    }
-
-    /* ==========================================================================
-       ЛОГІКА КОНСТРУКТОРА
-       ========================================================================== */
     function renderSlots() {
-      const categories = ['top', 'bottom', 'layer', 'shoes'];
-      const labels = { top: 'Верх', bottom: 'Низ', layer: 'Другий шар', shoes: 'Взуття' };
+      const cats = ['top', 'bottom', 'layer', 'shoes'];
+      const labels = { top: 'Верх', bottom: 'Низ', layer: 'Зіпка', shoes: 'Взуття' };
 
-      categories.forEach(cat => {
-        const slotEl = document.getElementById(`slot-${cat}`);
+      cats.forEach(cat => {
+        const slot = document.getElementById(`slot-${cat}`);
         const item = selectedOutfit[cat];
 
         if (item) {
-          slotEl.classList.add('filled');
-          slotEl.innerHTML = `
+          slot.classList.add('filled');
+          slot.innerHTML = `
             <img src="${item.image}" alt="${item.name}"/>
             <button class="slot-clear" onclick="event.stopPropagation(); clearSlot('${cat}')">✕</button>
           `;
         } else {
-          slotEl.classList.remove('filled');
-          slotEl.innerHTML = `<span class="slot-label">${labels[cat]}</span>`;
+          slot.classList.remove('filled');
+          slot.innerHTML = `<span class="slot-label">${labels[cat]}</span>`;
         }
       });
     }
@@ -786,8 +976,6 @@
 
       selectedOutfit[item.category] = item;
       renderSlots();
-
-      // Показати блок рекомендацій до щойно обраної речі
       showRecommendationsFor(item);
     }
 
@@ -795,13 +983,13 @@
       const grid = document.getElementById('wardrobe-grid');
       grid.innerHTML = '';
 
-      const filtered = wardrobe.filter(item => {
-        const matchCat = activeCategoryFilter === 'all' || item.category === activeCategoryFilter;
-        const matchColor = activeColorFilter === 'all' || item.color.toLowerCase() === activeColorFilter.toLowerCase();
-        return matchCat && matchColor;
+      const list = wardrobe.filter(item => {
+        const mCat = activeCategoryFilter === 'all' || item.category === activeCategoryFilter;
+        const mCol = activeColorFilter === 'all' || item.color.toLowerCase() === activeColorFilter.toLowerCase();
+        return mCat && mCol;
       });
 
-      filtered.forEach(item => {
+      list.forEach(item => {
         const isYesterday = yesterdayOutfit && Object.values(yesterdayOutfit).some(y => y && y.id === item.id);
         const card = document.createElement('div');
         card.className = 'item-card';
@@ -837,20 +1025,16 @@
       renderWardrobe();
     }
 
-    /* РЕКОМЕНДАЦІЇ */
     function showRecommendationsFor(item) {
       const banner = document.getElementById('rec-banner');
       const container = document.getElementById('rec-items-scroll');
       container.innerHTML = '';
 
-      // Інтелектуальний підбір за кольором і категорією
-      let suggestions = wardrobe.filter(candidate => candidate.category !== item.category);
+      let suggestions = wardrobe.filter(c => c.category !== item.category);
 
-      // Якщо річ чорна - пасує буквально все, але особливо денім або срібло
       if (item.color === 'чорний') {
         suggestions = suggestions.filter(c => ['синій', 'сірий', 'срібний', 'чорний'].includes(c.color));
       } else if (item.color === 'червоний') {
-        // Червоний акцент чудово пасує до чорного низу або синіх джинсів
         suggestions = suggestions.filter(c => ['чорний', 'синій'].includes(c.color));
       }
 
@@ -879,11 +1063,18 @@
     }
 
     /* ==========================================================================
-       ЛОГІКА КВІЗУ («Не знаю, що вдягнути»)
+       КВІЗ
        ========================================================================== */
+    function goToQuizFlow() {
+      quizAnswers = {};
+      document.getElementById('q-step-1').style.display = 'block';
+      document.getElementById('q-step-2').style.display = 'none';
+      document.getElementById('q-step-3').style.display = 'none';
+      goToScreen('screen-quiz');
+    }
+
     function answerQuiz(stepKey, val) {
       quizAnswers[stepKey] = val;
-
       if (stepKey === 'occasion') {
         document.getElementById('q-step-1').style.display = 'none';
         document.getElementById('q-step-2').style.display = 'block';
@@ -896,15 +1087,12 @@
     }
 
     function generateQuizOutfit() {
-      // Фільтруємо речі, які були вчора (щоб не повторювати образ)
       const yesterdayIds = yesterdayOutfit ? Object.values(yesterdayOutfit).filter(Boolean).map(x => x.id) : [];
       let pool = wardrobe.filter(item => !yesterdayIds.includes(item.id));
-
-      if (pool.length < 3) pool = [...wardrobe]; // якщо гардероб ще компактний
+      if (pool.length < 3) pool = [...wardrobe];
 
       let pickTop, pickBottom, pickLayer, pickShoes;
 
-      // Підбір верху за кольоровою гамою
       if (quizAnswers.palette === 'bright') {
         pickTop = pool.find(i => i.id === 't-red') || pool.find(i => i.category === 'top');
       } else if (quizAnswers.palette === 'dark') {
@@ -913,7 +1101,6 @@
         pickTop = pool.find(i => i.id === 't-grey') || pool.find(i => i.category === 'top');
       }
 
-      // Підбір низу за стилем
       if (quizAnswers.occasion === 'smart') {
         pickBottom = pool.find(i => i.id === 'p-black') || pool.find(i => i.category === 'bottom');
       } else if (quizAnswers.occasion === 'chill') {
@@ -922,14 +1109,12 @@
         pickBottom = pool.find(i => i.id === 'j-black') || pool.find(i => i.category === 'bottom');
       }
 
-      // Взуття
       if (quizAnswers.occasion === 'active') {
         pickShoes = pool.find(i => i.id === 's-nb') || pool.find(i => i.category === 'shoes');
       } else {
         pickShoes = pool.find(i => i.id === 's-converse') || pool.find(i => i.category === 'shoes');
       }
 
-      // Зіпка за потреби
       if (quizAnswers.layer === 'zipper') {
         pickLayer = (pickTop && pickTop.color === 'червоний') 
           ? pool.find(i => i.id === 'z-navy') 
@@ -956,7 +1141,6 @@
       container.innerHTML = '';
 
       const items = Object.values(selectedOutfit).filter(Boolean);
-
       if (items.length === 0) {
         alert('Оберіть хоча б одну річ для аутфіту!');
         return;
@@ -979,10 +1163,9 @@
     }
 
     function confirmTodayOutfit() {
-      // Зберегти як учорашній аутфіт для уникнення повторів
       localStorage.setItem('yesterday_outfit', JSON.stringify(selectedOutfit));
       yesterdayOutfit = selectedOutfit;
-      alert('Чудового дня! Твій аутфіт зафіксовано на сьогодні ✨');
+      alert('Чудового дня! Твій аутфіт зафіксовано ✨');
       goToScreen('screen-home');
     }
 
@@ -997,12 +1180,8 @@
       });
 
       localStorage.setItem('outfit_favorites', JSON.stringify(favorites));
-      updateFavCount();
+      updateCounts();
       alert('Образ додано в улюблені! ❤️');
-    }
-
-    function updateFavCount() {
-      document.getElementById('fav-count').innerText = favorites.length;
     }
 
     function showFavorites() {
@@ -1010,7 +1189,7 @@
       list.innerHTML = '';
 
       if (favorites.length === 0) {
-        list.innerHTML = '<p style="text-align:center; padding: 40px 0;">У тебе ще немає збережених образів.</p>';
+        list.innerHTML = '<p style="text-align:center; padding: 40px 0;">У тебе ще немає збережених аутфітів.</p>';
       } else {
         favorites.forEach(fav => {
           const card = document.createElement('div');
@@ -1035,64 +1214,9 @@
       goToScreen('screen-favorites');
     }
 
-    /* ==========================================================================
-       ДОДАВАННЯ НОВОЇ РЕЧІ
-       ========================================================================== */
-    function openAddModal() {
-      document.getElementById('add-modal').classList.add('active');
-    }
-
-    function closeAddModal() {
-      document.getElementById('add-modal').classList.remove('active');
-      uploadedImageBase64 = null;
-      document.getElementById('new-item-title').value = '';
-      document.getElementById('new-item-url').value = '';
-      document.getElementById('new-item-file').value = '';
-    }
-
-    function previewUploadedImage(input) {
-      if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          uploadedImageBase64 = e.target.result;
-        };
-        reader.readAsDataURL(input.files[0]);
-      }
-    }
-
-    function saveNewItem() {
-      const title = document.getElementById('new-item-title').value.trim();
-      const cat = document.getElementById('new-item-cat').value;
-      const color = document.getElementById('new-item-color').value;
-      const url = document.getElementById('new-item-url').value.trim();
-
-      if (!title) {
-        alert('Будь ласка, введіть назву речі');
-        return;
-      }
-
-      // Зображення: завантажений файл або URL або естетична заглушка
-      let finalImg = uploadedImageBase64 || url || 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=400&q=80';
-
-      const newItem = {
-        id: 'custom-' + Date.now(),
-        name: title,
-        category: cat,
-        color: color,
-        style: 'casual',
-        image: finalImg
-      };
-
-      wardrobe.unshift(newItem);
-      localStorage.setItem('wardrobe_items', JSON.stringify(wardrobe));
-
-      closeAddModal();
-      renderWardrobe();
-      alert('Річ успішно додана до твого гардероба!');
-    }
-
-    // Перший рендер
-    updateFavCount();
+    // Запуск при завантаженні
+    setRandomGreeting();
+    updateCounts();
   </script>
 </body>
 </html>
