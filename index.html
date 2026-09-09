@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Мій Аутфіт Дня ✨</title>
+  <title>Atelier Studio ✨ [v3.7 Cutout Edition]</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,6 @@
       --radius-sm: 10px;
     }
 
-    /* РАНОК */
     body.theme-morning.weather-clear {
       --current-gradient: linear-gradient(165deg, #FFEFEA 0%, #FCD8CE 40%, #FDEEE7 100%);
       --bubble-1: #FFA48D; --bubble-2: #FFD4C4;
@@ -55,8 +54,6 @@
       --accent-theme: #9E5B8E; --accent-theme-deep: #7D396E;
       --shadow-aero: 0 16px 40px -10px rgba(120, 70, 110, 0.18);
     }
-
-    /* ДЕНЬ */
     body.theme-day.weather-clear {
       --current-gradient: linear-gradient(165deg, #FFF5EA 0%, #FDE4C9 40%, #FDEFD9 100%);
       --bubble-1: #F7BA7C; --bubble-2: #FFE0BA;
@@ -93,8 +90,6 @@
       --accent-theme: #3F7EAA; --accent-theme-deep: #225C84;
       --shadow-aero: 0 16px 40px -10px rgba(60, 115, 155, 0.2);
     }
-
-    /* НІЧ */
     body.theme-night.weather-clear {
       --current-gradient: linear-gradient(165deg, #1A1829 0%, #12101F 45%, #0B0A14 100%);
       --bubble-1: #3B386A; --bubble-2: #24224A;
@@ -528,24 +523,38 @@
       position: relative;
       box-shadow: var(--shadow-aero), inset 0 1.5px 1.5px rgba(255,255,255,0.7);
     }
+    
+    /* СТИЛІ КАТАЛОЖНОГО ВИРІЗУ (CUTOUT LOOK) */
     .item-img-wrap {
       width: 100%;
       height: 155px;
       border-radius: var(--radius-md);
-      background: rgba(255, 255, 255, 0.5);
+      background: #FFFFFF;
       overflow: hidden;
       margin-bottom: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.8);
       position: relative;
+      box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.04);
     }
     .item-img-wrap img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transition: transform 0.3s ease;
     }
+    /* Коли активовано виріз */
+    .item-img-wrap.cutout-mode {
+      background: radial-gradient(circle, #FFFFFF 40%, #F5EFEA 100%);
+      padding: 6px;
+    }
+    .item-img-wrap.cutout-mode img {
+      object-fit: contain;
+      filter: drop-shadow(0 8px 16px rgba(40, 20, 15, 0.12));
+    }
+
     .item-title {
       font-size: 13.5px;
       font-weight: 700;
@@ -571,7 +580,7 @@
     .item-fav-btn {
       position: absolute;
       top: 6px; right: 6px;
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.88);
       backdrop-filter: blur(4px);
       border: none;
       border-radius: 50%;
@@ -639,8 +648,8 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      background: rgba(255, 255, 255, 0.35);
-      border: 1px solid rgba(255, 255, 255, 0.6);
+      background: rgba(255, 255, 255, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.7);
       padding: 10px 12px;
       border-radius: var(--radius-md);
     }
@@ -655,7 +664,7 @@
       height: 58px;
       border-radius: var(--radius-md);
       object-fit: cover;
-      background: rgba(255, 255, 255, 0.75);
+      background: rgba(255, 255, 255, 0.9);
       border: 1px solid #fff;
     }
     .btn-swap-item {
@@ -670,7 +679,7 @@
       white-space: nowrap;
     }
 
-    /* МОДАЛКА - ФІКС КОНТРАСТУ */
+    /* МОДАЛКИ */
     .modal {
       display: none;
       position: fixed;
@@ -700,17 +709,6 @@
       to { transform: translateY(0); }
     }
 
-    .modal-sheet h2,
-    .modal-sheet label,
-    .modal-sheet input,
-    .modal-sheet select,
-    .modal-sheet .smart-pill {
-      color: #24130F !important;
-    }
-    .modal-sheet label {
-      color: #7D564C !important;
-    }
-
     .form-group { margin-bottom: 16px; }
     .form-group label {
       display: block;
@@ -719,6 +717,7 @@
       margin-bottom: 8px;
       text-transform: uppercase;
       letter-spacing: 0.8px;
+      color: #7D564C !important;
     }
     .form-control {
       width: 100%;
@@ -728,6 +727,7 @@
       font-size: 14.5px;
       outline: none;
       background: #F9F5F1 !important;
+      color: #24130F !important;
     }
     .form-control:focus {
       border-color: #D9725B !important;
@@ -749,6 +749,7 @@
       font-size: 12.5px;
       font-weight: 700;
       cursor: pointer;
+      color: #24130F !important;
     }
     .smart-pill.active {
       background: #24130F !important;
@@ -868,7 +869,6 @@
       100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1.3); }
     }
 
-    /* ФІКСОВАНА КНОПКА ТА ПАНЕЛЬ ДЕБАГУ */
     #fixed-debug-btn {
       position: fixed;
       top: 16px;
@@ -1232,7 +1232,7 @@
     </div>
   </div>
 
-  <!-- МОДАЛКА ДОДАВАННЯ/РЕДАГУВАННЯ -->
+  <!-- МОДАЛКА ДОДАВАННЯ З ТУМБЛЕРОМ КАТАЛОЖНОГО ВИРІЗУ -->
   <div class="modal" id="add-modal">
     <div class="modal-sheet">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
@@ -1243,6 +1243,7 @@
       <input type="hidden" id="edit-item-id" />
       <input type="hidden" id="item-sleeve-attr" value="short" />
       <input type="hidden" id="item-layer-type-attr" value="open" />
+      <input type="hidden" id="item-cutout-attr" value="true" />
 
       <div class="form-group">
         <label>Фото (Галерея або Камера)</label>
@@ -1254,8 +1255,15 @@
         <input type="url" id="item-url-input" class="form-control" placeholder="https://..." onchange="handleUrlInput(this.value)" />
       </div>
 
-      <div id="img-preview-box" style="display:none; margin-bottom:14px; text-align:center;">
-        <img id="img-preview" src="" style="width:96px; height:96px; border-radius:18px; object-fit:cover; border:2px solid #E2D7CF; box-shadow:0 4px 14px rgba(0,0,0,0.08);" />
+      <!-- БЛОК ПРЕВ'Ю З ПЕРЕМИКАЧЕМ СТИЛЮ -->
+      <div id="img-preview-box" style="display:none; margin-bottom:16px; text-align:center;">
+        <div id="preview-frame" class="item-img-wrap cutout-mode" style="width:120px; height:120px; margin:0 auto 10px;">
+          <img id="img-preview" src="" />
+        </div>
+        <div style="display:flex; justify-content:center; gap:8px;">
+          <button type="button" id="btn-style-cutout" class="smart-pill active" onclick="toggleCutoutPreview(true)">✨ Каталожний виріз</button>
+          <button type="button" id="btn-style-photo" class="smart-pill" onclick="toggleCutoutPreview(false)">🖼️ Звичайне фото</button>
+        </div>
       </div>
 
       <div class="form-group">
@@ -1323,17 +1331,10 @@
     let dailyOutfitsLog = JSON.parse(localStorage.getItem('daily_outfits_log_v1')) || [];
 
     let selectedOutfit = { top: null, bottom: null, layer: null, outerwear: null, shoes: null, accessories: null };
-    let currentOutfitSource = 'quiz'; // 'quiz' | 'manual' | 'history'
+    let currentOutfitSource = 'quiz';
 
-    // Чорний список для поточної примірки (виправлення зациклення "Не хочу")
-    let rejectedItemIds = {
-      top: [],
-      bottom: [],
-      layer: [],
-      outerwear: [],
-      shoes: [],
-      accessories: []
-    };
+    let rejectedItemIds = { top: [], bottom: [], layer: [], outerwear: [], shoes: [], accessories: [] };
+    let rejectedOutfitIds = [];
 
     let activeCategoryFilter = 'all';
     let activeColorFilter = 'all';
@@ -1348,43 +1349,43 @@
     let managerSmartFilters = { favs: false, ready: false, rare: false };
     let modalSelectedOutfit = null;
 
-    /* СТАРТ ЧИСТОГО РУЧНОГО КОНСТРУКТОРА */
     function startFreshManualFlow() {
       selectedOutfit = { top: null, bottom: null, layer: null, outerwear: null, shoes: null, accessories: null };
       currentOutfitSource = 'manual';
       goToManualFlow();
     }
 
-    /* КУЛДАУН: 2 ДНІ ВІДПОЧИНКУ (3 ЦИКЛИ) */
+    /* ТОЧНИЙ КУЛДАУН (2 ДНІ ПЕРЕРВИ / 3 ЦИКЛИ) */
     function getItemCooldownStatus(itemId) {
       const item = wardrobe.find(i => i.id === itemId);
       const history = wearHistory.filter(h => h.id === itemId);
-      if (history.length === 0) return { inCooldown: false, isDeprioritized: false, cyclesLeft: 0 };
+      if (history.length === 0) return { inCooldown: false, isDeprioritized: false, cyclesLeft: 0, label: '' };
 
       const last = history[history.length - 1];
       const cyclesAgo = wearHistory.length - 1 - wearHistory.lastIndexOf(last);
 
       if (item && ['shoes', 'accessories'].includes(item.category)) {
-        return { inCooldown: false, isDeprioritized: false, cyclesLeft: 0 };
+        return { inCooldown: false, isDeprioritized: false, cyclesLeft: 0, label: '' };
       }
 
       if (item && ['bottom', 'layer', 'outerwear'].includes(item.category)) {
         if (cyclesAgo < 2) {
-          return { inCooldown: false, isDeprioritized: true, cyclesLeft: 2 - cyclesAgo };
+          return { inCooldown: false, isDeprioritized: true, cyclesLeft: 2 - cyclesAgo, label: 'Вчорашня' };
         }
-        return { inCooldown: false, isDeprioritized: false, cyclesLeft: 0 };
+        return { inCooldown: false, isDeprioritized: false, cyclesLeft: 0, label: '' };
       }
 
       if (!last.visible) {
-        return { inCooldown: false, isDeprioritized: true, cyclesLeft: 0, hiddenUnder: true };
+        return { inCooldown: false, isDeprioritized: true, cyclesLeft: 0, hiddenUnder: true, label: 'Під светр' };
       }
 
       const COOLDOWN_CYCLES = 3;
       if (cyclesAgo < COOLDOWN_CYCLES) {
-        return { inCooldown: true, isDeprioritized: false, cyclesLeft: COOLDOWN_CYCLES - cyclesAgo };
+        const left = COOLDOWN_CYCLES - cyclesAgo;
+        return { inCooldown: true, isDeprioritized: false, cyclesLeft: left, label: `⏳ Ще ${left} дн.` };
       }
 
-      return { inCooldown: false, isDeprioritized: false, cyclesLeft: 0 };
+      return { inCooldown: false, isDeprioritized: false, cyclesLeft: 0, label: '' };
     }
 
     function resetWearHistory() {
@@ -1426,38 +1427,36 @@
       renderManagerGrid();
     }
 
+    function generateOutfitSignature(outfit) {
+      return ['top', 'bottom', 'layer', 'shoes'].map(c => outfit[c] ? outfit[c].id : '0').join('|');
+    }
+
     /* ЗАМІНА "НЕ ХОЧУ ЦЕ" БЕЗ ЗАЦИКЛЕННЯ */
     function rejectAndSwapItem(category) {
       const currentItem = selectedOutfit[category];
       if (!currentItem) return;
 
-      // 1. Додаємо поточну річ у чорний список поточної сесії
       if (!rejectedItemIds[category]) rejectedItemIds[category] = [];
       if (!rejectedItemIds[category].includes(currentItem.id)) {
         rejectedItemIds[category].push(currentItem.id);
       }
 
-      // 2. Базовий пул речей цієї категорії
       let pool = wardrobe.filter(i => i.category === category);
       if (pool.length <= 1) {
         alert('У гардеробі немає іншої речі цієї категорії!');
         return;
       }
 
-      // 3. Відсікаємо ті, що вже були відхилені під час цього вибору
       let candidates = pool.filter(i => !rejectedItemIds[category].includes(i.id));
 
-      // Якщо перебрали весь асортимент — скидаємо чорний список і починаємо коло заново
       if (candidates.length === 0) {
         rejectedItemIds[category] = [currentItem.id];
         candidates = pool.filter(i => i.id !== currentItem.id);
       }
 
-      // 4. М'який кулдаун (пріоритет свіжим)
       const freshCandidates = candidates.filter(i => !getItemCooldownStatus(i.id).inCooldown);
       if (freshCandidates.length > 0) candidates = freshCandidates;
 
-      // 5. Сумісність шарів (під глухий светр — не пхати довгий рукав)
       if (category === 'top') {
         const isClosedLayer = selectedOutfit.layer && (
           selectedOutfit.layer.layerType === 'closed' ||
@@ -1472,17 +1471,14 @@
         }
       }
 
-      // 6. Сортування за улюбленими
       candidates.sort((a, b) => {
         const aFav = favoriteItemIds.includes(a.id) ? 1 : 0;
         const bFav = favoriteItemIds.includes(b.id) ? 1 : 0;
         return bFav - aFav;
       });
 
-      // Підставляємо новий елемент
       selectedOutfit[category] = candidates[0];
 
-      // Якщо змінили теплий шар на глухий светр — адаптуємо верх
       if (category === 'layer') {
         const isNowClosed = selectedOutfit.layer && (
           selectedOutfit.layer.layerType === 'closed' ||
@@ -1497,6 +1493,9 @@
           }
         }
       }
+
+      const signature = generateOutfitSignature(selectedOutfit);
+      if (!rejectedOutfitIds.includes(signature)) rejectedOutfitIds.push(signature);
 
       renderFinalScreenItems();
       triggerSparkles();
@@ -1518,9 +1517,13 @@
           ? `<button class="btn-swap-item interactive-press" onclick="rejectAndSwapItem('${cat}')">Не хочу ✕</button>`
           : '';
 
+        const isCutout = item.isCutout !== false;
+
         row.innerHTML = `
           <div class="final-item-left">
-            <img src="${item.image}" alt="${item.name}" />
+            <div class="item-img-wrap ${isCutout ? 'cutout-mode' : ''}" style="width:58px; height:58px; margin:0; border-radius:12px;">
+              <img src="${item.image}" alt="${item.name}" />
+            </div>
             <div>
               <div style="font-weight:700; font-size:14.5px;">${item.name}</div>
               <div style="font-size:12px; color:var(--text-sub); display:flex; align-items:center; gap:6px; margin-top:2px;">
@@ -1535,7 +1538,6 @@
       });
     }
 
-    /* РОЗУМНИЙ ПАРСЕР НАЗВИ */
     function handleSmartTitleInput(text) {
       if (!text) return;
       const lower = text.toLowerCase();
@@ -1609,6 +1611,20 @@
       document.getElementById('item-layer-type-attr').value = val;
       document.querySelectorAll('#pills-container .smart-pill').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
+    }
+
+    function toggleCutoutPreview(isCutout) {
+      document.getElementById('item-cutout-attr').value = isCutout ? 'true' : 'false';
+      const frame = document.getElementById('preview-frame');
+      if (isCutout) {
+        frame.classList.add('cutout-mode');
+        document.getElementById('btn-style-cutout').classList.add('active');
+        document.getElementById('btn-style-photo').classList.remove('active');
+      } else {
+        frame.classList.remove('cutout-mode');
+        document.getElementById('btn-style-photo').classList.add('active');
+        document.getElementById('btn-style-cutout').classList.remove('active');
+      }
     }
 
     function applyDynamicAtmosphere(weatherCode = 0) {
@@ -1759,7 +1775,7 @@
       updateCounts();
     }
 
-    /* ТОЧНЕ ВИЗНАЧЕННЯ ПОГОДИ ТА ЛОКАЦІЇ */
+    /* ПОГОДА З ПОКАЗНИКОМ "ВІДЧУВАЄТЬСЯ ЯК" */
     async function initWeatherOnLoad() {
       const queryWeather = async (lat, lon, cityName = 'Твоє місто') => {
         const locEl = document.getElementById('w-location');
@@ -1807,10 +1823,13 @@
       const currentHour = now.getHours();
       
       const realTemp = Math.round(data.current.temperature_2m);
+      const feelsLike = Math.round(data.current.apparent_temperature);
       currentOutdoorTemp = realTemp;
       const windSpeed = Math.round(data.current.wind_speed_10m / 3.6);
 
-      if (tempEl) tempEl.innerText = `Зараз ${realTemp}°C`;
+      if (tempEl) {
+        tempEl.innerHTML = `${realTemp}°C <span style="font-size:14px; font-weight:600; opacity:0.75;">(відчувається як ${feelsLike}°C)</span>`;
+      }
 
       const code = data.current.weather_code;
       applyDynamicAtmosphere(code);
@@ -1949,13 +1968,37 @@
     /* АЛГОРИТМ ПІДБОРУ ДЛЯ КВІЗУ */
     function generateQuizOutfit() {
       currentOutfitSource = 'quiz';
-      
-      // Скидаємо чорний список сесії при новому запуску квізу
       rejectedItemIds = { top: [], bottom: [], layer: [], outerwear: [], shoes: [], accessories: [] };
 
+      let attempts = 0;
+      let chosenCandidate = null;
+
+      while (attempts < 6) {
+        chosenCandidate = buildCandidateOutfit();
+        const sig = generateOutfitSignature(chosenCandidate);
+        
+        if (!rejectedOutfitIds.includes(sig)) {
+          break;
+        }
+
+        if (chosenCandidate.top) {
+          if (!rejectedItemIds.top) rejectedItemIds.top = [];
+          rejectedItemIds.top.push(chosenCandidate.top.id);
+        }
+        attempts++;
+      }
+
+      selectedOutfit = chosenCandidate;
+      const finalSig = generateOutfitSignature(selectedOutfit);
+      if (!rejectedOutfitIds.includes(finalSig)) rejectedOutfitIds.push(finalSig);
+
+      finishOutfit(null, 'quiz');
+    }
+
+    function buildCandidateOutfit() {
       let pool = [...wardrobe];
 
-      let layers = pool.filter(i => i.category === 'layer' && !getItemCooldownStatus(i.id).inCooldown);
+      let layers = pool.filter(i => i.category === 'layer' && !getItemCooldownStatus(i.id).inCooldown && !rejectedItemIds.layer.includes(i.id));
       if (layers.length === 0) layers = pool.filter(i => i.category === 'layer');
 
       let pickLayer = null;
@@ -1975,9 +2018,8 @@
         ['светр', 'худі', 'світшот'].some(w => pickLayer.name.toLowerCase().includes(w))
       );
 
-      let tops = pool.filter(i => i.category === 'top');
-      let availableTops = tops.filter(i => !getItemCooldownStatus(i.id).inCooldown);
-      if (availableTops.length > 0) tops = availableTops;
+      let tops = pool.filter(i => i.category === 'top' && !getItemCooldownStatus(i.id).inCooldown && !rejectedItemIds.top.includes(i.id));
+      if (tops.length === 0) tops = pool.filter(i => i.category === 'top');
 
       if (isClosedLayer) {
         const underSweaterTops = tops.filter(i => 
@@ -2010,7 +2052,7 @@
         pickTop = tops[Math.floor(Math.random() * tops.length)];
       }
 
-      let bottoms = pool.filter(i => i.category === 'bottom' && !getItemCooldownStatus(i.id).inCooldown);
+      let bottoms = pool.filter(i => i.category === 'bottom' && !getItemCooldownStatus(i.id).inCooldown && !rejectedItemIds.bottom.includes(i.id));
       if (bottoms.length === 0) bottoms = pool.filter(i => i.category === 'bottom');
 
       bottoms.sort((a, b) => {
@@ -2046,7 +2088,7 @@
       let pickAccessory = (accessoriesPool.length > 0 && (occ === 'date' || occ === 'walk'))
         ? accessoriesPool[Math.floor(Math.random() * accessoriesPool.length)] : null;
 
-      selectedOutfit = {
+      return {
         top: pickTop || null,
         bottom: pickBottom || null,
         layer: pickLayer || null,
@@ -2054,8 +2096,6 @@
         shoes: pickShoes || null,
         accessories: pickAccessory || null
       };
-
-      finishOutfit(null, 'quiz');
     }
 
     function finishOutfit(event = null, source = 'quiz') {
@@ -2065,7 +2105,6 @@
       goToScreen('screen-final');
     }
 
-    /* ФІКСАЦІЯ АУТФІТУ ДНЯ */
     function confirmTodayOutfit(event = null) {
       if (event) triggerSparkles(event);
 
@@ -2111,7 +2150,6 @@
       alert('Аутфіт збережено в улюблені! ❤️');
     }
 
-    /* ПЕРЕГЛЯД ЗБЕРЕЖЕНИХ */
     function showFavorites() {
       const list = document.getElementById('favorites-list');
       list.innerHTML = '';
@@ -2126,7 +2164,8 @@
 
           let imagesHtml = '';
           Object.values(fav.outfit).filter(Boolean).forEach(i => {
-            imagesHtml += `<img src="${i.image}" style="width:54px; height:54px; border-radius:12px; object-fit:cover; margin-right:8px; box-shadow:0 4px 10px rgba(0,0,0,0.06);"/>`;
+            const isCut = i.isCutout !== false;
+            imagesHtml += `<div class="item-img-wrap ${isCut ? 'cutout-mode' : ''}" style="width:54px; height:54px; margin-right:8px; border-radius:12px; display:inline-flex;"><img src="${i.image}"/></div>`;
           });
 
           card.innerHTML = `
@@ -2152,7 +2191,6 @@
       showFavorites();
     }
 
-    /* СТРІЧКА ІСТОРІЇ ОБРАЗІВ */
     function showHistoryLog() {
       const list = document.getElementById('history-log-list');
       list.innerHTML = '';
@@ -2167,7 +2205,8 @@
 
           let imagesHtml = '';
           Object.values(log.outfit).filter(Boolean).forEach(i => {
-            imagesHtml += `<img src="${i.image}" style="width:54px; height:54px; border-radius:12px; object-fit:cover; margin-right:8px; box-shadow:0 4px 10px rgba(0,0,0,0.06);"/>`;
+            const isCut = i.isCutout !== false;
+            imagesHtml += `<div class="item-img-wrap ${isCut ? 'cutout-mode' : ''}" style="width:54px; height:54px; margin-right:8px; border-radius:12px; display:inline-flex;"><img src="${i.image}"/></div>`;
           });
 
           card.innerHTML = `
@@ -2193,9 +2232,12 @@
 
       Object.values(outfit).filter(Boolean).forEach(item => {
         const row = document.createElement('div');
+        const isCut = item.isCutout !== false;
         row.style = "display:flex; align-items:center; gap:12px; background:#F9F5F1; padding:10px; border-radius:14px; border:1px solid #E2D7CF;";
         row.innerHTML = `
-          <img src="${item.image}" style="width:60px; height:60px; border-radius:10px; object-fit:cover;" />
+          <div class="item-img-wrap ${isCut ? 'cutout-mode' : ''}" style="width:60px; height:60px; margin:0; border-radius:10px;">
+            <img src="${item.image}" />
+          </div>
           <div>
             <div style="font-weight:700; font-size:14px; color:#24130F;">${item.name}</div>
             <div style="font-size:12px; color:#7D564C; display:flex; align-items:center; gap:6px; margin-top:2px;">
@@ -2221,7 +2263,6 @@
       finishOutfit(null, 'history');
     }
 
-    /* МОДАЛКА */
     function openAddEditModal(itemId = null) {
       const modal = document.getElementById('add-modal');
       const title = document.getElementById('modal-title');
@@ -2247,6 +2288,9 @@
         previewImg.src = item.image;
         previewBox.style.display = 'block';
 
+        const isCut = item.isCutout !== false;
+        toggleCutoutPreview(isCut);
+
         document.getElementById('item-sleeve-attr').value = item.sleeve || 'short';
         document.getElementById('item-layer-type-attr').value = item.layerType || 'open';
         updateAttributePills(item.category, item.name.toLowerCase());
@@ -2259,6 +2303,7 @@
         selectPaletteColor('Чорний', '#1c1b1a');
         previewBox.style.display = 'none';
         document.getElementById('attribute-pills-box').style.display = 'none';
+        toggleCutoutPreview(true); // за замовчуванням увімкнено гарний виріз
       }
 
       modal.classList.add('active');
@@ -2329,6 +2374,7 @@
 
       const sleeve = document.getElementById('item-sleeve-attr').value;
       const layerType = document.getElementById('item-layer-type-attr').value;
+      const isCutout = document.getElementById('item-cutout-attr').value === 'true';
 
       if (!name) {
         alert('Введіть назву речі');
@@ -2346,6 +2392,7 @@
           wardrobe[index].colorHex = colorHex;
           wardrobe[index].sleeve = sleeve;
           wardrobe[index].layerType = layerType;
+          wardrobe[index].isCutout = isCutout;
           if (image) wardrobe[index].image = image;
         }
         const localIdx = customLocalItems.findIndex(i => i.id === id);
@@ -2359,6 +2406,7 @@
           colorHex: colorHex,
           sleeve: sleeve,
           layerType: layerType,
+          isCutout: isCutout,
           image: image
         };
         wardrobe.unshift(newItem);
@@ -2405,19 +2453,19 @@
       list.forEach(item => {
         const isFav = favoriteItemIds.includes(item.id);
         const cooldown = getItemCooldownStatus(item.id);
+        const isCut = item.isCutout !== false;
 
         const card = document.createElement('div');
         card.className = 'item-card interactive-press';
 
         let badgeHtml = '';
-        if (cooldown.inCooldown) {
-          badgeHtml = `<div class="cooldown-badge">⏳ Ще ${cooldown.cyclesLeft} дн.</div>`;
-        } else if (cooldown.isDeprioritized) {
-          badgeHtml = `<div class="cooldown-badge" style="background:#6B6D82;">Вчорашня</div>`;
+        if (cooldown.label) {
+          const badgeBg = cooldown.inCooldown ? 'rgba(36, 20, 16, 0.85)' : '#6B6D82';
+          badgeHtml = `<div class="cooldown-badge" style="background:${badgeBg};">${cooldown.label}</div>`;
         }
 
         card.innerHTML = `
-          <div class="item-img-wrap">
+          <div class="item-img-wrap ${isCut ? 'cutout-mode' : ''}">
             <img src="${item.image}" alt="${item.name}" />
             <button class="item-fav-btn" onclick="toggleItemFavorite('${item.id}', event)">${isFav ? '⭐' : '☆'}</button>
             ${badgeHtml}
@@ -2522,8 +2570,11 @@
 
         if (item) {
           slot.classList.add('filled');
+          const isCut = item.isCutout !== false;
           slot.innerHTML = `
-            <img src="${item.image}" alt="${item.name}"/>
+            <div class="item-img-wrap ${isCut ? 'cutout-mode' : ''}" style="width:100%; height:100%; margin:0; border:none; box-shadow:none;">
+              <img src="${item.image}" alt="${item.name}"/>
+            </div>
             <button class="slot-clear" onclick="event.stopPropagation(); clearSlot('${cat}')">✕</button>
           `;
         } else {
@@ -2569,20 +2620,20 @@
       list.forEach(item => {
         const isFav = favoriteItemIds.includes(item.id);
         const cooldown = getItemCooldownStatus(item.id);
+        const isCut = item.isCutout !== false;
 
         const card = document.createElement('div');
         card.className = 'item-card interactive-press';
         card.onclick = (e) => selectItem(item.id, e);
 
         let badgeHtml = '';
-        if (cooldown.inCooldown) {
-          badgeHtml = `<div class="cooldown-badge">⏳ Ще ${cooldown.cyclesLeft} дн.</div>`;
-        } else if (cooldown.isDeprioritized) {
-          badgeHtml = `<div class="cooldown-badge" style="background:#6B6D82;">Вчорашня</div>`;
+        if (cooldown.label) {
+          const badgeBg = cooldown.inCooldown ? 'rgba(36, 20, 16, 0.85)' : '#6B6D82';
+          badgeHtml = `<div class="cooldown-badge" style="background:${badgeBg};">${cooldown.label}</div>`;
         }
 
         card.innerHTML = `
-          <div class="item-img-wrap">
+          <div class="item-img-wrap ${isCut ? 'cutout-mode' : ''}">
             <img src="${item.image}" alt="${item.name}" loading="lazy"/>
             <button class="item-fav-btn" onclick="toggleItemFavorite('${item.id}', event)">${isFav ? '⭐' : '☆'}</button>
             ${badgeHtml}
@@ -2615,7 +2666,7 @@
       renderWardrobe();
     }
 
-    // Запуск застосунку
+    // Старт
     applyDynamicAtmosphere(0);
     initWeatherOnLoad();
     setRandomGreeting();
