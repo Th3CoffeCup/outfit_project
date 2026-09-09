@@ -3,22 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Мій Аутфіт Дня ✨ (v2.1)</title>
+  <title>Мій Аутфіт Дня ✨</title>
+  
+  <!-- Google Fonts: Playfair Display + Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --bg: #faf8f5;
-      --card-bg: #ffffff;
-      --accent: #2b2927;
-      --accent-soft: #f2eee9;
-      --accent-highlight: #d97757;
-      --text: #211f1e;
-      --muted: #8c857b;
-      --border: #eae4dc;
-      --danger: #d9534f;
-      --shadow: 0 4px 20px rgba(0,0,0,0.06);
-      --radius-lg: 24px;
-      --radius-md: 16px;
-      --radius-sm: 10px;
+      --bg: #FAF7F2;
+      --card-bg: #FFFFFF;
+      --text-main: #231F1D;
+      --text-muted: #877E76;
+      --accent-terracotta: #C06C53;
+      --accent-soft: #F3ECE2;
+      --border-sand: #EAE3D8;
+      --border-focus: #D1C5B4;
+      --shadow-paper: 0 8px 24px rgba(60, 47, 39, 0.04);
+      --shadow-hover: 0 12px 32px rgba(60, 47, 39, 0.08);
+      --radius-xl: 26px;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
     }
 
     * {
@@ -26,16 +33,18 @@
       -webkit-tap-highlight-color: transparent;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
     body {
       background-color: var(--bg);
-      color: var(--text);
+      color: var(--text-main);
       display: flex;
       justify-content: center;
       min-height: 100vh;
       overflow-x: hidden;
+      background-image: radial-gradient(rgba(192, 108, 83, 0.03) 1px, transparent 0);
+      background-size: 24px 24px;
     }
 
     #app {
@@ -53,118 +62,181 @@
       display: none;
       flex-direction: column;
       padding: 24px 20px;
-      animation: fadeIn 0.25s ease-out forwards;
+      animation: softFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     .screen.active {
       display: flex;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
+    @keyframes softFadeIn {
+      from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    h1 { font-size: 26px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.5px; }
-    h2 { font-size: 20px; font-weight: 600; margin-bottom: 12px; }
-    p { font-size: 14px; color: var(--muted); line-height: 1.4; }
+    /* Типографіка Lookbook */
+    h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 30px;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      color: var(--text-main);
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+    h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 21px;
+      font-weight: 600;
+      color: var(--text-main);
+      letter-spacing: -0.3px;
+      margin-bottom: 10px;
+    }
+    p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
 
+    /* Кнопки */
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 16px 20px;
-      border-radius: var(--radius-md);
-      font-size: 15px;
+      padding: 16px 22px;
+      border-radius: var(--radius-lg);
+      font-size: 14.5px;
       font-weight: 600;
       cursor: pointer;
       border: none;
-      transition: transform 0.15s ease, background-color 0.15s ease;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       text-align: center;
-      gap: 8px;
+      gap: 10px;
+      letter-spacing: 0.2px;
     }
-    .btn:active { transform: scale(0.97); }
-    .btn-primary { background: var(--accent); color: #fff; }
-    .btn-secondary { background: var(--accent-soft); color: var(--accent); }
-    .btn-outline { border: 1.5px solid var(--border); background: transparent; color: var(--text); }
-    .btn-danger { background: #ffebee; color: var(--danger); }
+    .btn:active {
+      transform: scale(0.97);
+    }
+    .btn-primary {
+      background: var(--text-main);
+      color: #FAF7F2;
+      box-shadow: 0 4px 16px rgba(35, 31, 29, 0.15);
+    }
+    .btn-primary:active {
+      background: #000;
+    }
+    .btn-secondary {
+      background: var(--card-bg);
+      color: var(--text-main);
+      border: 1px solid var(--border-sand);
+      box-shadow: var(--shadow-paper);
+    }
+    .btn-outline {
+      border: 1px solid var(--border-sand);
+      background: transparent;
+      color: var(--text-main);
+    }
 
+    /* Верхній бар */
     .top-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
+    }
+    .brand-mark {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
     }
     .icon-btn {
       background: var(--card-bg);
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-sand);
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       font-size: 18px;
+      color: var(--text-main);
+      box-shadow: var(--shadow-paper);
+      transition: all 0.2s ease;
+    }
+    .icon-btn:active {
+      transform: scale(0.92);
+      border-color: var(--border-focus);
     }
 
     .hero-header {
-      margin: 30px 0 24px;
-      text-align: left;
+      margin: 20px 0 28px;
     }
-    .hero-header span {
-      color: var(--accent-highlight);
-      font-weight: 600;
-      font-size: 13px;
+    .hero-subtitle {
+      font-size: 11.5px;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
+      color: var(--accent-terracotta);
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: block;
     }
 
+    /* Картки головного екрана */
     .choice-card {
       background: var(--card-bg);
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 20px;
-      margin-bottom: 14px;
+      border: 1px solid var(--border-sand);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      margin-bottom: 16px;
       cursor: pointer;
-      box-shadow: var(--shadow);
-      transition: border-color 0.2s ease, transform 0.15s ease;
+      box-shadow: var(--shadow-paper);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .choice-card:hover {
+      box-shadow: var(--shadow-hover);
+      border-color: var(--border-focus);
     }
     .choice-card:active {
-      transform: scale(0.98);
-      border-color: var(--accent);
+      transform: translateY(2px) scale(0.99);
     }
     .choice-card .icon-bubble {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
       background: var(--accent-soft);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 22px;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
     }
 
+    /* Слоти Moodboard / Polaroid */
     .outfit-slots-panel {
       position: sticky;
       top: 0;
-      background: var(--bg);
+      background: rgba(250, 247, 242, 0.94);
+      backdrop-filter: blur(12px);
       z-index: 10;
-      padding: 10px 0 16px;
-      border-bottom: 1px solid var(--border);
+      padding: 6px 0 16px;
       margin-bottom: 16px;
+      border-bottom: 1px solid rgba(234, 227, 216, 0.6);
     }
     .slots-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
+      gap: 10px;
     }
     .slot-item {
       background: var(--card-bg);
-      border: 1.5px dashed var(--border);
-      border-radius: var(--radius-sm);
-      height: 90px;
+      border: 1px solid var(--border-sand);
+      border-radius: var(--radius-lg);
+      height: 96px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -174,40 +246,46 @@
       cursor: pointer;
       text-align: center;
       padding: 4px;
+      box-shadow: var(--shadow-paper);
+      transition: all 0.2s ease;
     }
     .slot-item.filled {
-      border-style: solid;
-      border-color: var(--accent);
+      border: 1.5px solid var(--text-main);
+      box-shadow: var(--shadow-hover);
     }
     .slot-item img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 6px;
+      border-radius: 14px;
+      animation: softFadeIn 0.3s ease;
     }
     .slot-label {
       font-size: 10px;
       font-weight: 600;
-      color: var(--muted);
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
       text-transform: uppercase;
     }
     .slot-clear {
       position: absolute;
-      top: 3px;
-      right: 3px;
-      background: rgba(0,0,0,0.6);
+      top: 5px;
+      right: 5px;
+      background: rgba(35, 31, 29, 0.7);
       color: #fff;
       border: none;
       border-radius: 50%;
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
       font-size: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      backdrop-filter: blur(4px);
     }
 
+    /* Фільтри-чіпси */
     .filters-scroll {
       display: flex;
       gap: 8px;
@@ -219,42 +297,55 @@
     .filters-scroll::-webkit-scrollbar { display: none; }
     .filter-chip {
       background: var(--card-bg);
-      border: 1px solid var(--border);
-      padding: 8px 14px;
-      border-radius: 20px;
+      border: 1px solid var(--border-sand);
+      padding: 8px 16px;
+      border-radius: 30px;
       font-size: 13px;
       white-space: nowrap;
       cursor: pointer;
+      color: var(--text-main);
+      font-weight: 500;
+      transition: all 0.2s ease;
     }
     .filter-chip.active {
-      background: var(--accent);
-      color: #fff;
-      border-color: var(--accent);
+      background: var(--text-main);
+      color: #FAF7F2;
+      border-color: var(--text-main);
     }
 
+    /* Каталог речей */
     .items-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
+      gap: 14px;
       margin-bottom: 24px;
     }
     .item-card {
       background: var(--card-bg);
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-sand);
       padding: 10px;
       display: flex;
       flex-direction: column;
       cursor: pointer;
       position: relative;
+      box-shadow: var(--shadow-paper);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .item-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+    .item-card:active {
+      transform: scale(0.98);
     }
     .item-img-wrap {
       width: 100%;
-      height: 140px;
-      border-radius: var(--radius-sm);
+      height: 155px;
+      border-radius: var(--radius-md);
       background: var(--accent-soft);
       overflow: hidden;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -263,51 +354,58 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .item-card:hover .item-img-wrap img {
+      transform: scale(1.03);
     }
     .item-title {
       font-size: 13px;
       font-weight: 600;
-      margin-bottom: 2px;
+      margin-bottom: 3px;
+      line-height: 1.3;
     }
     .item-sub {
-      font-size: 11px;
-      color: var(--muted);
+      font-size: 11.5px;
+      color: var(--text-muted);
       display: flex;
       align-items: center;
       gap: 6px;
     }
     .color-dot {
-      width: 10px;
-      height: 10px;
+      width: 9px;
+      height: 9px;
       border-radius: 50%;
-      border: 1px solid rgba(0,0,0,0.15);
+      border: 1px solid rgba(0,0,0,0.1);
       display: inline-block;
     }
 
     .item-card-actions {
       display: flex;
       gap: 6px;
-      margin-top: 8px;
-      border-top: 1px solid var(--border);
+      margin-top: 10px;
+      border-top: 1px solid var(--border-sand);
       padding-top: 8px;
     }
     .action-sub-btn {
       flex: 1;
-      padding: 6px 0;
+      padding: 7px 0;
       font-size: 12px;
       font-weight: 600;
-      border-radius: 6px;
-      border: 1px solid var(--border);
+      border-radius: 8px;
+      border: 1px solid var(--border-sand);
       background: var(--bg);
+      color: var(--text-main);
       cursor: pointer;
     }
 
+    /* Блок рекомендацій */
     .recommendations-banner {
-      background: #fdf5ec;
-      border: 1px solid #f1d3b5;
-      border-radius: var(--radius-md);
-      padding: 12px 14px;
-      margin-bottom: 16px;
+      background: #F8F3ED;
+      border: 1px solid #E6D8C8;
+      border-radius: var(--radius-lg);
+      padding: 14px 16px;
+      margin-bottom: 18px;
       display: none;
     }
     .recommendations-banner.active {
@@ -317,84 +415,90 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
     .rec-header span {
       font-size: 12px;
-      font-weight: 600;
-      color: var(--accent-highlight);
+      font-weight: 700;
+      color: var(--accent-terracotta);
+      letter-spacing: 0.5px;
     }
 
-    /* Віджет розумної погоди для Кроку 3 */
+    /* Картка розумної погоди */
     .smart-weather-box {
-      background: #ffffff;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 16px;
-      margin-bottom: 18px;
-      box-shadow: var(--shadow);
+      background: #FFFFFF;
+      border: 1px solid var(--border-sand);
+      border-radius: var(--radius-xl);
+      padding: 20px;
+      margin-bottom: 22px;
+      box-shadow: var(--shadow-paper);
     }
     .weather-main-row {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 10px;
+      gap: 14px;
+      margin-bottom: 12px;
     }
     .weather-icon-large {
-      font-size: 32px;
+      font-size: 34px;
     }
     .weather-temp-main {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--text);
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text-main);
     }
     .weather-insights {
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      border-top: 1px dashed var(--border);
-      padding-top: 10px;
+      gap: 8px;
+      border-top: 1px dashed var(--border-sand);
+      padding-top: 12px;
       font-size: 13px;
-      line-height: 1.4;
+      line-height: 1.45;
     }
     .insight-item {
       display: flex;
       align-items: flex-start;
-      gap: 8px;
+      gap: 10px;
     }
 
+    /* Фінальна картка аутфіту */
     .final-look-card {
       background: var(--card-bg);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border);
-      padding: 20px;
-      box-shadow: var(--shadow);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-sand);
+      padding: 24px;
+      box-shadow: var(--shadow-hover);
       margin-bottom: 24px;
     }
     .final-items-list {
       display: flex;
       flex-direction: column;
-      gap: 14px;
-      margin: 16px 0;
+      gap: 16px;
+      margin: 20px 0;
     }
     .final-item-row {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 16px;
     }
     .final-item-row img {
-      width: 60px;
-      height: 60px;
-      border-radius: var(--radius-sm);
+      width: 68px;
+      height: 68px;
+      border-radius: var(--radius-md);
       object-fit: cover;
       background: var(--accent-soft);
+      box-shadow: var(--shadow-paper);
     }
 
+    /* Модальне вікно */
     .modal {
       display: none;
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
+      background: rgba(35, 31, 29, 0.45);
+      backdrop-filter: blur(6px);
       z-index: 100;
       align-items: flex-end;
       justify-content: center;
@@ -404,32 +508,40 @@
       background: var(--card-bg);
       width: 100%;
       max-width: 480px;
-      border-radius: 24px 24px 0 0;
-      padding: 24px 20px 40px;
+      border-radius: 28px 28px 0 0;
+      padding: 28px 22px 42px;
       max-height: 90vh;
       overflow-y: auto;
+      box-shadow: 0 -10px 40px rgba(0,0,0,0.1);
     }
     .form-group {
       margin-bottom: 16px;
     }
     .form-group label {
       display: block;
-      font-size: 12px;
-      font-weight: 600;
+      font-size: 11.5px;
+      font-weight: 700;
       margin-bottom: 8px;
       text-transform: uppercase;
-      color: var(--muted);
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
     }
     .form-control {
       width: 100%;
-      padding: 12px;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border);
+      padding: 13px 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-sand);
       font-size: 14px;
       outline: none;
+      background: #FAF9F7;
+      transition: all 0.2s ease;
     }
-    .form-control:focus { border-color: var(--accent); }
+    .form-control:focus {
+      border-color: var(--text-main);
+      background: #fff;
+    }
 
+    /* Палітра */
     .color-swatches-grid {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
@@ -445,20 +557,20 @@
       align-items: center;
       justify-content: center;
       position: relative;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      transition: transform 0.15s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+      transition: transform 0.2s ease;
     }
     .color-swatch-item:active { transform: scale(0.9); }
     .color-swatch-item.selected {
-      border-color: var(--accent);
-      transform: scale(1.1);
+      border-color: var(--text-main);
+      transform: scale(1.12);
     }
     .color-swatch-item.selected::after {
       content: '✓';
       color: #fff;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: bold;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
     }
     .color-swatch-item.light.selected::after {
       color: #000;
@@ -467,15 +579,15 @@
     .custom-color-btn {
       height: 38px;
       border-radius: 50%;
-      border: 1px dashed var(--border);
-      background: #f9f9f9;
+      border: 1px dashed var(--border-sand);
+      background: var(--bg);
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       position: relative;
       overflow: hidden;
-      font-size: 16px;
+      font-size: 15px;
     }
     .custom-color-btn input[type="color"] {
       position: absolute;
@@ -485,16 +597,25 @@
       cursor: pointer;
     }
 
+    .yesterday-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: rgba(35, 31, 29, 0.82);
+      color: #FAF7F2;
+      font-size: 9px;
+      padding: 3px 7px;
+      border-radius: 6px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      backdrop-filter: blur(4px);
+    }
     .empty-state {
       text-align: center;
       padding: 50px 20px;
-      color: var(--muted);
+      color: var(--text-muted);
       grid-column: 1 / -1;
-    }
-    .version-tag {
-      font-size: 10px;
-      color: var(--muted);
-      letter-spacing: 0.5px;
+      font-style: italic;
     }
   </style>
 </head>
@@ -504,46 +625,43 @@
     <!-- 1. ГОЛОВНИЙ ЕКРАН -->
     <section id="screen-home" class="screen active">
       <div class="top-bar">
-        <div>
-          <span style="font-weight: 700; font-size: 14px; letter-spacing: 0.5px;">OUTFIT STUDIO</span>
-          <span class="version-tag">v2.1</span>
-        </div>
+        <span class="brand-mark">Atelier Studio</span>
         <button class="icon-btn" onclick="openAddEditModal()" title="Додати річ">+</button>
       </div>
 
       <div class="hero-header">
-        <span>Що вдягнемо сьогодні?</span>
+        <span class="hero-subtitle">Ранковий ритуал</span>
         <h1 id="greeting-text">Привіт ✨</h1>
-        <p>Обери настрій на день або зазирни в гардероб.</p>
+        <p>Обери сьогоднішній настрій або зазирни у свою колекцію.</p>
       </div>
 
       <div class="choice-card" onclick="goToManualFlow()">
         <div class="icon-bubble">🌸</div>
         <h2>Я знаю, на що мій настрій</h2>
-        <p>Збери аутфіт власноруч: клікай на речі та дивись гармонійні поєднання.</p>
+        <p>Збери свій аутфіт власноруч: відкривай каталог та обирай найкращі поєднання.</p>
       </div>
 
       <div class="choice-card" onclick="goToQuizFlow()">
         <div class="icon-bubble">🎲</div>
         <h2>Не знаю, що вдягнути</h2>
-        <p>3 швидких запитання про день і вайб — готовий образ без роздумів.</p>
+        <p>Три легких запитання про формат дня та погоду — гармонійний сет без вагань.</p>
       </div>
 
       <div class="choice-card" style="background: var(--accent-soft); border-color: transparent;" onclick="goToWardrobeManager()">
         <div style="display:flex; justify-content:space-between; align-items:center;">
-          <div style="display:flex; align-items:center; gap:12px;">
-            <div style="font-size:22px;">👗</div>
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div style="font-size:24px;">👗</div>
             <div>
-              <h2 style="font-size:16px; margin:0;">Мій гардероб</h2>
+              <h2 style="font-size:16px; margin:0 0 2px;">Мій гардероб</h2>
               <p style="font-size:12px; margin:0;">Всього речей: <span id="total-items-count">0</span> • переглянути / змінити</p>
             </div>
           </div>
-          <span style="font-size:18px; color:var(--accent);">→</span>
+          <span style="font-size:18px; color:var(--text-main);">→</span>
         </div>
       </div>
 
       <div style="margin-top: 10px;">
-        <button class="btn btn-outline" style="width: 100%; font-size: 13px;" onclick="showFavorites()">
+        <button class="btn btn-outline" style="width: 100%; font-size: 13.5px;" onclick="showFavorites()">
           ❤️ Мої збережені аутфіти (<span id="fav-count">0</span>)
         </button>
       </div>
@@ -553,13 +671,13 @@
     <section id="screen-wardrobe-manager" class="screen">
       <div class="top-bar">
         <button class="icon-btn" onclick="goToScreen('screen-home')">←</button>
-        <span style="font-weight: 600; font-size: 14px;">Мій гардероб</span>
+        <span style="font-weight: 600; font-size: 14px; letter-spacing: 0.5px;">Мій гардероб</span>
         <button class="icon-btn" onclick="openAddEditModal()">+</button>
       </div>
 
       <div style="display:flex; gap:8px; margin-bottom:14px;">
-        <button class="btn btn-outline" style="flex:1; padding:8px; font-size:11px;" onclick="exportWardrobeBackup()">💾 Зберегти копію</button>
-        <button class="btn btn-outline" style="flex:1; padding:8px; font-size:11px;" onclick="document.getElementById('import-file-input').click()">📥 Відновити</button>
+        <button class="btn btn-outline" style="flex:1; padding:9px; font-size:11.5px;" onclick="exportWardrobeBackup()">💾 Зберегти копію</button>
+        <button class="btn btn-outline" style="flex:1; padding:9px; font-size:11.5px;" onclick="document.getElementById('import-file-input').click()">📥 Відновити</button>
         <input type="file" id="import-file-input" accept=".json" style="display:none;" onchange="importWardrobeBackup(this)" />
       </div>
 
@@ -580,7 +698,7 @@
     <section id="screen-manual" class="screen">
       <div class="top-bar">
         <button class="icon-btn" onclick="goToScreen('screen-home')">←</button>
-        <span style="font-weight: 600; font-size: 14px;">Конструктор образу</span>
+        <span style="font-weight: 600; font-size: 14px; letter-spacing: 0.5px;">Конструктор образу</span>
         <button class="icon-btn" onclick="openAddEditModal()">+</button>
       </div>
 
@@ -604,9 +722,9 @@
       <div id="rec-banner" class="recommendations-banner">
         <div class="rec-header">
           <span id="rec-title">✨ Пропозиції до обраного:</span>
-          <button style="border:none; background:none; font-size:12px; color:var(--muted); cursor:pointer;" onclick="hideRecommendations()">Сховати</button>
+          <button style="border:none; background:none; font-size:12px; color:var(--text-muted); cursor:pointer;" onclick="hideRecommendations()">Сховати</button>
         </div>
-        <div id="rec-items-scroll" style="display:flex; gap:8px; overflow-x:auto; padding:4px 0;"></div>
+        <div id="rec-items-scroll" style="display:flex; gap:10px; overflow-x:auto; padding:4px 0;"></div>
       </div>
 
       <div class="filters-scroll" id="color-filters"></div>
@@ -628,14 +746,14 @@
     <section id="screen-quiz" class="screen">
       <div class="top-bar">
         <button class="icon-btn" onclick="handleQuizBack()">←</button>
-        <span style="font-weight: 600; font-size: 14px;">Швидкий підбір</span>
+        <span style="font-weight: 600; font-size: 14px; letter-spacing: 0.5px;">Швидкий підбір</span>
         <button class="icon-btn" onclick="goToScreen('screen-home')" title="На головну">✕</button>
       </div>
 
       <div id="quiz-step-container">
-        <!-- КРОК 1 (Без віджета погоди) -->
+        <!-- КРОК 1 -->
         <div id="q-step-1" class="quiz-step">
-          <p style="text-transform:uppercase; font-size:11px; font-weight:700; color:var(--accent-highlight); margin-bottom:8px;">Крок 1 з 3</p>
+          <p style="text-transform:uppercase; font-size:11px; font-weight:700; color:var(--accent-terracotta); margin-bottom:8px; letter-spacing:1px;">Крок 1 з 3</p>
           <h2>Який формат сьогоднішнього дня?</h2>
           <div style="display:flex; flex-direction:column; gap:12px; margin-top:20px;">
             <button class="btn btn-secondary" onclick="answerQuiz('occasion', 'walk')">🚶‍♀️ Прогулянка</button>
@@ -647,7 +765,7 @@
 
         <!-- КРОК 2 -->
         <div id="q-step-2" class="quiz-step" style="display:none;">
-          <p style="text-transform:uppercase; font-size:11px; font-weight:700; color:var(--accent-highlight); margin-bottom:8px;">Крок 2 з 3</p>
+          <p style="text-transform:uppercase; font-size:11px; font-weight:700; color:var(--accent-terracotta); margin-bottom:8px; letter-spacing:1px;">Крок 2 з 3</p>
           <h2>Який кольоровий настрій?</h2>
           <div style="display:flex; flex-direction:column; gap:12px; margin-top:20px;">
             <button class="btn btn-secondary" onclick="answerQuiz('palette', 'dark')">🖤 Темний / монохром</button>
@@ -657,22 +775,21 @@
           </div>
         </div>
 
-        <!-- КРОК 3: РОЗУМНА ПОГОДА ТА КОМФОРТ -->
+        <!-- КРОК 3 -->
         <div id="q-step-3" class="quiz-step" style="display:none;">
-          <p style="text-transform:uppercase; font-size:11px; font-weight:700; color:var(--accent-highlight); margin-bottom:8px;">Крок 3 з 3</p>
+          <p style="text-transform:uppercase; font-size:11px; font-weight:700; color:var(--accent-terracotta); margin-bottom:8px; letter-spacing:1px;">Крок 3 з 3</p>
           <h2>Що з комфортом і погодою?</h2>
 
-          <!-- Віджет погоди з'являється СУВОРО ТУТ -->
           <div id="smart-weather-box" class="smart-weather-box">
             <div class="weather-main-row">
               <div class="weather-icon-large" id="w-icon">⛅</div>
               <div>
-                <div class="weather-temp-main" id="w-temp">Визначаємо температуру...</div>
-                <div style="font-size:12px; color:var(--muted);" id="w-location">Твоя локація</div>
+                <div class="weather-temp-main" id="w-temp">Визначаємо погоду...</div>
+                <div style="font-size:12px; color:var(--text-muted);" id="w-location">Твоя локація</div>
               </div>
             </div>
             <div class="weather-insights" id="w-insights">
-              <div class="insight-item">⏳ <span>Аналізуємо прогноз на найближчі години...</span></div>
+              <div class="insight-item">⏳ <span>Аналізуємо температуру та небо...</span></div>
             </div>
           </div>
 
@@ -688,17 +805,17 @@
     <section id="screen-final" class="screen">
       <div class="top-bar">
         <button class="icon-btn" onclick="goToScreen('screen-home')">✕</button>
-        <span style="font-weight: 600; font-size: 14px;">Образ на сьогодні</span>
+        <span style="font-weight: 600; font-size: 14px; letter-spacing: 0.5px;">Образ на сьогодні</span>
         <button class="icon-btn" onclick="toggleFavoriteCurrent()">❤️</button>
       </div>
 
       <div class="final-look-card">
-        <span style="font-size: 11px; text-transform:uppercase; letter-spacing:1px; color:var(--accent-highlight); font-weight:700;">Готовий сет</span>
+        <span style="font-size: 11px; text-transform:uppercase; letter-spacing:1.5px; color:var(--accent-terracotta); font-weight:700;">Готовий сет</span>
         <h2 style="margin-top: 4px;">Ти виглядаєш неперевершено!</h2>
         <div class="final-items-list" id="final-items-container"></div>
       </div>
 
-      <div style="margin-top:auto; display:flex; flex-direction:column; gap:10px;">
+      <div style="margin-top:auto; display:flex; flex-direction:column; gap:12px;">
         <button class="btn btn-primary" onclick="confirmTodayOutfit()">Сьогодні я в цьому ✨</button>
         <button class="btn btn-outline" onclick="goToManualFlow()">Змінити щось в образі</button>
       </div>
@@ -708,8 +825,8 @@
     <section id="screen-favorites" class="screen">
       <div class="top-bar">
         <button class="icon-btn" onclick="goToScreen('screen-home')">←</button>
-        <span style="font-weight: 600; font-size: 14px;">Улюблені аутфіти</span>
-        <div style="width:40px;"></div>
+        <span style="font-weight: 600; font-size: 14px; letter-spacing: 0.5px;">Улюблені аутфіти</span>
+        <div style="width:42px;"></div>
       </div>
       <div id="favorites-list" style="display:flex; flex-direction:column; gap:16px;"></div>
     </section>
@@ -718,9 +835,9 @@
   <!-- МОДАЛКА З ПАЛІТРОЮ -->
   <div class="modal" id="add-modal">
     <div class="modal-sheet">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-        <h2 id="modal-title">Додати річ</h2>
-        <button style="border:none; background:none; font-size:22px; cursor:pointer;" onclick="closeAddEditModal()">✕</button>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <h2 id="modal-title" style="margin:0;">Додати річ</h2>
+        <button style="border:none; background:none; font-size:24px; cursor:pointer; color:var(--text-muted);" onclick="closeAddEditModal()">✕</button>
       </div>
 
       <input type="hidden" id="edit-item-id" />
@@ -736,7 +853,7 @@
       </div>
 
       <div id="img-preview-box" style="display:none; margin-bottom:14px; text-align:center;">
-        <img id="img-preview" src="" style="width:90px; height:90px; border-radius:12px; object-fit:cover; border:1.5px solid var(--border);" />
+        <img id="img-preview" src="" style="width:96px; height:96px; border-radius:14px; object-fit:cover; border:1.5px solid var(--border-sand); box-shadow:var(--shadow-paper);" />
       </div>
 
       <div class="form-group">
@@ -755,15 +872,15 @@
       </div>
 
       <div class="form-group">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-          <label style="margin:0;">Колір: <b id="selected-color-label" style="color:var(--text); text-transform:none;">Чорний</b></label>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <label style="margin:0;">Колір: <b id="selected-color-label" style="color:var(--text-main); text-transform:none;">Чорний</b></label>
         </div>
         <div class="color-swatches-grid" id="swatches-container"></div>
         <input type="hidden" id="selected-color-val" value="Чорний" />
         <input type="hidden" id="selected-color-hex" value="#1c1b1a" />
       </div>
 
-      <button class="btn btn-primary" style="width:100%; margin-top:8px;" onclick="saveItem()">Зберегти в гардероб</button>
+      <button class="btn btn-primary" style="width:100%; margin-top:10px;" onclick="saveItem()">Зберегти в гардероб</button>
     </div>
   </div>
 
@@ -802,9 +919,6 @@
     let quizAnswers = {};
     let currentQuizStep = 1;
 
-    let weatherDataCache = null;
-
-    /* ЗАВАНТАЖЕННЯ ДАНИХ */
     async function loadWardrobeFromGitHub() {
       try {
         const res = await fetch('wardrobe.json?t=' + Date.now());
@@ -848,16 +962,13 @@
       updateCounts();
     }
 
-    /* ==========================================================================
-       SMART WEATHER ENGINE (Точний час доби, динаміка тепла/холоду, опади та вітер)
-       ========================================================================== */
+    /* SMART WEATHER ENGINE */
     async function fetchSmartWeather() {
       const tempEl = document.getElementById('w-temp');
       const iconEl = document.getElementById('w-icon');
       const insightsEl = document.getElementById('w-insights');
       const locEl = document.getElementById('w-location');
 
-      // Функція виконання запиту до Open-Meteo з погодинними даними
       const queryWeather = async (lat, lon, cityName = 'Київ') => {
         locEl.innerText = cityName;
         const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code,wind_speed_10m&hourly=temperature_2m,precipitation_probability,precipitation,wind_speed_10m,weather_code&timezone=auto`;
@@ -865,15 +976,13 @@
         const res = await fetch(url);
         if (!res.ok) throw new Error('Помилка API');
         const data = await res.json();
-        weatherDataCache = data;
         renderSmartWeather(data);
       };
 
-      // Спроба отримати реальну GPS-геолокацію пристрою дівчини
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           pos => queryWeather(pos.coords.latitude, pos.coords.longitude, 'Поточна локація'),
-          () => queryWeather(50.45, 30.52, 'Київ') // fallback
+          () => queryWeather(50.45, 30.52, 'Київ')
         );
       } else {
         queryWeather(50.45, 30.52, 'Київ');
@@ -888,11 +997,10 @@
       const now = new Date();
       const currentHour = now.getHours();
       const currentTemp = Math.round(data.current.temperature_2m);
-      const windSpeed = Math.round(data.current.wind_speed_10m / 3.6); // перевід у м/с
+      const windSpeed = Math.round(data.current.wind_speed_10m / 3.6);
 
       tempEl.innerText = `Зараз ${currentTemp}°C`;
 
-      // Хмарність та іконка
       const code = data.current.weather_code;
       let cloudDesc = 'Ясно';
       let icon = '☀️';
@@ -908,34 +1016,29 @@
         icon = '🌧️';
       }
 
-      // Якщо зараз ніч/пізній вечір і небо без опадів
       if ((currentHour >= 21 || currentHour <= 5) && icon === '☀️') {
         icon = '🌙';
       }
       iconEl.innerText = icon;
 
-      // Аналіз погодинного тренду
       const hourlyTemps = data.hourly.temperature_2m;
       const hourlyPrecip = data.hourly.precipitation;
       const hourlyPrecipProb = data.hourly.precipitation_probability;
 
-      // Зріз на найближчі 8 годин
       const nextHoursTemps = hourlyTemps.slice(currentHour, currentHour + 8);
       const maxNextTemp = Math.max(...nextHoursTemps);
       const minNextTemp = Math.min(...nextHoursTemps);
 
       let insightsHtml = '';
 
-      // 1. Динаміка температури (Ранок vs Вечір)
       if (currentHour >= 6 && currentHour < 15) {
-        // Ранок/день
         if (maxNextTemp > currentTemp + 2) {
           const peakIndex = nextHoursTemps.indexOf(maxNextTemp);
           const peakHour = (currentHour + peakIndex) % 24;
           insightsHtml += `
             <div class="insight-item">
               <span>📈</span>
-              <span>Зараз <b>${currentTemp}°C</b>, але близько <b>${peakHour}:00</b> потеплішає до <b>+${Math.round(maxNextTemp)}°C</b>. Вдень буде комфортно тепло!</span>
+              <span>Зараз <b>${currentTemp}°C</b>, але близько <b>${peakHour}:00</b> потеплішає до <b>+${Math.round(maxNextTemp)}°C</b>. Вдень буде тепло!</span>
             </div>`;
         } else {
           insightsHtml += `
@@ -945,25 +1048,23 @@
             </div>`;
         }
       } else {
-        // Вечір / ніч
         if (minNextTemp < currentTemp - 2) {
           const dropIndex = nextHoursTemps.indexOf(minNextTemp);
           const dropHour = (currentHour + dropIndex) % 24;
           insightsHtml += `
             <div class="insight-item">
               <span>📉</span>
-              <span>Зараз <b>${currentTemp}°C</b>, але до <b>${dropHour}:00</b> похолоднішає до <b>+${Math.round(minNextTemp)}°C</b>. Якщо плануєш довгу прогулянку — зіпка знадобиться!</span>
+              <span>Зараз <b>${currentTemp}°C</b>, але до <b>${dropHour}:00</b> похолоднішає до <b>+${Math.round(minNextTemp)}°C</b>. Якщо плануєш бути на вулиці довго — зіпка знадобиться!</span>
             </div>`;
         } else {
           insightsHtml += `
             <div class="insight-item">
               <span>✨</span>
-              <span>Приємний теплий вечір, сильного похолодання не очікується.</span>
+              <span>Приємний вечір, помітного похолодання не очікується.</span>
             </div>`;
         }
       }
 
-      // 2. Опади на найближчі години
       let rainHour = -1;
       let rainIntensity = 'слабкий';
 
@@ -978,31 +1079,30 @@
 
       if (rainHour !== -1) {
         insightsHtml += `
-          <div class="insight-item" style="color:var(--danger);">
+          <div class="insight-item" style="color:var(--accent-terracotta);">
             <span>🌧️</span>
-            <span>Попередження: близько <b>${rainHour}:00</b> можливий <b>${rainIntensity} дощ</b>. Візьми парасольку або щільне взуття!</span>
+            <span>Увага: близько <b>${rainHour}:00</b> можливий <b>${rainIntensity} дощ</b>. Захопи парасольку чи щільне взуття!</span>
           </div>`;
       } else {
         insightsHtml += `
           <div class="insight-item">
             <span>🌈</span>
-            <span>Опадів найближчим часом не прогнозується. Небо: ${cloudDesc.toLowerCase()}.</span>
+            <span>Опадів найближчим часом не очікується. Небо: ${cloudDesc.toLowerCase()}.</span>
           </div>`;
       }
 
-      // 3. Вітер
       if (windSpeed >= 6) {
         insightsHtml += `
           <div class="insight-item">
             <span>💨</span>
-            <span>Відчутний вітер (<b>~${windSpeed} м/с</b>) — на відкритому просторі може здаватися прохолодніше.</span>
+            <span>Відчутний вітер (<b>~${windSpeed} м/с</b>) — на відкритому просторі здаватиметься прохолодніше.</span>
           </div>`;
       }
 
       insightsEl.innerHTML = insightsHtml;
     }
 
-    /* КВІЗ ТА НАВІГАЦІЯ НАЗАД */
+    /* КВІЗ ТА НАВІГАЦІЯ */
     function goToQuizFlow() {
       if (wardrobe.length < 2) {
         alert('Додайте хоча б кілька речей у гардероб!');
@@ -1020,7 +1120,6 @@
       document.getElementById('q-step-2').style.display = step === 2 ? 'block' : 'none';
       document.getElementById('q-step-3').style.display = step === 3 ? 'block' : 'none';
 
-      // Віджет завантажується та оновлюється ТІЛЬКИ на 3 кроці
       if (step === 3) {
         fetchSmartWeather();
       }
@@ -1067,7 +1166,6 @@
       let pickShoes = null;
       let pickLayer = null;
 
-      // 1. Палітра
       const p = quizAnswers.palette;
       if (p === 'dark') {
         pickTop = tops.find(i => ['чорн', 'графіт', 'темн'].some(c => i.color.toLowerCase().includes(c))) || tops[0];
@@ -1079,7 +1177,6 @@
         pickTop = tops[Math.floor(Math.random() * tops.length)];
       }
 
-      // 2. Формат дня
       const occ = quizAnswers.occasion;
       if (occ === 'study') {
         pickBottom = bottoms.find(i => i.name.toLowerCase().includes('штани')) || bottoms[0];
@@ -1091,7 +1188,6 @@
         pickBottom = bottoms[0];
       }
 
-      // 3. Взуття (не зникає)
       if (occ === 'active') {
         pickShoes = shoesPool.find(i => ['balance', 'кросівк', 'sneaker', 'ню'].some(n => i.name.toLowerCase().includes(n))) || shoesPool[0];
       } else if (occ === 'study' || occ === 'date') {
@@ -1100,7 +1196,6 @@
         pickShoes = shoesPool[0];
       }
 
-      // 4. Другий шар (зіпка)
       if (quizAnswers.layer === 'zipper' && layers.length > 0) {
         if (pickTop && pickTop.color.toLowerCase().includes('червон')) {
           pickLayer = layers.find(l => l.color.toLowerCase().includes('син') || l.color.toLowerCase().includes('чорн')) || layers[0];
@@ -1135,8 +1230,8 @@
         row.innerHTML = `
           <img src="${item.image}" alt="${item.name}" />
           <div>
-            <div style="font-weight:600; font-size:14px;">${item.name}</div>
-            <div style="font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px;">
+            <div style="font-weight:600; font-size:14.5px;">${item.name}</div>
+            <div style="font-size:12px; color:var(--text-muted); display:flex; align-items:center; gap:6px; margin-top:2px;">
               <span class="color-dot" style="background:${item.colorHex || '#999'}"></span>
               ${item.color}
             </div>
@@ -1184,12 +1279,12 @@
 
           let imagesHtml = '';
           Object.values(fav.outfit).filter(Boolean).forEach(i => {
-            imagesHtml += `<img src="${i.image}" style="width:48px; height:48px; border-radius:8px; object-fit:cover; margin-right:6px;"/>`;
+            imagesHtml += `<img src="${i.image}" style="width:52px; height:52px; border-radius:10px; object-fit:cover; margin-right:8px; box-shadow:var(--shadow-paper);"/>`;
           });
 
           card.innerHTML = `
-            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-              <span style="font-size:12px; font-weight:600; color:var(--muted);">${fav.date}</span>
+            <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+              <span style="font-size:12px; font-weight:600; color:var(--text-muted);">${fav.date}</span>
             </div>
             <div style="display:flex; flex-wrap:wrap; gap:6px;">${imagesHtml}</div>
           `;
@@ -1200,7 +1295,7 @@
       goToScreen('screen-favorites');
     }
 
-    /* МОДАЛКА, РЕДАГУВАННЯ ТА ІНТЕРФЕЙС ГАРДЕРОБА */
+    /* МОДАЛКА ТА КАТАЛОГ */
     function openAddEditModal(itemId = null) {
       const modal = document.getElementById('add-modal');
       const title = document.getElementById('modal-title');
@@ -1379,7 +1474,7 @@
           </div>
           <div class="item-card-actions">
             <button class="action-sub-btn" onclick="openAddEditModal('${item.id}')">✏️ Змінити</button>
-            <button class="action-sub-btn" style="color:var(--danger);" onclick="deleteItem('${item.id}')">🗑️</button>
+            <button class="action-sub-btn" style="color:var(--accent-terracotta);" onclick="deleteItem('${item.id}')">🗑️</button>
           </div>
         `;
         grid.appendChild(card);
@@ -1499,7 +1594,7 @@
       });
 
       if (list.length === 0) {
-        grid.innerHTML = `<div class="empty-state">Не знайдено речей.</div>`;
+        grid.innerHTML = `<div class="empty-state">Не знайдено речей для цього фільтра.</div>`;
         return;
       }
 
@@ -1563,11 +1658,11 @@
 
       suggestions.slice(0, 4).forEach(s => {
         const thumb = document.createElement('div');
-        thumb.style = "min-width: 70px; cursor: pointer; text-align:center;";
+        thumb.style = "min-width: 72px; cursor: pointer; text-align:center;";
         thumb.onclick = () => selectItem(s.id);
         thumb.innerHTML = `
-          <img src="${s.image}" style="width:70px; height:70px; border-radius:8px; object-fit:cover; border:1px solid var(--border);"/>
-          <div style="font-size:10px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:70px;">${s.name}</div>
+          <img src="${s.image}" style="width:72px; height:72px; border-radius:12px; object-fit:cover; border:1px solid var(--border-sand); box-shadow:var(--shadow-paper);"/>
+          <div style="font-size:10.5px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:72px; margin-top:4px;">${s.name}</div>
         `;
         container.appendChild(thumb);
       });
