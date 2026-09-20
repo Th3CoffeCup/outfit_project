@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Atelier Studio ✨ [v3.10 Thermal Split]</title>
+  <title>Atelier Studio ✨ [v3.10 Capsule & Trip]</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -412,7 +412,7 @@
       -webkit-backdrop-filter: blur(20px);
       border-top: 1.5px solid var(--glass-border-top);
       border-left: 1px solid var(--glass-border-top);
-      border-right: 1px solid var(--glass-border-bot);
+      border-right: 1.5px solid var(--glass-border-bot);
       border-bottom: 1.5px solid var(--glass-border-bot);
       border-radius: var(--radius-md);
       height: 96px;
@@ -483,7 +483,7 @@
       -webkit-backdrop-filter: blur(20px);
       border-top: 1.5px solid var(--glass-border-top);
       border-left: 1px solid var(--glass-border-top);
-      border-right: 1px solid var(--glass-border-bot);
+      border-right: 1.5px solid var(--glass-border-bot);
       border-bottom: 1.5px solid var(--glass-border-bot);
       padding: 8px 15px;
       border-radius: 30px;
@@ -514,7 +514,7 @@
       border-radius: var(--radius-lg);
       border-top: 1.5px solid var(--glass-border-top);
       border-left: 1px solid var(--glass-border-top);
-      border-right: 1px solid var(--glass-border-bot);
+      border-right: 1.5px solid var(--glass-border-bot);
       border-bottom: 1.5px solid var(--glass-border-bot);
       padding: 12px;
       display: flex;
@@ -1431,7 +1431,6 @@
       return ['top', 'bottom', 'layer', 'shoes'].map(c => outfit[c] ? outfit[c].id : 'none').join('||');
     }
 
-    /* ЗАМІНА "НЕ ХОЧУ ЦЕ" */
     function rejectAndSwapItem(category) {
       const currentItem = selectedOutfit[category];
       if (!currentItem) return;
@@ -1539,7 +1538,7 @@
       if (!item) return;
 
       selectedOutfit = { top: null, bottom: null, layer: null, outerwear: null, shoes: null, accessories: null };
-      const slotCat = (item.category === 'bottom_light') ? 'bottom' : (item.category === 'bottom_pants' ? 'bottom' : item.category);
+      const slotCat = (['bottom_light', 'bottom_pants'].includes(item.category)) ? 'bottom' : item.category;
       selectedOutfit[slotCat] = item;
       currentOutfitSource = 'manual';
       goToManualFlow();
@@ -1986,7 +1985,7 @@
       return weightedPool[Math.floor(Math.random() * weightedPool.length)];
     }
 
-    /* РОЗУМНИЙ АЛГОРИТМ З ТЕМПЕРАТУРНИМ ФІЛЬТРОМ ДЛЯ СПІДНИЦЬ */
+    /* АЛГОРИТМ З ТЕМПЕРАТУРНИМ ФІЛЬТРОМ ДЛЯ ШТАНІВ ТА СПІДНИЦЬ */
     function generateQuizOutfit() {
       currentOutfitSource = 'quiz';
       rejectedItemIds = { top: [], bottom_pants: [], bottom_light: [], layer: [], outerwear: [], shoes: [], accessories: [] };
@@ -2040,7 +2039,7 @@
       let matchedTops = tops;
       if (!isSurprise) {
         if (p === 'dark') matchedTops = tops.filter(i => ['чорн', 'графіт', 'темн'].some(c => i.color.toLowerCase().includes(c)));
-        else if (p === 'bright') matchedTops = tops.filter(i => ['червон', 'рожев', 'зелен', 'жовт', 'синій'].some(c => i.color.toLowerCase().includes(c)));
+        else if (p === 'bright') matchedTops = tops.filter(i => ['червон', 'рожев', 'зелен', 'жовт', 'помаранч', 'синій'].some(c => i.color.toLowerCase().includes(c)));
         else if (p === 'pastel') matchedTops = tops.filter(i => ['беж', 'світло-сір', 'біл', 'блакит'].some(c => i.color.toLowerCase().includes(c)));
       }
       if (!matchedTops || matchedTops.length === 0) matchedTops = tops;
@@ -2049,7 +2048,6 @@
 
       // 3. НИЗ (ТЕМПЕРАТУРНИЙ ФІЛЬТР: НИЖЧЕ 21°C ТІЛЬКИ ШТАНИ/ДЖИНСИ)
       let allowedBottomCategories = ['bottom_pants'];
-      // Спідниці/шорти пропонуємо лише якщо тепло (>= 21°C)
       if (currentOutdoorTemp !== null && currentOutdoorTemp >= 21) {
         allowedBottomCategories.push('bottom_light');
       }
@@ -2059,7 +2057,7 @@
         bottoms = pool.filter(i => allowedBottomCategories.includes(i.category));
       }
       if (bottoms.length === 0) {
-        bottoms = pool.filter(i => ['bottom_pants', 'bottom_light'].includes(i.category)); // абсолютний fallback
+        bottoms = pool.filter(i => ['bottom_pants', 'bottom_light'].includes(i.category));
       }
 
       let pickBottom = pickWeightedRandomItem(bottoms);
@@ -2580,7 +2578,7 @@
       const item = wardrobe.find(i => i.id === id);
       if (!item) return;
 
-      const slotCat = (item.category === 'bottom_light' || item.category === 'bottom_pants') ? 'bottom' : item.category;
+      const slotCat = (['bottom_light', 'bottom_pants'].includes(item.category)) ? 'bottom' : item.category;
       selectedOutfit[slotCat] = item;
       renderSlots();
     }
