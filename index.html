@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Atelier Studio ✨ [v3.13 Smart Matching Suite]</title>
+  <title>Atelier Studio ✨ [v3.13.1 Fixed Sort]</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -281,7 +281,7 @@
       color: var(--text-main);
       border-top: 1.5px solid var(--glass-border-top);
       border-left: 1px solid var(--glass-border-top);
-      border-right: 1px solid var(--glass-border-bot);
+      border-right: 1.5px solid var(--glass-border-bot);
       border-bottom: 1.5px solid var(--glass-border-bot);
       box-shadow: var(--shadow-aero), inset 0 2px 2px rgba(255,255,255,0.7);
     }
@@ -1364,7 +1364,7 @@
     let managerSmartFilters = { favs: false, ready: false, rare: false };
     let modalSelectedOutfit = null;
     let currentlyViewedItemId = null;
-    let isSmartSortedMode = false; // Режим розумного підбору в каталозі
+    let isSmartSortedMode = false;
 
     function startFreshManualFlow() {
       selectedOutfit = { top: null, bottom: null, layer: null, outerwear: null, shoes: null, accessories: null };
@@ -1386,7 +1386,7 @@
         return { inCooldown: false, isDeprioritized: false, cyclesLeft: 0, label: '', daysIdle: cyclesAgo };
       }
 
-      const COOLDOWN_CYCLES = ['bottom', 'layer', 'outerwear'].includes(item?.category) ? 2 : 3;
+      const COOLDOWN_CYCLES = ['bottom', 'bottom_pants', 'bottom_light', 'layer', 'outerwear'].includes(item?.category) ? 2 : 3;
 
       if (cyclesAgo < COOLDOWN_CYCLES) {
         const left = COOLDOWN_CYCLES - cyclesAgo;
@@ -1512,7 +1512,6 @@
       });
     }
 
-    /* КНОПКА РОЗУМНОГО ПІДБОРУ В КАТАЛОЗІ */
     function applySmartSuggestionsToCatalog() {
       isSmartSortedMode = !isSmartSortedMode;
       const btn = event.currentTarget;
@@ -2083,7 +2082,6 @@
       let bottoms = pool.filter(i => ['bottom', 'bottom_pants', 'bottom_light'].includes(i.category) && !getItemCooldownStatus(i.id).inCooldown);
       if (bottoms.length === 0) bottoms = pool.filter(i => ['bottom', 'bottom_pants', 'bottom_light'].includes(i.category));
 
-      // Пріоритет за погодою для квізу: якщо нижче 21°C, віддаємо перевагу штанам/джинсам
       if (currentOutdoorTemp !== null && currentOutdoorTemp < 21) {
         const warmBottoms = bottoms.filter(i => !i.name.toLowerCase().includes('спідниц') && !i.name.toLowerCase().includes('шорт') && i.category !== 'bottom_light');
         if (warmBottoms.length > 0) bottoms = warmBottoms;
@@ -2623,13 +2621,12 @@
       if (smartFilters.ready) list = list.filter(item => !getItemCooldownStatus(item.id).inCooldown);
       if (smartFilters.rare) list = list.filter(item => wearHistory.filter(h => h.id === item.id).length <= 1);
 
-      // РОЗУМНЕ СОРТУВАННЯ ЗА ПОГОДОЮ ТА ПРИДБАТИМ ВИБОРОМ (якщо активовано кнопку підбору)
+      // Сортуємо тільки якщо користувач натиснув кнопку розумного добору
       if (isSmartSortedMode) {
         list.sort((a, b) => {
           let scoreA = getItemCooldownStatus(a.id).inCooldown ? -50 : 10;
           let scoreB = getItemCooldownStatus(b.id).inCooldown ? -50 : 10;
 
-          // Якщо температура прохолодна (< 21), штани/джинси отримують плюс, спідниці/шорти мінус
           const isLightA = a.category === 'bottom_light' || a.name.toLowerCase().includes('спідниц') || a.name.toLowerCase().includes('шорт');
           const isLightB = b.category === 'bottom_light' || b.name.toLowerCase().includes('спідниц') || b.name.toLowerCase().includes('шорт');
 
@@ -2641,7 +2638,6 @@
             if (isLightB) scoreB += 25; else scoreB -= 25;
           }
 
-          // Перевірка гармонії кольору з уже вибраним верхом
           if (selectedOutfit.top) {
             const topColor = selectedOutfit.top.color.toLowerCase();
             if (a.color.toLowerCase() === topColor) scoreA += 15;
