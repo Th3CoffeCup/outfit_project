@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Atelier Studio ✨ [v3.10 Capsule & Trip]</title>
+  <title>Atelier Studio ✨ [v3.11 Smart Suggestions]</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -412,7 +412,7 @@
       -webkit-backdrop-filter: blur(20px);
       border-top: 1.5px solid var(--glass-border-top);
       border-left: 1px solid var(--glass-border-top);
-      border-right: 1.5px solid var(--glass-border-bot);
+      border-right: 1px solid var(--glass-border-bot);
       border-bottom: 1.5px solid var(--glass-border-bot);
       border-radius: var(--radius-md);
       height: 96px;
@@ -483,7 +483,7 @@
       -webkit-backdrop-filter: blur(20px);
       border-top: 1.5px solid var(--glass-border-top);
       border-left: 1px solid var(--glass-border-top);
-      border-right: 1.5px solid var(--glass-border-bot);
+      border-right: 1px solid var(--glass-border-bot);
       border-bottom: 1.5px solid var(--glass-border-bot);
       padding: 8px 15px;
       border-radius: 30px;
@@ -514,7 +514,7 @@
       border-radius: var(--radius-lg);
       border-top: 1.5px solid var(--glass-border-top);
       border-left: 1px solid var(--glass-border-top);
-      border-right: 1.5px solid var(--glass-border-bot);
+      border-right: 1px solid var(--glass-border-bot);
       border-bottom: 1.5px solid var(--glass-border-bot);
       padding: 12px;
       display: flex;
@@ -1056,25 +1056,25 @@
 
       <div class="outfit-slots-panel">
         <div class="slots-grid">
-          <div class="slot-item interactive-press" id="slot-top" onclick="filterByCategory('top')">
+          <div class="slot-item interactive-press" id="slot-top" onclick="openSlotSelector('top')">
             <span class="slot-label">Базовий верх</span>
           </div>
-          <div class="slot-item interactive-press" id="slot-bottom" onclick="filterByCategory('bottom_pants')">
+          <div class="slot-item interactive-press" id="slot-bottom" onclick="openSlotSelector('bottom')">
             <span class="slot-label">Низ</span>
           </div>
-          <div class="slot-item interactive-press" id="slot-layer" onclick="filterByCategory('layer')">
+          <div class="slot-item interactive-press" id="slot-layer" onclick="openSlotSelector('layer')">
             <span class="slot-label">Теплий шар</span>
           </div>
-          <div class="slot-item interactive-press" id="slot-shoes" onclick="filterByCategory('shoes')">
+          <div class="slot-item interactive-press" id="slot-shoes" onclick="openSlotSelector('shoes')">
             <span class="slot-label">Взуття</span>
           </div>
         </div>
 
         <div class="extra-slots-row">
-          <div class="slot-item interactive-press" style="height:70px;" id="slot-outerwear" onclick="filterByCategory('outerwear')">
+          <div class="slot-item interactive-press" style="height:70px;" id="slot-outerwear" onclick="openSlotSelector('outerwear')">
             <span class="slot-label">+ Верхній одяг</span>
           </div>
-          <div class="slot-item interactive-press" style="height:70px;" id="slot-accessories" onclick="filterByCategory('accessories')">
+          <div class="slot-item interactive-press" style="height:70px;" id="slot-accessories" onclick="openSlotSelector('accessories')">
             <span class="slot-label">+ Аксесуари</span>
           </div>
         </div>
@@ -1242,6 +1242,22 @@
     </div>
   </div>
 
+  <!-- ШТОРКА РОЗУМНИХ ПІДКАЗОК ДЛЯ СЛОТА В КОНСТРУКТОРІ -->
+  <div class="modal" id="slot-selector-modal">
+    <div class="modal-sheet">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h2 id="slot-selector-title" style="margin:0;">Виберіть річ</h2>
+        <button style="border:none; background:none; font-size:26px; cursor:pointer; color:#7D564C;" onclick="closeSlotSelector()">✕</button>
+      </div>
+      <p style="font-size:13px; margin-bottom:14px;">Рекомендації на основі гармонії та свіжості:</p>
+      <div id="slot-suggestions-grid" class="items-grid" style="margin-bottom:16px;"></div>
+      
+      <button class="btn btn-secondary interactive-press" style="width:100%; padding:14px; font-size:13.5px;" onclick="switchToFullCatalogForSlot()">
+        📂 Переглянути весь гардероб цієї категорії
+      </button>
+    </div>
+  </div>
+
   <!-- МОДАЛКА ДОДАВАННЯ/РЕДАГУВАННЯ -->
   <div class="modal" id="add-modal">
     <div class="modal-sheet">
@@ -1354,6 +1370,7 @@
     let managerSmartFilters = { favs: false, ready: false, rare: false };
     let modalSelectedOutfit = null;
     let currentlyViewedItemId = null;
+    let activeSlotForSelection = null; // Для шторки підказок
 
     function startFreshManualFlow() {
       selectedOutfit = { top: null, bottom: null, layer: null, outerwear: null, shoes: null, accessories: null };
@@ -1498,6 +1515,67 @@
         `;
         container.appendChild(row);
       });
+    }
+
+    /* ВІКНО РОЗУМНИХ ПІДКАЗОК ДЛЯ СЛОТА */
+    function openSlotSelector(category) {
+      activeSlotForSelection = category;
+      const titles = { top: 'Базовий верх', bottom: 'Низ', layer: 'Теплий шар', shoes: 'Взуття', outerwear: 'Верхній одяг', accessories: 'Аксесуари' };
+      document.getElementById('slot-selector-title').innerText = `Вибрати: ${titles[category] || category}`;
+
+      const grid = document.getElementById('slot-suggestions-grid');
+      grid.innerHTML = '';
+
+      // Фільтруємо відповідні речі
+      let pool = wardrobe.filter(i => {
+        if (category === 'bottom') return ['bottom_pants', 'bottom_light'].includes(i.category);
+        return i.category === category;
+      });
+
+      // Спочатку показуємо свіжі/готові речі як рекомендації
+      pool.sort((a,b) => (getItemCooldownStatus(a.id).inCooldown ? 1 : 0) - (getItemCooldownStatus(b.id).inCooldown ? 1 : 0));
+
+      if (pool.length === 0) {
+        grid.innerHTML = '<p style="grid-column: span 2; text-align:center; padding:20px;">Немає речей у цій категорії.</p>';
+      } else {
+        pool.slice(0, 4).forEach(item => {
+          const isFav = favoriteItemIds.includes(item.id);
+          const cooldown = getItemCooldownStatus(item.id);
+          const card = document.createElement('div');
+          card.className = 'item-card interactive-press';
+          card.onclick = () => selectItemFromModal(item.id);
+
+          let badgeHtml = cooldown.label ? `<div class="cooldown-badge" style="background:${cooldown.inCooldown?'rgba(36,20,16,0.85)':'#6B6D82'};">${cooldown.label}</div>` : '';
+
+          card.innerHTML = `
+            <div class="item-img-wrap">
+              <img src="${item.image}" />
+              ${badgeHtml}
+            </div>
+            <div class="item-title">${item.name}</div>
+            <div class="item-sub"><span class="color-dot" style="background:${item.colorHex}"></span>${item.color}</div>
+          `;
+          grid.appendChild(card);
+        });
+      }
+
+      document.getElementById('slot-selector-modal').classList.add('active');
+    }
+
+    function closeSlotSelector() {
+      document.getElementById('slot-selector-modal').classList.remove('active');
+    }
+
+    function selectItemFromModal(itemId) {
+      selectItem(itemId);
+      closeSlotSelector();
+    }
+
+    function switchToFullCatalogForSlot() {
+      closeSlotSelector();
+      const catMap = { top: 'top', bottom: 'bottom_pants', layer: 'layer', shoes: 'shoes', outerwear: 'outerwear', accessories: 'accessories' };
+      filterByCategory(catMap[activeSlotForSelection] || 'all');
+      goToManualFlow();
     }
 
     function openItemBigView(itemId, event) {
@@ -1985,7 +2063,6 @@
       return weightedPool[Math.floor(Math.random() * weightedPool.length)];
     }
 
-    /* АЛГОРИТМ З ТЕМПЕРАТУРНИМ ФІЛЬТРОМ ДЛЯ ШТАНІВ ТА СПІДНИЦЬ */
     function generateQuizOutfit() {
       currentOutfitSource = 'quiz';
       rejectedItemIds = { top: [], bottom_pants: [], bottom_light: [], layer: [], outerwear: [], shoes: [], accessories: [] };
@@ -2015,7 +2092,6 @@
       const p = quizAnswers.palette;
       const isSurprise = (p === 'surprise');
 
-      // 1. Теплий шар
       let pickLayer = null;
       if (quizAnswers.layer === 'layer_needed' || isSurprise) {
         let layers = pool.filter(i => i.category === 'layer' && !getItemCooldownStatus(i.id).inCooldown);
@@ -2028,7 +2104,6 @@
         ['светр', 'худі', 'світшот'].some(w => pickLayer.name.toLowerCase().includes(w))
       );
 
-      // 2. Базовий верх
       let tops = pool.filter(i => i.category === 'top' && !getItemCooldownStatus(i.id).inCooldown);
       if (tops.length === 0) tops = pool.filter(i => i.category === 'top');
 
@@ -2039,14 +2114,13 @@
       let matchedTops = tops;
       if (!isSurprise) {
         if (p === 'dark') matchedTops = tops.filter(i => ['чорн', 'графіт', 'темн'].some(c => i.color.toLowerCase().includes(c)));
-        else if (p === 'bright') matchedTops = tops.filter(i => ['червон', 'рожев', 'зелен', 'жовт', 'помаранч', 'синій'].some(c => i.color.toLowerCase().includes(c)));
+        else if (p === 'bright') matchedTops = tops.filter(i => ['червон', 'рожев', 'зелен', 'жовт', 'синій'].some(c => i.color.toLowerCase().includes(c)));
         else if (p === 'pastel') matchedTops = tops.filter(i => ['беж', 'світло-сір', 'біл', 'блакит'].some(c => i.color.toLowerCase().includes(c)));
       }
       if (!matchedTops || matchedTops.length === 0) matchedTops = tops;
 
       let pickTop = pickWeightedRandomItem(matchedTops);
 
-      // 3. НИЗ (ТЕМПЕРАТУРНИЙ ФІЛЬТР: НИЖЧЕ 21°C ТІЛЬКИ ШТАНИ/ДЖИНСИ)
       let allowedBottomCategories = ['bottom_pants'];
       if (currentOutdoorTemp !== null && currentOutdoorTemp >= 21) {
         allowedBottomCategories.push('bottom_light');
@@ -2062,11 +2136,9 @@
 
       let pickBottom = pickWeightedRandomItem(bottoms);
 
-      // 4. Взуття
       let shoesPool = pool.filter(i => i.category === 'shoes');
       let pickShoes = pickWeightedRandomItem(shoesPool);
 
-      // 5. Верхній одяг та аксесуари
       let outerwears = pool.filter(i => i.category === 'outerwear');
       let pickOuterwear = (currentOutdoorTemp !== null && currentOutdoorTemp <= 12 && outerwears.length > 0) ? outerwears[0] : null;
 
