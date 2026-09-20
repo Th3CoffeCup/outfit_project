@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Atelier Studio ✨ [v3.13.1 Fixed Sort]</title>
+  <title>Atelier Studio ✨ [v3.13.2 Weather Priority Fixed]</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -323,7 +323,7 @@
       border-top: 1.5px solid var(--glass-border-top);
       border-left: 1px solid var(--glass-border-top);
       border-bottom: 1.5px solid var(--glass-border-bot);
-      border-right: 1px solid var(--glass-border-bot);
+      border-right: 1.5px solid var(--glass-border-bot);
       box-shadow: var(--shadow-aero), inset 0 1.5px 1.5px rgba(255,255,255,0.7);
       border-radius: 50%;
       width: 46px;
@@ -949,10 +949,13 @@
     </div>
 
     <div class="debug-title">Температура (<span id="debug-temp-val">18</span>°C)</div>
-    <div style="display:flex; gap:6px; margin-bottom:12px;">
+    <div style="display:flex; gap:6px; margin-bottom:8px;">
       <button class="debug-mini-btn" style="flex:1;" onclick="adjustDebugTemp(-1)">➖ Холодніше</button>
       <button class="debug-mini-btn" style="flex:1;" onclick="adjustDebugTemp(1)">➕ Тепліше</button>
     </div>
+    <button class="btn btn-outline interactive-press" style="width:100%; padding:8px; font-size:11.5px; color:#24130F; border-color:#D8CCC3; margin-bottom:12px;" onclick="resetDebugTempToReal()">
+      🔄 Скинути температуру (за погодою)
+    </button>
 
     <div class="debug-title">Кулдаун гардероба</div>
     <button class="btn btn-outline interactive-press" style="width:100%; padding:10px; font-size:12px; color:#24130F; border-color:#D8CCC3;" onclick="resetWearHistory()">
@@ -1085,7 +1088,6 @@
         </div>
       </div>
 
-      <!-- КНОПКА РОЗУМНОГО ДОБОРУ НА ОСНОВІ ВЖЕ ВИБРАНОГО -->
       <div style="margin-bottom: 12px;">
         <button class="btn btn-primary interactive-press" style="width:100%; padding:14px; font-size:13.5px;" onclick="applySmartSuggestionsToCatalog()">
           ✨ Підібрати ідеї до обраного одягу
@@ -1358,6 +1360,7 @@
     let quizAnswers = {};
     let currentQuizStep = 1;
     let currentOutdoorTemp = 18;
+    let realFetchedTemp = 18;
 
     let isFadeLayerActive = false;
     let smartFilters = { favs: false, ready: false, rare: false };
@@ -1730,6 +1733,12 @@
       renderWardrobe();
     }
 
+    function resetDebugTempToReal() {
+      currentOutdoorTemp = realFetchedTemp;
+      document.getElementById('debug-temp-val').innerText = currentOutdoorTemp;
+      renderWardrobe();
+    }
+
     function delayedNavigate(element, callback) {
       if (element) element.classList.add('is-pressed');
       setTimeout(() => {
@@ -1854,6 +1863,7 @@
       
       const realTemp = Math.round(data.current.temperature_2m);
       const feelsLike = Math.round(data.current.apparent_temperature);
+      realFetchedTemp = realTemp;
       currentOutdoorTemp = realTemp;
       document.getElementById('debug-temp-val').innerText = currentOutdoorTemp;
 
@@ -2621,32 +2631,40 @@
       if (smartFilters.ready) list = list.filter(item => !getItemCooldownStatus(item.id).inCooldown);
       if (smartFilters.rare) list = list.filter(item => wearHistory.filter(h => h.id === item.id).length <= 1);
 
-      // Сортуємо тільки якщо користувач натиснув кнопку розумного добору
-      if (isSmartSortedMode) {
-        list.sort((a, b) => {
-          let scoreA = getItemCooldownStatus(a.id).inCooldown ? -50 : 10;
-          let scoreB = getItemCooldownStatus(b.id).inCooldown ? -50 : 10;
+      // Сортування працює ТІЛЬКИ в режимі розумного підбору або автоматично виставляє пріоритет за погодою для низу
+      list.sort((a, b) => {
+        const isBottomA = ['bottom', 'bottom_pants', 'bottom_light'].includes(a.category);
+        const isBottomB = ['bottom', 'bottom_pants', 'bottom_light'].includes(b.category);
 
+        if (isBottomA && isBottomB) {
           const isLightA = a.category === 'bottom_light' || a.name.toLowerCase().includes('спідниц') || a.name.toLowerCase().includes('шорт');
           const isLightB = b.category === 'bottom_light' || b.name.toLowerCase().includes('спідниц') || b.name.toLowerCase().includes('шорт');
 
           if (currentOutdoorTemp < 21) {
-            if (!isLightA) scoreA += 25; else scoreA -= 25;
-            if (!isLightB) scoreB += 25; else scoreB -= 25;
+            // При прохолодній погоді штани/джинси вище, спідниці нижче
+            if (!isLightA && isLightB) return -1;
+            if (isLightA && !isLightB) return 1;
           } else {
-            if (isLightA) scoreA += 25; else scoreA -= 25;
-            if (isLightB) scoreB += 25; else scoreB -= 25;
+            // У спеку спідниці/шорти вище, штани нижче
+            if (isLightA && !isLightB) return -1;
+            if (!isLightA && isLightB) return 1;
           }
+        }
+
+        if (isSmartSortedMode) {
+          let scoreA = getItemCooldownStatus(a.id).inCooldown ? -50 : 10;
+          let scoreB = getItemCooldownStatus(b.id).inCooldown ? -50 : 10;
 
           if (selectedOutfit.top) {
             const topColor = selectedOutfit.top.color.toLowerCase();
             if (a.color.toLowerCase() === topColor) scoreA += 15;
             if (b.color.toLowerCase() === topColor) scoreB += 15;
           }
-
           return scoreB - scoreA;
-        });
-      }
+        }
+
+        return 0;
+      });
 
       if (list.length === 0) {
         grid.innerHTML = `<div class="empty-state">Не знайдено речей для цієї комбінації фільтрів.</div>`;
