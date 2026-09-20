@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Atelier Studio ✨ [v3.12 UX & Lab Edition]</title>
+  <title>Atelier Studio ✨ [v3.13 Smart Matching Suite]</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -281,7 +281,7 @@
       color: var(--text-main);
       border-top: 1.5px solid var(--glass-border-top);
       border-left: 1px solid var(--glass-border-top);
-      border-right: 1.5px solid var(--glass-border-bot);
+      border-right: 1px solid var(--glass-border-bot);
       border-bottom: 1.5px solid var(--glass-border-bot);
       box-shadow: var(--shadow-aero), inset 0 2px 2px rgba(255,255,255,0.7);
     }
@@ -1039,8 +1039,7 @@
       <div class="filters-scroll" id="manager-cat-filters">
         <button class="filter-chip active interactive-press" onclick="filterManagerCat('all', this)">Всі</button>
         <button class="filter-chip interactive-press" onclick="filterManagerCat('top', this)">Верх</button>
-        <button class="filter-chip interactive-press" onclick="filterManagerCat('bottom_pants', this)">Штани/Джинси</button>
-        <button class="filter-chip interactive-press" onclick="filterManagerCat('bottom_light', this)">Спідниці/Шорти</button>
+        <button class="filter-chip interactive-press" onclick="filterManagerCat('bottom', this)">Низ</button>
         <button class="filter-chip interactive-press" onclick="filterManagerCat('layer', this)">Теплий шар</button>
         <button class="filter-chip interactive-press" onclick="filterManagerCat('outerwear', this)">Верхній одяг</button>
         <button class="filter-chip interactive-press" onclick="filterManagerCat('shoes', this)">Взуття</button>
@@ -1065,7 +1064,7 @@
           <div class="slot-item interactive-press" id="slot-top" onclick="filterByCategory('top')">
             <span class="slot-label">Базовий верх</span>
           </div>
-          <div class="slot-item interactive-press" id="slot-bottom" onclick="filterByCategory('bottom_pants')">
+          <div class="slot-item interactive-press" id="slot-bottom" onclick="filterByCategory('bottom')">
             <span class="slot-label">Низ</span>
           </div>
           <div class="slot-item interactive-press" id="slot-layer" onclick="filterByCategory('layer')">
@@ -1086,6 +1085,13 @@
         </div>
       </div>
 
+      <!-- КНОПКА РОЗУМНОГО ДОБОРУ НА ОСНОВІ ВЖЕ ВИБРАНОГО -->
+      <div style="margin-bottom: 12px;">
+        <button class="btn btn-primary interactive-press" style="width:100%; padding:14px; font-size:13.5px;" onclick="applySmartSuggestionsToCatalog()">
+          ✨ Підібрати ідеї до обраного одягу
+        </button>
+      </div>
+
       <div class="filters-scroll" id="smart-toggles">
         <button class="filter-chip interactive-press" id="smart-filter-favs" onclick="toggleSmartFilter('favs')">⭐ Тільки улюблені</button>
         <button class="filter-chip interactive-press" id="smart-filter-ready" onclick="toggleSmartFilter('ready')">⏳ Тільки готові</button>
@@ -1097,8 +1103,7 @@
       <div class="filters-scroll" id="cat-filters">
         <button class="filter-chip active interactive-press" onclick="filterByCategory('all', this)">Все</button>
         <button class="filter-chip interactive-press" onclick="filterByCategory('top', this)">Верх</button>
-        <button class="filter-chip interactive-press" onclick="filterByCategory('bottom_pants', this)">Штани/Джинси</button>
-        <button class="filter-chip interactive-press" onclick="filterByCategory('bottom_light', this)">Спідниці/Шорти</button>
+        <button class="filter-chip interactive-press" onclick="filterByCategory('bottom', this)">Низ</button>
         <button class="filter-chip interactive-press" onclick="filterByCategory('layer', this)">Теплий шар</button>
         <button class="filter-chip interactive-press" onclick="filterByCategory('outerwear', this)">Верхній одяг</button>
         <button class="filter-chip interactive-press" onclick="filterByCategory('shoes', this)">Взуття</button>
@@ -1288,8 +1293,7 @@
         <label>Категорія гардероба</label>
         <select id="item-cat-input" class="form-control" onchange="handleCategoryChange(this.value)">
           <option value="top">Базовий верх (футболка, топ, лонгслів, сорочка)</option>
-          <option value="bottom_pants">Штани / Джинси (теплий низ)</option>
-          <option value="bottom_light">Спідниці / Шорти (легкий низ)</option>
+          <option value="bottom">Низ (штани, джинси, спідниці, шорти)</option>
           <option value="layer">Теплий шар (зіпка, худі, светр, кардиган)</option>
           <option value="outerwear">Верхній одяг (куртка, пальто, тренч, бомбер)</option>
           <option value="shoes">Взуття (кросівки, кеди, черевики)</option>
@@ -1344,7 +1348,7 @@
     let selectedOutfit = { top: null, bottom: null, layer: null, outerwear: null, shoes: null, accessories: null };
     let currentOutfitSource = 'quiz';
 
-    let rejectedItemIds = { top: [], bottom_pants: [], bottom_light: [], layer: [], outerwear: [], shoes: [], accessories: [] };
+    let rejectedItemIds = { top: [], bottom: [], layer: [], outerwear: [], shoes: [], accessories: [] };
     let recentOutfitSignatures = JSON.parse(localStorage.getItem('recent_outfit_sigs') || '[]');
 
     let activeCategoryFilter = 'all';
@@ -1353,16 +1357,18 @@
     let currentUploadBase64 = null;
     let quizAnswers = {};
     let currentQuizStep = 1;
-    let currentOutdoorTemp = 18; // За замовчуванням для лаби
+    let currentOutdoorTemp = 18;
 
     let isFadeLayerActive = false;
     let smartFilters = { favs: false, ready: false, rare: false };
     let managerSmartFilters = { favs: false, ready: false, rare: false };
     let modalSelectedOutfit = null;
     let currentlyViewedItemId = null;
+    let isSmartSortedMode = false; // Режим розумного підбору в каталозі
 
     function startFreshManualFlow() {
       selectedOutfit = { top: null, bottom: null, layer: null, outerwear: null, shoes: null, accessories: null };
+      isSmartSortedMode = false;
       currentOutfitSource = 'manual';
       goToManualFlow();
     }
@@ -1380,7 +1386,7 @@
         return { inCooldown: false, isDeprioritized: false, cyclesLeft: 0, label: '', daysIdle: cyclesAgo };
       }
 
-      const COOLDOWN_CYCLES = ['bottom_pants', 'bottom_light', 'layer', 'outerwear'].includes(item?.category) ? 2 : 3;
+      const COOLDOWN_CYCLES = ['bottom', 'layer', 'outerwear'].includes(item?.category) ? 2 : 3;
 
       if (cyclesAgo < COOLDOWN_CYCLES) {
         const left = COOLDOWN_CYCLES - cyclesAgo;
@@ -1441,14 +1447,14 @@
       const currentItem = selectedOutfit[category];
       if (!currentItem) return;
 
-      const catKey = (category === 'bottom') ? 'bottom_pants' : category;
+      const catKey = category;
 
       if (!rejectedItemIds[catKey]) rejectedItemIds[catKey] = [];
       if (!rejectedItemIds[catKey].includes(currentItem.id)) {
         rejectedItemIds[catKey].push(currentItem.id);
       }
 
-      let pool = wardrobe.filter(i => i.category === catKey || (catKey === 'bottom_pants' && i.category === 'bottom'));
+      let pool = wardrobe.filter(i => i.category === catKey || (catKey === 'bottom' && ['bottom_pants', 'bottom_light'].includes(i.category)));
       if (pool.length <= 1) {
         alert('У гардеробі немає іншої речі цієї категорії!');
         return;
@@ -1506,6 +1512,23 @@
       });
     }
 
+    /* КНОПКА РОЗУМНОГО ПІДБОРУ В КАТАЛОЗІ */
+    function applySmartSuggestionsToCatalog() {
+      isSmartSortedMode = !isSmartSortedMode;
+      const btn = event.currentTarget;
+      if (isSmartSortedMode) {
+        btn.style.background = '#24130F';
+        btn.style.color = '#FFF6F3';
+        btn.innerText = '✨ Режим підбору активовано (нагорі найкраще)';
+      } else {
+        btn.style.background = '';
+        btn.style.color = '';
+        btn.innerText = '✨ Підібрати ідеї до обраного одягу';
+      }
+      renderWardrobe();
+      triggerSparkles();
+    }
+
     function openItemBigView(itemId, event) {
       if (event) event.stopPropagation();
       const item = wardrobe.find(i => i.id === itemId);
@@ -1561,10 +1584,8 @@
 
       const catSelect = document.getElementById('item-cat-input');
 
-      if (['спідниц', 'шорт'].some(w => lower.includes(w))) {
-        catSelect.value = 'bottom_light';
-      } else if (['джинс', 'штани', 'карго', 'брюк'].some(w => lower.includes(w))) {
-        catSelect.value = 'bottom_pants';
+      if (['спідниц', 'шорт', 'джинс', 'штани', 'карго', 'брюк'].some(w => lower.includes(w))) {
+        catSelect.value = 'bottom';
       } else if (['зіпк', 'худі', 'светр', 'світшот', 'кардиган', 'жакет', 'кофт'].some(w => lower.includes(w))) {
         catSelect.value = 'layer';
       } else if (['куртк', 'пальто', 'тренч', 'бомбер', 'пуховик'].some(w => lower.includes(w))) {
@@ -1707,6 +1728,7 @@
       if (tempEl) {
         tempEl.innerHTML = `${currentOutdoorTemp}°C <span style="font-size:14px; font-weight:600; opacity:0.75;">(Lab Mode)</span>`;
       }
+      renderWardrobe();
     }
 
     function delayedNavigate(element, callback) {
@@ -1925,6 +1947,14 @@
           </div>`;
       }
 
+      if (windSpeed >= 6) {
+        insightsHtml += `
+          <div class="insight-item">
+            <span>💨</span>
+            <span>Відчутний вітер (<b>~${windSpeed} м/с</b>) — на відкритому просторі відчувається прохолодніше.</span>
+          </div>`;
+      }
+
       if (insightsEl) insightsEl.innerHTML = insightsHtml;
     }
 
@@ -1994,7 +2024,7 @@
 
     function generateQuizOutfit() {
       currentOutfitSource = 'quiz';
-      rejectedItemIds = { top: [], bottom_pants: [], bottom_light: [], layer: [], outerwear: [], shoes: [], accessories: [] };
+      rejectedItemIds = { top: [], bottom: [], layer: [], outerwear: [], shoes: [], accessories: [] };
 
       let attempts = 0;
       let chosenCandidate = null;
@@ -2050,17 +2080,13 @@
 
       let pickTop = pickWeightedRandomItem(matchedTops);
 
-      let allowedBottomCategories = ['bottom_pants', 'bottom'];
-      if (currentOutdoorTemp !== null && currentOutdoorTemp >= 21) {
-        allowedBottomCategories.push('bottom_light');
-      }
+      let bottoms = pool.filter(i => ['bottom', 'bottom_pants', 'bottom_light'].includes(i.category) && !getItemCooldownStatus(i.id).inCooldown);
+      if (bottoms.length === 0) bottoms = pool.filter(i => ['bottom', 'bottom_pants', 'bottom_light'].includes(i.category));
 
-      let bottoms = pool.filter(i => allowedBottomCategories.includes(i.category) && !getItemCooldownStatus(i.id).inCooldown);
-      if (bottoms.length === 0) {
-        bottoms = pool.filter(i => allowedBottomCategories.includes(i.category));
-      }
-      if (bottoms.length === 0) {
-        bottoms = pool.filter(i => ['bottom_pants', 'bottom_light', 'bottom'].includes(i.category));
+      // Пріоритет за погодою для квізу: якщо нижче 21°C, віддаємо перевагу штанам/джинсам
+      if (currentOutdoorTemp !== null && currentOutdoorTemp < 21) {
+        const warmBottoms = bottoms.filter(i => !i.name.toLowerCase().includes('спідниц') && !i.name.toLowerCase().includes('шорт') && i.category !== 'bottom_light');
+        if (warmBottoms.length > 0) bottoms = warmBottoms;
       }
 
       let pickBottom = pickWeightedRandomItem(bottoms);
@@ -2272,7 +2298,7 @@
         title.innerText = 'Редагувати річ';
         idField.value = item.id;
         nameField.value = item.name;
-        catField.value = item.category;
+        catField.value = ['bottom_pants', 'bottom_light'].includes(item.category) ? 'bottom' : item.category;
         urlField.value = item.image.startsWith('data:') ? '' : item.image;
         selectPaletteColor(item.color, item.colorHex || '#1c1b1a');
         previewImg.src = item.image;
@@ -2280,7 +2306,7 @@
 
         document.getElementById('item-sleeve-attr').value = item.sleeve || 'short';
         document.getElementById('item-layer-type-attr').value = item.layerType || 'open';
-        updateAttributePills(item.category, item.name.toLowerCase());
+        updateAttributePills(catField.value, item.name.toLowerCase());
       } else {
         title.innerText = 'Додати річ';
         idField.value = '';
@@ -2424,8 +2450,7 @@
 
       let list = wardrobe.filter(item => {
         if (managerFilter === 'all') return true;
-        if (managerFilter === 'bottom_pants') return item.category === 'bottom_pants' || item.category === 'bottom';
-        if (managerFilter === 'bottom_light') return item.category === 'bottom_light';
+        if (managerFilter === 'bottom') return ['bottom', 'bottom_pants', 'bottom_light'].includes(item.category);
         return item.category === managerFilter;
       });
 
@@ -2590,14 +2615,42 @@
 
       let list = wardrobe.filter(item => {
         if (activeCategoryFilter === 'all') return true;
-        if (activeCategoryFilter === 'bottom_pants') return item.category === 'bottom_pants' || item.category === 'bottom';
-        if (activeCategoryFilter === 'bottom_light') return item.category === 'bottom_light';
+        if (activeCategoryFilter === 'bottom') return ['bottom', 'bottom_pants', 'bottom_light'].includes(item.category);
         return item.category === activeCategoryFilter;
       });
 
       if (smartFilters.favs) list = list.filter(item => favoriteItemIds.includes(item.id));
       if (smartFilters.ready) list = list.filter(item => !getItemCooldownStatus(item.id).inCooldown);
       if (smartFilters.rare) list = list.filter(item => wearHistory.filter(h => h.id === item.id).length <= 1);
+
+      // РОЗУМНЕ СОРТУВАННЯ ЗА ПОГОДОЮ ТА ПРИДБАТИМ ВИБОРОМ (якщо активовано кнопку підбору)
+      if (isSmartSortedMode) {
+        list.sort((a, b) => {
+          let scoreA = getItemCooldownStatus(a.id).inCooldown ? -50 : 10;
+          let scoreB = getItemCooldownStatus(b.id).inCooldown ? -50 : 10;
+
+          // Якщо температура прохолодна (< 21), штани/джинси отримують плюс, спідниці/шорти мінус
+          const isLightA = a.category === 'bottom_light' || a.name.toLowerCase().includes('спідниц') || a.name.toLowerCase().includes('шорт');
+          const isLightB = b.category === 'bottom_light' || b.name.toLowerCase().includes('спідниц') || b.name.toLowerCase().includes('шорт');
+
+          if (currentOutdoorTemp < 21) {
+            if (!isLightA) scoreA += 25; else scoreA -= 25;
+            if (!isLightB) scoreB += 25; else scoreB -= 25;
+          } else {
+            if (isLightA) scoreA += 25; else scoreA -= 25;
+            if (isLightB) scoreB += 25; else scoreB -= 25;
+          }
+
+          // Перевірка гармонії кольору з уже вибраним верхом
+          if (selectedOutfit.top) {
+            const topColor = selectedOutfit.top.color.toLowerCase();
+            if (a.color.toLowerCase() === topColor) scoreA += 15;
+            if (b.color.toLowerCase() === topColor) scoreB += 15;
+          }
+
+          return scoreB - scoreA;
+        });
+      }
 
       if (list.length === 0) {
         grid.innerHTML = `<div class="empty-state">Не знайдено речей для цієї комбінації фільтрів.</div>`;
