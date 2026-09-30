@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Atelier Studio ✨ [v4.1 Afternoon & Weather FX]</title>
+  <title>Atelier Studio ✨ [v4.2 Afternoon Fixed]</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -94,42 +94,42 @@
       --shadow-aero: 0 16px 40px -10px rgba(60, 115, 155, 0.2);
     }
 
-    /* ПОЛУДЕНЬ / НАДВІЧІР'Я (15:00 - 19:00) — м'який теплий перехід */
+    /* ПОЛУДЕНЬ / НАДВІЧІР'Я (15:00 - 19:00) — теплий вечірній вайб */
     body.theme-afternoon.weather-clear {
-      --current-gradient: linear-gradient(165deg, #FFF0E5 0%, #F5C6B0 40%, #FBE3D6 100%);
-      --bubble-1: #EFA07B; --bubble-2: #F7C4B2;
+      --current-gradient: linear-gradient(165deg, #FFE8D6 0%, #EFA07B 40%, #F5C6B0 100%);
+      --bubble-1: #E68D65; --bubble-2: #F3B59B;
       --glass-surface: rgba(255, 255, 255, 0.53);
       --glass-card: rgba(255, 244, 240, 0.63);
       --glass-border-top: rgba(255, 255, 255, 0.95);
-      --glass-border-bot: rgba(200, 95, 70, 0.35);
-      --glass-gloss: linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.2) 40%, rgba(220,110,85,0.12) 100%);
+      --glass-border-bot: rgba(190, 85, 60, 0.35);
+      --glass-gloss: linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.2) 40%, rgba(210,100,75,0.12) 100%);
       --text-main: #2A150F; --text-sub: #7F5044;
-      --accent-theme: #C85A40; --accent-theme-deep: #9E3A24;
-      --shadow-aero: 0 16px 40px -10px rgba(160, 60, 40, 0.22);
+      --accent-theme: #BD5338; --accent-theme-deep: #92321C;
+      --shadow-aero: 0 16px 40px -10px rgba(150, 50, 30, 0.22);
     }
     body.theme-afternoon.weather-cloudy {
-      --current-gradient: linear-gradient(165deg, #F3E6E0 0%, #D8C3BC 40%, #EBD6D0 100%);
-      --bubble-1: #C8A39C; --bubble-2: #E8D0CB;
+      --current-gradient: linear-gradient(165deg, #EADCD6 0%, #C9B2AB 40%, #DFC8C1 100%);
+      --bubble-1: #B8968F; --bubble-2: #D8BCB6;
       --glass-surface: rgba(255, 255, 255, 0.56);
       --glass-card: rgba(252, 245, 243, 0.68);
       --glass-border-top: rgba(255, 255, 255, 0.95);
-      --glass-border-bot: rgba(160, 115, 105, 0.3);
-      --glass-gloss: linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.2) 45%, rgba(180,130,120,0.1) 100%);
+      --glass-border-bot: rgba(150, 105, 95, 0.3);
+      --glass-gloss: linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.2) 45%, rgba(170,120,110,0.1) 100%);
       --text-main: #2A1C19; --text-sub: #785A55;
-      --accent-theme: #A85B50; --accent-theme-deep: #853F36;
-      --shadow-aero: 0 16px 40px -10px rgba(130, 80, 70, 0.16);
+      --accent-theme: #A05247; --accent-theme-deep: #7C372E;
+      --shadow-aero: 0 16px 40px -10px rgba(120, 75, 65, 0.16);
     }
     body.theme-afternoon.weather-rain, body.theme-afternoon.weather-snow {
-      --current-gradient: linear-gradient(165deg, #DFDCE3 0%, #C2BAC7 40%, #D6CFDD 100%);
-      --bubble-1: #B0A2BC; --bubble-2: #D1C7DC;
+      --current-gradient: linear-gradient(165deg, #D5D1DC 0%, #B4AAC0 40%, #CBC2D4 100%);
+      --bubble-1: #9D8EB0; --bubble-2: #C4B6C9;
       --glass-surface: rgba(255, 255, 255, 0.55);
       --glass-card: rgba(248, 245, 250, 0.65);
       --glass-border-top: rgba(255, 255, 255, 0.95);
-      --glass-border-bot: rgba(130, 100, 140, 0.3);
-      --glass-gloss: linear-gradient(135deg, rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.2) 45%, rgba(160,130,170,0.1) 100%);
+      --glass-border-bot: rgba(120, 90, 130, 0.3);
+      --glass-gloss: linear-gradient(135deg, rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.2) 45%, rgba(150,120,160,0.1) 100%);
       --text-main: #201725; --text-sub: #63506E;
-      --accent-theme: #864E8E; --accent-theme-deep: #64316C;
-      --shadow-aero: 0 16px 40px -10px rgba(100, 60, 110, 0.18);
+      --accent-theme: #7C4384; --accent-theme-deep: #5A2761;
+      --shadow-aero: 0 16px 40px -10px rgba(90, 50, 100, 0.18);
     }
 
     /* НІЧ (19:00 - 06:00) */
@@ -1672,7 +1672,7 @@
 
       // 06:00 - 12:00 -> Ранок
       // 12:00 - 15:00 -> День
-      // 15:00 - 19:00 -> Полудень / надвечір'я
+      // 15:00 - 19:00 -> Полудень / надвечір'я (теплий вечірній вайб)
       // 19:00 - 06:00 -> Ніч
       if (h >= 6 && h < 12) {
         timeClass = 'theme-morning'; timeLabel = 'Ранок';
