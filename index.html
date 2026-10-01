@@ -2018,12 +2018,17 @@
       const p = quizAnswers.palette;
       const isSurprise = (p === 'surprise');
 
+      // ЖОРСТКА ПЕРЕВІРКА ВИБОРУ ТЕПЛОГО ШАРУ ДІАНИ
       let pickLayer = null;
-      if (quizAnswers.layer === 'layer_needed' || isSurprise || (currentOutdoorTemp < 14 && quizAnswers.layer !== 'single')) {
+      const userWantsLayer = quizAnswers.layer === 'layer_needed';
+      const isActuallyCold = currentOutdoorTemp < 10; // Справжній холод, коли без шару ніяк
+
+      if (userWantsLayer || isActuallyCold || (isSurprise && currentOutdoorTemp < 15)) {
         let layers = pool.filter(i => i.category === 'layer' && !getItemCooldownStatus(i.id).inCooldown);
         if (layers.length === 0) layers = pool.filter(i => i.category === 'layer');
         pickLayer = pickWeightedRandomItem(layers);
       }
+      // Якщо Діана вибрала «Тепло (тільки один шар)» і на вулиці не мороз — pickLayer залишається null (без зіпки)!
 
       let tops = pool.filter(i => i.category === 'top' && !getItemCooldownStatus(i.id).inCooldown);
       if (tops.length === 0) tops = pool.filter(i => i.category === 'top');
@@ -2051,7 +2056,7 @@
       let pickShoes = pickWeightedRandomItem(shoesPool);
 
       let outerwears = pool.filter(i => i.category === 'outerwear');
-      let pickOuterwear = (currentOutdoorTemp !== null && currentOutdoorTemp <= 10 && outerwears.length > 0) ? outerwears[0] : null;
+      let pickOuterwear = (currentOutdoorTemp !== null && currentOutdoorTemp <= 8 && outerwears.length > 0) ? outerwears[0] : null;
 
       return {
         top: pickTop || null,
