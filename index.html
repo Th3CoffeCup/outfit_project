@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Atelier Studio ✨ [v4.2 Afternoon Fixed]</title>
+  <title>Atelier Studio ✨</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -94,7 +94,7 @@
       --shadow-aero: 0 16px 40px -10px rgba(60, 115, 155, 0.2);
     }
 
-    /* ПОЛУДЕНЬ / НАДВІЧІР'Я (15:00 - 19:00) — теплий вечірній вайб */
+    /* ПОЛУДЕНЬ / НАДВІЧІР'Я (15:00 - 19:00) */
     body.theme-afternoon.weather-clear {
       --current-gradient: linear-gradient(165deg, #FFE8D6 0%, #EFA07B 40%, #F5C6B0 100%);
       --bubble-1: #E68D65; --bubble-2: #F3B59B;
@@ -936,16 +936,16 @@
         <p>Обери сьогоднішній настрій або зазирни у свою колекцію гардероба.</p>
       </div>
 
-      <div class="choice-card interactive-press" onclick="delayedNavigate(this, () => startFreshManualFlow())">
-        <div class="icon-bubble">🌸</div>
-        <h2>Я знаю, на що мій настрій</h2>
-        <p>Збери свій аутфіт власноруч: відкривай каталог та обирай найкращі поєднання.</p>
-      </div>
-
       <div class="choice-card interactive-press" onclick="delayedNavigate(this, () => goToQuizFlow())">
         <div class="icon-bubble">🎲</div>
         <h2>Не знаю, що вдягнути</h2>
         <p>Три швидких запитання про формат дня та погоду — гармонійний сет без вагань.</p>
+      </div>
+
+      <div class="choice-card interactive-press" onclick="delayedNavigate(this, () => startFreshManualFlow())">
+        <div class="icon-bubble">🌸</div>
+        <h2>Я знаю, на що мій настрій</h2>
+        <p>Збери свій аутфіт власноруч: відкривай каталог та обирай найкращі поєднання.</p>
       </div>
 
       <div class="choice-card interactive-press" style="background: var(--glass-gloss), rgba(255, 255, 255, 0.45);" onclick="delayedNavigate(this, () => goToWardrobeManager())">
@@ -1268,6 +1268,8 @@
   </div>
 
   <script>
+    const OW_API_KEY = 'b4d529b97aa48a1bc650ca844ea6a0ce';
+
     const PALETTE = [
       { name: 'Чорний', hex: '#1c1b1a', isLight: false },
       { name: 'Білий', hex: '#ffffff', isLight: true },
@@ -1319,6 +1321,8 @@
     let modalSelectedOutfit = null;
     let currentlyViewedItemId = null;
     let isSmartSortedMode = false;
+
+    let realFetchedWeatherData = null;
 
     // Анімація часток (дощ / сніг)
     const canvas = document.getElementById('fx-canvas');
@@ -1384,6 +1388,26 @@
     }
     updateParticles();
 
+    function getCurrentHour() {
+      return new Date().getHours();
+    }
+
+    function getCurrentTimeClass() {
+      const h = getCurrentHour();
+      if (h >= 6 && h < 12) return 'theme-morning';
+      if (h >= 12 && h < 15) return 'theme-day';
+      if (h >= 15 && h < 19) return 'theme-afternoon';
+      return 'theme-night';
+    }
+
+    function getCurrentTimeLabel() {
+      const h = getCurrentHour();
+      if (h >= 6 && h < 12) return 'Ранок';
+      if (h >= 12 && h < 15) return 'День';
+      if (h >= 15 && h < 19) return 'Полудень';
+      return 'Ніч';
+    }
+
     function startFreshManualFlow() {
       selectedOutfit = { top: null, bottom: null, layer: null, outerwear: null, shoes: null };
       isSmartSortedMode = false;
@@ -1400,16 +1424,12 @@
       const cyclesAgo = currentWearCycle - last.cycle;
 
       if (item && item.category === 'shoes') {
-        if (cyclesAgo === 0) return { inCooldown: false, isDeprioritized: true, cyclesLeft: 0, label: 'Вчорашнє', daysIdle: cyclesAgo };
+        if (cyclesAgo === 0) return { inCooldown: false, isDeprioritized: true, cyclesLeft: 0, label: 'Вчора 🤍', daysIdle: cyclesAgo };
         return { inCooldown: false, isDeprioritized: false, cyclesLeft: 0, label: '', daysIdle: cyclesAgo };
       }
 
-      const COOLDOWN_CYCLES = ['bottom', 'bottom_pants', 'bottom_light', 'layer', 'outerwear'].includes(item?.category) ? 2 : 3;
-
-      if (cyclesAgo < COOLDOWN_CYCLES) {
-        const left = COOLDOWN_CYCLES - cyclesAgo;
-        return { inCooldown: true, isDeprioritized: false, cyclesLeft: left, label: `⏳ Ще ${left} дн.`, daysIdle: cyclesAgo };
-      }
+      if (cyclesAgo === 1) return { inCooldown: true, isDeprioritized: false, cyclesLeft: 1, label: 'Вчора 🤍', daysIdle: cyclesAgo };
+      if (cyclesAgo === 2) return { inCooldown: true, isDeprioritized: false, cyclesLeft: 2, label: 'Позавчора ☕', daysIdle: cyclesAgo };
 
       return { inCooldown: false, isDeprioritized: false, cyclesLeft: 0, label: '', daysIdle: cyclesAgo };
     }
@@ -1594,10 +1614,14 @@
       if (!text) return;
       const lower = text.toLowerCase();
 
-      PALETTE.forEach(c => {
-        const root = c.name.slice(0, -2).toLowerCase();
-        if (lower.includes(root)) selectPaletteColor(c.name, c.hex);
-      });
+      if (lower.includes('джинс')) {
+        selectPaletteColor('Денім', '#4b6b94');
+      } else {
+        PALETTE.forEach(c => {
+          const root = c.name.slice(0, -2).toLowerCase();
+          if (lower.includes(root)) selectPaletteColor(c.name, c.hex);
+        });
+      }
 
       const catSelect = document.getElementById('item-cat-input');
 
@@ -1663,39 +1687,23 @@
       btn.classList.add('active');
     }
 
-    function applyDynamicAtmosphere(weatherCode = 0) {
-      const now = new Date();
-      const h = now.getHours();
-
-      let timeClass = 'theme-day';
-      let timeLabel = 'День';
-
-      // 06:00 - 12:00 -> Ранок
-      // 12:00 - 15:00 -> День
-      // 15:00 - 19:00 -> Полудень / надвечір'я (теплий вечірній вайб)
-      // 19:00 - 06:00 -> Ніч
-      if (h >= 6 && h < 12) {
-        timeClass = 'theme-morning'; timeLabel = 'Ранок';
-      } else if (h >= 12 && h < 15) {
-        timeClass = 'theme-day'; timeLabel = 'День';
-      } else if (h >= 15 && h < 19) {
-        timeClass = 'theme-afternoon'; timeLabel = 'Полудень';
-      } else {
-        timeClass = 'theme-night'; timeLabel = 'Ніч';
-      }
+    function applyDynamicAtmosphere(weatherId = 800) {
+      const timeClass = getCurrentTimeClass();
+      const timeLabel = getCurrentTimeLabel();
 
       let weatherClass = 'weather-clear';
       let weatherLabel = 'Ясно';
       currentWeatherType = 'clear';
 
-      if ([71, 73, 75, 77, 85, 86].includes(weatherCode)) {
-        weatherClass = 'weather-snow'; weatherLabel = 'Сніжить';
-        currentWeatherType = 'snow';
-      } else if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(weatherCode)) {
+      if (weatherId >= 200 && weatherId < 600) {
         weatherClass = 'weather-rain'; weatherLabel = 'Дощить';
         currentWeatherType = 'rain';
-      } else if ([1, 2, 3].includes(weatherCode)) {
+      } else if (weatherId >= 600 && weatherId < 700) {
+        weatherClass = 'weather-snow'; weatherLabel = 'Сніжить';
+        currentWeatherType = 'snow';
+      } else if (weatherId > 800) {
         weatherClass = 'weather-cloudy'; weatherLabel = 'Похмуро';
+        currentWeatherType = 'cloudy';
       }
 
       initParticles(currentWeatherType);
@@ -1783,7 +1791,7 @@
     }
 
     function setRandomGreeting() {
-      const names = ['Сонце', 'Гарнюнько', 'Манюня', 'Діанка', 'Крихітко'];
+      const names = ['Сонце', 'Сонечко', 'Діанка', 'Крихітка', 'Діана', 'Гарнюнько'];
       const chosen = names[Math.floor(Math.random() * names.length)];
       document.getElementById('greeting-text').innerText = `Привіт, ${chosen} ✨`;
     }
@@ -1801,79 +1809,98 @@
       updateCounts();
     }
 
-    /* ПОГОДА */
+    /* ПОГОДА ВІД OPENWEATHERMAP З ЗАХИСТОМ ВІД ЗАВИСАНЬ */
     async function initWeatherOnLoad() {
-      const queryWeather = async (lat, lon, cityName = 'Твоє місто') => {
+      const fallbackLat = 54.8985;
+      const fallbackLon = 23.9036;
+
+      const queryWeather = async (lat, lon, cityName = 'Каунас') => {
         const locEl = document.getElementById('w-location');
         if (locEl) locEl.innerText = cityName;
 
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+
         try {
-          const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m&hourly=temperature_2m,precipitation_probability,precipitation,weather_code&timezone=auto&models=best_match&_t=${Date.now()}`;
-          const res = await fetch(url, { cache: 'no-store' });
+          const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${OW_API_KEY}&lang=uk&_t=${Date.now()}`;
+          const res = await fetch(url, { signal: controller.signal });
+          clearTimeout(timeoutId);
+
           if (res.ok) {
             const data = await res.json();
+            realFetchedWeatherData = data;
             renderSmartWeather(data);
+          } else {
+            throw new Error('API error');
           }
         } catch (e) {
-          applyDynamicAtmosphere(0);
+          renderSmartWeather({
+            main: { temp: 18, feels_like: 18 },
+            weather: [{ id: 800, description: 'ясно' }]
+          });
         }
       };
 
       if (navigator.geolocation) {
+        let locationResolved = false;
+        
         navigator.geolocation.getCurrentPosition(
-          pos => queryWeather(pos.coords.latitude.toFixed(4), pos.coords.longitude.toFixed(4), 'Поточна локація'),
-          async () => {
-            try {
-              const ipRes = await fetch('https://ipapi.co/json/', { cache: 'no-store' });
-              if (ipRes.ok) {
-                const ipData = await ipRes.json();
-                queryWeather(ipData.latitude, ipData.longitude, ipData.city || 'Каунас');
-                return;
-              }
-            } catch(err) {}
-            queryWeather(54.8985, 23.9036, 'Каунас');
+          pos => {
+            if (!locationResolved) {
+              locationResolved = true;
+              queryWeather(pos.coords.latitude.toFixed(4), pos.coords.longitude.toFixed(4), 'Поточна локація');
+            }
           },
-          { timeout: 7000, enableHighAccuracy: true, maximumAge: 0 }
+          () => {
+            if (!locationResolved) {
+              locationResolved = true;
+              queryWeather(fallbackLat, fallbackLon, 'Каунас');
+            }
+          },
+          { timeout: 4000, enableHighAccuracy: false, maximumAge: 60000 }
         );
+
+        setTimeout(() => {
+          if (!locationResolved) {
+            locationResolved = true;
+            queryWeather(fallbackLat, fallbackLon, 'Каунас');
+          }
+        }, 4500);
+
       } else {
-        queryWeather(54.8985, 23.9036, 'Каунас');
+        queryWeather(fallbackLat, fallbackLon, 'Каунас');
       }
     }
 
     function renderSmartWeather(data) {
+      realFetchedWeatherData = data;
       const tempEl = document.getElementById('w-temp');
       const iconEl = document.getElementById('w-icon');
       const insightsEl = document.getElementById('w-insights');
 
-      const now = new Date();
-      const currentHour = now.getHours();
-      
-      const realTemp = Math.round(data.current.temperature_2m);
-      const feelsLike = Math.round(data.current.apparent_temperature);
+      const currentHour = getCurrentHour();
+      const realTemp = Math.round(data.main.temp);
+      const feelsLike = Math.round(data.main.feels_like);
       currentOutdoorTemp = realTemp;
 
       if (tempEl) {
         tempEl.innerHTML = `${realTemp}°C <span style="font-size:14px; font-weight:600; opacity:0.75;">(відчувається як ${feelsLike}°C)</span>`;
       }
 
-      const code = data.current.weather_code;
-      applyDynamicAtmosphere(code);
+      let weatherId = data.weather[0].id;
+      applyDynamicAtmosphere(weatherId);
 
-      let cloudDesc = 'Ясно';
+      let weatherDesc = data.weather[0].description || 'Ясно';
       let icon = '☀️';
 
-      if ([71, 73, 75, 77, 85, 86].includes(code)) {
-        cloudDesc = 'Сніжить';
-        icon = '❄️';
-      } else if ([1, 2].includes(code)) {
-        cloudDesc = 'Мінлива хмарність';
-        icon = '⛅';
-      } else if ([3].includes(code)) {
-        cloudDesc = 'Хмарно';
-        icon = '☁️';
-      } else if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(code)) {
-        cloudDesc = 'Дощить';
+      if (weatherId >= 200 && weatherId < 600 || currentWeatherType === 'rain') {
         icon = '🌧️';
+      } else if (weatherId >= 600 && weatherId < 700 || currentWeatherType === 'snow') {
+        icon = '❄️';
+      } else if (weatherId > 800 || currentWeatherType === 'cloudy') {
+        icon = '☁️';
+      } else if (weatherId === 800) {
+        icon = '☀️';
       }
 
       if ((currentHour >= 21 || currentHour <= 5) && icon === '☀️') icon = '🌙';
@@ -1887,31 +1914,11 @@
             <span>🧥</span>
             <span>На вулиці холодно (<b>${realTemp}°C</b>). Обов'язково одягай <b>теплу куртку та термобілизну / колготки</b>!</span>
           </div>`;
-      }
-
-      let rainOrSnowHour = -1;
-      let precipName = 'опади';
-
-      for (let i = 0; i < 6; i++) {
-        const h = currentHour + i;
-        if (data.hourly.precipitation_probability[h] >= 40 || data.hourly.precipitation[h] > 0.2) {
-          rainOrSnowHour = h % 24;
-          precipName = currentWeatherType === 'snow' ? 'сніг' : 'дощ';
-          break;
-        }
-      }
-
-      if (rainOrSnowHour !== -1) {
-        insightsHtml += `
-          <div class="insight-item" style="color:var(--accent-theme-deep);">
-            <span>🌧️</span>
-            <span>Увага: близько <b>${rainOrSnowHour}:00</b> можливий <b>${precipName}</b>. Будь готова!</span>
-          </div>`;
       } else {
         insightsHtml += `
           <div class="insight-item">
             <span>🌈</span>
-            <span>Опадів найближчим часом не очікується. Небо: ${cloudDesc.toLowerCase()}.</span>
+            <span>Погода стабільна. Стан неба: ${weatherDesc}.</span>
           </div>`;
       }
 
@@ -2012,7 +2019,7 @@
       const isSurprise = (p === 'surprise');
 
       let pickLayer = null;
-      if (quizAnswers.layer === 'layer_needed' || isSurprise || currentOutdoorTemp < 12) {
+      if (quizAnswers.layer === 'layer_needed' || isSurprise || (currentOutdoorTemp < 14 && quizAnswers.layer !== 'single')) {
         let layers = pool.filter(i => i.category === 'layer' && !getItemCooldownStatus(i.id).inCooldown);
         if (layers.length === 0) layers = pool.filter(i => i.category === 'layer');
         pickLayer = pickWeightedRandomItem(layers);
@@ -2044,7 +2051,7 @@
       let pickShoes = pickWeightedRandomItem(shoesPool);
 
       let outerwears = pool.filter(i => i.category === 'outerwear');
-      let pickOuterwear = (currentOutdoorTemp !== null && currentOutdoorTemp <= 14 && outerwears.length > 0) ? outerwears[0] : null;
+      let pickOuterwear = (currentOutdoorTemp !== null && currentOutdoorTemp <= 10 && outerwears.length > 0) ? outerwears[0] : null;
 
       return {
         top: pickTop || null,
@@ -2646,7 +2653,6 @@
       renderWardrobe();
     }
 
-    applyDynamicAtmosphere(0);
     initWeatherOnLoad();
     setRandomGreeting();
     buildSwatches();
